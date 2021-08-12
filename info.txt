@@ -1,0 +1,9 @@
+userID;Password;Time;Random = token, można zaszyfrować md5/sha256
+
+tokeny powinny być krótkie czasowo (15 min)
+najlepiej żeby token był tlyko 1 
+
+loguje sie, tworze 15 min token, jeżeli otwieram stronę w czasie trwania tokenu to go regeneruje i przedłużam czas. jeżli po 15 min po f5 czas będzie dłuższy niż 15 min to od nowa tworzę token po logowaniu.
+
+
+stworzyć funkcję, która będzie zwracała aktualny token z ciastka
