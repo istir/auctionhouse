@@ -1,18 +1,27 @@
 import { faChevronDown, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import { Manager, Popper, Reference } from "react-popper";
+import UserPopout from "./UserPopout";
 
 interface NameMenuProps {
   name?: string;
   avatar?: string;
   //! podpytać czy ma sens wysyłanie tokenów
 }
-interface NameMenuState {}
+interface NameMenuState {
+  popoutOpen: boolean;
+}
 
 export default class NameMenu extends React.Component<
   NameMenuProps,
   NameMenuState
 > {
+  constructor(props: NameMenuProps) {
+    super(props);
+    this.state = { popoutOpen: false };
+  }
+
   renderName(): string {
     if (this.props.name) {
       return this.props.name;
@@ -30,19 +39,46 @@ export default class NameMenu extends React.Component<
     return <FontAwesomeIcon icon={faUser} />;
   }
 
-  render() {
+  /**
+   * Method to toggle search box visibility
+   * @param state - "open"|"close" - open or close, or toggle if not specified
+   */
+  changePopoutState(state?: "open" | "close"): void {
+    //TODO make so that it has an animation on open
+
+    if (state) {
+      this.setState({ popoutOpen: state === "open" ? true : false });
+
+      return;
+    } else {
+      this.setState((prevState) => ({ popoutOpen: !prevState.popoutOpen }));
+    }
+  }
+  renderNameMenu(
+    popperReference: React.LegacyRef<HTMLDivElement> | undefined,
+    onClickFunction: React.MouseEventHandler<HTMLDivElement> | undefined
+  ) {
     return (
       <div
-        className="group hover:text-blue-900 border-2 hover:border-blue-200 duration-150 p-1 hover:bg-blue-100 rounded-full cursor-pointer flex gap-2 group items-center transition-all"
-        onClick={() => {
-          console.info("Clicked! User Info");
-        }}
+        className="group hover:text-blue-700 border-2 hover:border-blue-200 duration-150 p-1 hover:bg-blue-100 rounded-full cursor-pointer flex gap-2 group items-center transition-all"
+        ref={popperReference}
+        onClick={onClickFunction}
       >
         {this.renderAvatar()}
         <p className="font-bold">{this.renderName()}</p>
         <FontAwesomeIcon
           icon={faChevronDown}
           className="cursor-pointer duration-150"
+        />
+      </div>
+    );
+  }
+  render() {
+    return (
+      <div>
+        <UserPopout
+          username={this.renderName()}
+          popperInitialElement={this.renderNameMenu.bind(this)}
         />
       </div>
     );
