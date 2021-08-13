@@ -1,34 +1,41 @@
-import { Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import React from "react";
+import {
+  validateEmail,
+  validateName,
+  validatePassword,
+  validateUserName,
+} from "../../libs/validator";
 
 interface RegisterProps {}
 
 export const Register: React.FC<RegisterProps> = ({}) => {
   const inputClassName =
     "duration-150 border-2  rounded-md p-1 font-semibold focus:border-blue-200 outline-none";
+  const errorDivClassName = "font-semibold text-red-500";
 
-  function AJAX() {
-    const xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/api/", true);
-    // xhttp.send(JSON.stringify());
-    xhttp.onreadystatechange = () => {
-      if (xhttp.readyState === 4) {
-        if (xhttp.status === 200) {
-        }
-      }
-    };
+  function checkForAnyError(error, touched) {
+    const keys = Object.keys(error);
+    for (let i = 0; i < keys.length; i += 1) {
+      if (error[keys[i]].length > 0 && touched[keys[i]]) return true;
+    }
+    return false;
   }
 
   function styleFormikError(
     error: string | undefined,
     touched: boolean | undefined
   ) {
-    if (error) return "border-red-400";
-    if (touched) return "border-blue-400";
+    if (touched) {
+      if (error !== undefined) return "border-red-400";
+      // if (touched)
+      return "border-blue-400";
+    }
     return "border-gray-400";
   }
   return (
-    <div>
+    //! temp class
+    <div className="w-1/3">
       <Formik
         initialValues={{
           firstName: "",
@@ -40,23 +47,17 @@ export const Register: React.FC<RegisterProps> = ({}) => {
           phoneNumer: "",
           birthDate: "",
         }}
-        validate={(values) => {
-          const errors = {};
-          if (!values.email) {
-            errors.email = "Required";
-          } else if (
-            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-          ) {
-            errors.email = "Invalid email address";
-          }
-          return errors;
-          // return {};
-        }}
         onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
+          const xhttp = new XMLHttpRequest();
+          xhttp.open("POST", "/api/register", true);
+          xhttp.send(JSON.stringify(values));
+          xhttp.onreadystatechange = () => {
+            if (xhttp.readyState === 4) {
+              if (xhttp.status === 200) {
+                setSubmitting(false);
+              }
+            }
+          };
         }}
       >
         {({
@@ -67,69 +68,78 @@ export const Register: React.FC<RegisterProps> = ({}) => {
           handleBlur,
           handleSubmit,
           isSubmitting,
+          isValidating,
           /* and other goodies */
         }) => (
-          <form onSubmit={handleSubmit} className="flex flex-col">
-            {/* <input
-              type="text"
-              name="userName"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.userName}
-            />
-            {errors.userName && touched.userName && errors.userName} */}
-            <input
-              type="text"
-              name="firstName"
+          <Form className="flex flex-col gap-1">
+            <label htmlFor="firstName" className="font-semibold ">
+              Imię*
+            </label>
+            <Field
               className={`${inputClassName} ${styleFormikError(
                 errors.firstName,
                 touched.firstName
               )}`}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.firstName}
-            />
-            {errors.firstName && touched.firstName && errors.firstName}
-            <input
-              type="text"
-              name="lastName"
+              name="firstName"
+              validate={validateName}
+            ></Field>
+            {errors.firstName && touched.firstName && (
+              <div className={errorDivClassName}>{errors.firstName}</div>
+            )}
+            <label htmlFor="lastName" className="font-semibold ">
+              Nazwisko*
+            </label>
+            <Field
               className={`${inputClassName} ${styleFormikError(
                 errors.lastName,
                 touched.lastName
               )}`}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.lastName}
-            />
-            {errors.lastName && touched.lastName && errors.lastName}
-            <input
-              type="email"
-              name="email"
-              onChange={handleChange}
+              name="lastName"
+              validate={validateName}
+            ></Field>
+            {errors.lastName && touched.lastName && (
+              <div className={errorDivClassName}>{errors.lastName}</div>
+            )}
+            <label htmlFor="email" className="font-semibold ">
+              Adres e-mail*
+            </label>
+            <Field
               className={`${inputClassName} ${styleFormikError(
                 errors.email,
                 touched.email
               )}`}
-              onBlur={handleBlur}
-              value={values.email}
-            />
-            {errors.email && touched.email && errors.email}
-            <input
-              type="password"
-              name="password"
-              onChange={handleChange}
+              name="email"
+              validate={validateEmail}
+            ></Field>
+            {errors.email && touched.email && (
+              <div className={errorDivClassName}>{errors.email}</div>
+            )}
+            <label htmlFor="password" className="font-semibold ">
+              Hasło*
+            </label>
+            <Field
               className={`${inputClassName} ${styleFormikError(
                 errors.password,
                 touched.password
               )}`}
-              onBlur={handleBlur}
-              value={values.password}
-            />
-            {errors.password && touched.password && errors.password}
-            <button type="submit" disabled={isSubmitting}>
-              Submit
+              name="password"
+              type="password"
+              validate={validatePassword}
+            ></Field>
+            {errors.password && touched.password && (
+              <div className={errorDivClassName}>{errors.password}</div>
+            )}
+            <button
+              type="submit"
+              className={`rounded-md border-2 duration-150 font-semibold ${
+                checkForAnyError(errors, touched)
+                  ? "border-red-200 bg-red-100 hover:bg-red-400 hover:border-red-500"
+                  : "border-blue-200 bg-blue-100  hover:bg-blue-400 hover:border-blue-500"
+              }`}
+            >
+              Zarejestruj
             </button>
-          </form>
+          </Form>
         )}
       </Formik>
     </div>
