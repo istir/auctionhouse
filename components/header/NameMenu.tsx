@@ -7,6 +7,7 @@ import UserPopout from "./UserPopout";
 interface NameMenuProps {
   name?: string;
   avatar?: string;
+  isLogged?: boolean;
   //! podpytać czy ma sens wysyłanie tokenów
 }
 interface NameMenuState {
@@ -54,9 +55,10 @@ export default class NameMenu extends React.Component<
       this.setState((prevState) => ({ popoutOpen: !prevState.popoutOpen }));
     }
   }
+
   renderNameMenu(
-    popperReference: React.LegacyRef<HTMLDivElement> | undefined,
-    onClickFunction: React.MouseEventHandler<HTMLDivElement> | undefined
+    popperReference?: React.LegacyRef<HTMLDivElement>,
+    onClickFunction?: React.MouseEventHandler<HTMLDivElement>
   ) {
     return (
       <div
@@ -65,7 +67,7 @@ export default class NameMenu extends React.Component<
         onClick={onClickFunction}
       >
         {this.renderAvatar()}
-        <p className="font-bold">{this.renderName()}</p>
+        <p className="font-bold select-none">{this.renderName()}</p>
         <FontAwesomeIcon
           icon={faChevronDown}
           className="cursor-pointer duration-150"
@@ -79,6 +81,7 @@ export default class NameMenu extends React.Component<
         <UserPopout
           username={this.renderName()}
           popperInitialElement={this.renderNameMenu.bind(this)}
+          isLogged={this.props.isLogged}
         />
       </div>
     );

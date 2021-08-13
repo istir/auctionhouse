@@ -64,10 +64,10 @@ export default class SearchComponent extends React.Component<
       //TODO modify tailwind css later
 
       <input
-        onBlur={() => {
-          this.changeSearchBoxState("close"); //? close search box when not selected
-        }}
-        className="p-1 md:p-2 text-lg md:text-sm rounded-md focus:outline-none focus:ring-2"
+        // onBlur={() => {
+        //   this.changeSearchBoxState("close"); //? close search box when not selected
+        // }}
+        className="p-1 sm:p-2 text-lg sm:text-sm rounded-md focus:outline-none focus:ring-2"
       ></input>
     );
   }
