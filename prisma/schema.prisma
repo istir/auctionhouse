@@ -3,12 +3,12 @@
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_URI")
 }
 
 
 model User {
-  id          Int       @id
+  id          Int       @default(autoincrement())  @id
   firstName   String
   lastName    String
   email       String    @unique
@@ -16,10 +16,11 @@ model User {
   phoneNumber String    
   password    String
   birthDate   DateTime
+  tokens       Token[]   @relation()
 }
 
 model Address {
-  id          Int       @id
+  id          Int        @default(autoincrement()) @id
   user        User      @relation(fields:[userId],references: [id])      
   userId      Int
   street      String
@@ -28,7 +29,12 @@ model Address {
 }
 
 model Token {
-  id          Int     @id
+  id            Int      @default(autoincrement()) @id
+  token         String   @unique
+  validTime     Int
+  timeGenerated DateTime
+  user          User     @relation(fields:[userId],references: [id])
+  userId        Int
 }
 generator client {
   provider = "prisma-client-js"

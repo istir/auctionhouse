@@ -8,7 +8,7 @@ export function validateEmail(value: string): void | string {
   if (!value) {
     return "Pole nie może być puste";
   }
-  if (/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/.test(value)) {
+  if (!/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/.test(value)) {
     return "Niepoprawny email";
   }
   // if(value.search(/\W/)) return ""
@@ -24,6 +24,7 @@ export function validateName(value: string): void | string {
   if (!value) {
     return "Pole nie może być puste";
   }
+  
   // if(value.search(/\W/)) return ""
 }
 
@@ -101,7 +102,9 @@ export function validateAddress(value: string): string | void {
     return "Pole nie może być puste";
   }
   if (
-    !value.match(/^[a-zżźćńółęąś ]+ [0-9]+[a-z]?($|\/[0-9]+| m\. [0-9]+)$/i)
+    !value.match(
+      /^((ul|Ul|UL|ULICA|Ulica|ulica)\.? ?)?[a-zżźćńółęąś ]+ [0-9]+[a-z]?($|\/[0-9]+| ?m\.? ?[0-9]+)$/i
+    )
   ) {
     return "Nieprawidłowy format";
   }
@@ -122,5 +125,78 @@ export function validatePhoneNumber(value: string): string | void {
     )
   ) {
     return "Nieprawidłowy format";
+  }
+}
+
+/**
+@param value - entered date
+@returns error message or nothing 
+*/
+export function validateDate(value: string): string | void {
+  function isLeapYear(year: string) {
+    let yearInt = parseInt(year);
+    if (isNaN(yearInt)) return false;
+    if ((yearInt % 4 === 0 && yearInt % 100 !== 0) || yearInt % 400 === 0) {
+      return true;
+    }
+    return false;
+  }
+
+  function checkIfDayIsPossible(year: string, month: string, day: string) {
+    let maxDay;
+    switch (month) {
+      case "01":
+        maxDay = 31;
+        break;
+      case "03":
+        maxDay = 31;
+        break;
+      case "05":
+        maxDay = 31;
+        break;
+      case "07":
+        maxDay = 31;
+        break;
+      case "08":
+        maxDay = 31;
+        break;
+      case "10":
+        maxDay = 31;
+        break;
+      case "12":
+        maxDay = 31;
+        break;
+      case "02":
+        maxDay = isLeapYear(year) ? 29 : 28;
+        break;
+      default:
+        maxDay = 30;
+        break;
+    }
+    if (isNaN(parseInt(day))) return false;
+    if (parseInt(day) < 0 || parseInt(day) > maxDay) return false;
+    return true;
+  }
+
+  if (!value) {
+    return "Pole nie może być puste";
+  }
+  try {
+    const [year, month, day] = value.split("-");
+    if (
+      isNaN(new Date(value).getTime()) ||
+      new Date(value).getTime() > Date.now() ||
+      year < "1850"
+    ) {
+      return "Niewłaściwa data";
+    }
+    if (month < "01" || month > "12") {
+      return "Niewłaściwa data";
+    }
+    if (!checkIfDayIsPossible(year, month, day)) {
+      return "Niewłaściwa data";
+    }
+  } catch (err) {
+    console.error(err);
   }
 }

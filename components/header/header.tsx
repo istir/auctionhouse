@@ -3,9 +3,17 @@ import Image from "next/image";
 import IconMenu from "./IconMenu";
 import NameMenu from "./NameMenu";
 import vercel from "../../public/vercel.svg";
-interface HeaderProps {}
+import { Token, User } from "@prisma/client";
+import ajaxUser from "../../libs/AJAXUser";
+interface HeaderProps {
+  userId?: number;
+  token?: string;
+}
 
-export const Header: React.FC<HeaderProps> = ({}) => {
+export const Header: React.FC<HeaderProps> = ({ userId }) => {
+  // console.log(userId);
+  // userId && ajaxUser(userId);
+
   function drawLogo(imgName?: string): JSX.Element {
     if (imgName) return <Image src="/public/imgName" />;
     return <Image width="100px" height="30px" src={vercel} />;

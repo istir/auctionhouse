@@ -74,6 +74,10 @@ export default class UserPopout extends React.Component<
           <p>Nie zalogowano</p>
           <button
             className={`${buttonClass} border-blue-200 bg-blue-100  hover:bg-blue-400 hover:border-blue-500 `}
+            onClick={() => {
+              Router.push("/login");
+              // console.log(process.env.SESSION_PASSWORD);
+            }}
           >
             Zaloguj
           </button>
@@ -81,6 +85,7 @@ export default class UserPopout extends React.Component<
             className={`${buttonClass} border-red-200 bg-red-100 hover:bg-red-400 hover:border-red-500 `}
             onClick={() => {
               Router.push("/register");
+              // console.log(process.env.SESSION_PASSWORD);
             }}
           >
             Zarejestruj

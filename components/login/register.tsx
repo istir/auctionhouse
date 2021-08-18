@@ -1,10 +1,14 @@
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikTouched } from "formik";
 import React from "react";
 import {
+  validateAddress,
+  validateDate,
   validateEmail,
   validateName,
   validatePassword,
+  validatePhoneNumber,
   validateUserName,
+  validateZipCode,
 } from "../../libs/validator";
 
 interface RegisterProps {}
@@ -14,7 +18,7 @@ export const Register: React.FC<RegisterProps> = ({}) => {
     "duration-150 border-2  rounded-md p-1 font-semibold focus:border-blue-200 outline-none";
   const errorDivClassName = "font-semibold text-red-500";
 
-  function checkForAnyError(error, touched) {
+  function checkForAnyError(error: any, touched: any) {
     const keys = Object.keys(error);
     for (let i = 0; i < keys.length; i += 1) {
       if (error[keys[i]].length > 0 && touched[keys[i]]) return true;
@@ -23,9 +27,18 @@ export const Register: React.FC<RegisterProps> = ({}) => {
   }
 
   function styleFormikError(
-    error: string | undefined,
-    touched: boolean | undefined
+    error: any,
+    touched?: boolean | FormikTouched<Date> | undefined | boolean[]
   ) {
+    if (Array.isArray(error) && Array.isArray(touched)) {
+      if (touched.some((element) => element === true)) {
+        for (let i = 0; i < error.length; i += 1) {
+          if (error[i] !== undefined && touched[i]) return "border-red-400";
+        }
+        return "border-blue-400";
+      }
+      return "border-gray-400";
+    }
     if (touched) {
       if (error !== undefined) return "border-red-400";
       // if (touched)
@@ -33,6 +46,7 @@ export const Register: React.FC<RegisterProps> = ({}) => {
     }
     return "border-gray-400";
   }
+
   return (
     //! temp class
     <div className="w-1/3">
@@ -40,11 +54,14 @@ export const Register: React.FC<RegisterProps> = ({}) => {
         initialValues={{
           firstName: "",
           lastName: "",
-          userName: "",
           password: "",
           email: "",
-          address: "",
-          phoneNumer: "",
+
+          street: "",
+          zipCode: "",
+          city: "",
+
+          phoneNumber: "",
           birthDate: "",
         }}
         onSubmit={(values, { setSubmitting }) => {
@@ -53,6 +70,7 @@ export const Register: React.FC<RegisterProps> = ({}) => {
           xhttp.send(JSON.stringify(values));
           xhttp.onreadystatechange = () => {
             if (xhttp.readyState === 4) {
+              console.log(xhttp.responseText);
               if (xhttp.status === 200) {
                 setSubmitting(false);
               }
@@ -60,17 +78,7 @@ export const Register: React.FC<RegisterProps> = ({}) => {
           };
         }}
       >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          isSubmitting,
-          isValidating,
-          /* and other goodies */
-        }) => (
+        {({ errors, touched }) => (
           <Form className="flex flex-col gap-1">
             <label htmlFor="firstName" className="font-semibold ">
               Imię*
@@ -114,6 +122,20 @@ export const Register: React.FC<RegisterProps> = ({}) => {
             {errors.email && touched.email && (
               <div className={errorDivClassName}>{errors.email}</div>
             )}
+            <label htmlFor="phoneNumber" className="font-semibold ">
+              Numer telefonu*
+            </label>
+            <Field
+              className={`${inputClassName} ${styleFormikError(
+                errors.phoneNumber,
+                touched.phoneNumber
+              )}`}
+              name="phoneNumber"
+              validate={validatePhoneNumber}
+            ></Field>
+            {errors.phoneNumber && touched.phoneNumber && (
+              <div className={errorDivClassName}>{errors.phoneNumber}</div>
+            )}
             <label htmlFor="password" className="font-semibold ">
               Hasło*
             </label>
@@ -126,9 +148,80 @@ export const Register: React.FC<RegisterProps> = ({}) => {
               type="password"
               validate={validatePassword}
             ></Field>
-            {errors.password && touched.password && (
-              <div className={errorDivClassName}>{errors.password}</div>
+            <label htmlFor="birthDate" className="font-semibold ">
+              Data urodzenia*
+            </label>
+
+            <Field
+              className={`${inputClassName} ${styleFormikError(
+                errors.birthDate,
+                touched.birthDate
+              )}`}
+              name="birthDate"
+              type="date"
+              min="01-01-1850"
+              max={new Date().toISOString().replace(/T.+$/, "")}
+              // max={`${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDay()}`}
+              validate={validateDate}
+              pattern="\d{4}-\d{2}-\d{2}"
+            ></Field>
+            {errors.birthDate && touched.birthDate && (
+              <div className={errorDivClassName}>{errors.birthDate}</div>
             )}
+
+            <fieldset
+              className={`border-2 rounded-md p-2 flex flex-col ${styleFormikError(
+                [errors.street, errors.zipCode, errors.city],
+                [touched.street, touched.zipCode, touched.city]
+              )}`}
+            >
+              <legend className="font-semibold ">Adres*:</legend>
+              <label htmlFor="street" className="font-semibold ">
+                Ulica*
+              </label>
+              <Field
+                className={`${inputClassName} ${styleFormikError(
+                  errors.street,
+                  touched.street
+                )}`}
+                name="street"
+                validate={validateAddress}
+              ></Field>
+              {errors.street && touched.street && (
+                <div className={errorDivClassName}>{errors.street}</div>
+              )}
+
+              <label htmlFor="zipCode" className="font-semibold ">
+                Kod pocztowy*
+              </label>
+              <Field
+                className={`${inputClassName} ${styleFormikError(
+                  errors.zipCode,
+                  touched.zipCode
+                )}`}
+                name="zipCode"
+                validate={validateZipCode}
+              ></Field>
+              {errors.zipCode && touched.zipCode && (
+                <div className={errorDivClassName}>{errors.zipCode}</div>
+              )}
+
+              <label htmlFor="city" className="font-semibold ">
+                Miasto*
+              </label>
+              <Field
+                className={`${inputClassName} ${styleFormikError(
+                  errors.city,
+                  touched.city
+                )}`}
+                name="city"
+                validate={validateName}
+              ></Field>
+              {errors.city && touched.city && (
+                <div className={errorDivClassName}>{errors.city}</div>
+              )}
+            </fieldset>
+
             <button
               type="submit"
               className={`rounded-md border-2 duration-150 font-semibold ${

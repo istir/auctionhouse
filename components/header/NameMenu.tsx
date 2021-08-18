@@ -1,13 +1,16 @@
 import { faChevronDown, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { User } from "@prisma/client";
 import React from "react";
 import { Manager, Popper, Reference } from "react-popper";
 import UserPopout from "./UserPopout";
 
 interface NameMenuProps {
-  name?: string;
-  avatar?: string;
-  isLogged?: boolean;
+  // name?: string;
+  // avatar?: string;
+  // isLogged?: boolean;
+  user?: User;
+  // token: string;
   //! podpytać czy ma sens wysyłanie tokenów
 }
 interface NameMenuState {
@@ -24,8 +27,8 @@ export default class NameMenu extends React.Component<
   }
 
   renderName(): string {
-    if (this.props.name) {
-      return this.props.name;
+    if (this.props.user) {
+      return this.props.user.firstName + " " + this.props.user.lastName;
     }
     return "Zaloguj";
   }
