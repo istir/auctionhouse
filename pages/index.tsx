@@ -7,43 +7,32 @@ import Header from "../components/header/header";
 import checkIfTokenValidAndRefresh from "../libs/checkIfTokenValidAndRefresh";
 import withSession from "../libs/ironSession";
 import useSWR from "swr";
+import { simplifiedUser } from "../types";
 export const getServerSideProps: GetServerSideProps = withSession(
   async function ({ req }: { req: NextApiRequest & { session: Session } }) {
     // return await getUserFromSession(req);
     const token = await checkIfTokenValidAndRefresh(req.session);
     if (token) {
-      return { props: { token: token.token, userId: token.userId } };
+      return {
+        props: {
+          token: token.token,
+          simplifiedUser: {
+            firstName: token.user.firstName,
+            lastName: token.user.lastName,
+            id: token.user.id,
+          },
+        },
+      };
     } else {
       return { props: { token: "" } };
     }
   }
 );
 
-export default function Home(props: Token & { user?: User }) {
-  const fetcher = (url: string) =>
-    fetch(url).finally(() => {
-      const socket = io();
-      socket.on("connect", () => {
-        console.log("connect");
-        socket.emit("hello");
-      });
-      socket.on("hello", (data) => {
-        console.log("hello", data);
-      });
-
-      socket.on("a user connected", () => {
-        console.log("a user connected");
-      });
-
-      socket.on("disconnect", () => {
-        console.log("disconnect");
-      });
-    });
-
-  useSWR("/api/socketio", fetcher);
-  // console.log(data);
-
-  if (props.userId && props.token)
-    return <Header userId={props.userId} token={props.token}></Header>;
+export default function Home(
+  props: Token & { simplifiedUser?: simplifiedUser }
+) {
+  if (props.simplifiedUser && props.token)
+    return <Header user={props.simplifiedUser} token={props.token}></Header>;
   return <Header></Header>;
 }

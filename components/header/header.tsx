@@ -5,12 +5,13 @@ import NameMenu from "./NameMenu";
 import vercel from "../../public/vercel.svg";
 import { Token, User } from "@prisma/client";
 import ajaxUser from "../../libs/AJAXUser";
+import { simplifiedUser } from "../../types";
 interface HeaderProps {
-  userId?: number;
+  user?: simplifiedUser;
   token?: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({ userId }) => {
+export const Header: React.FC<HeaderProps> = ({ user }) => {
   // console.log(userId);
   // userId && ajaxUser(userId);
 
@@ -24,7 +25,7 @@ export const Header: React.FC<HeaderProps> = ({ userId }) => {
       {drawLogo()}
       <nav className="flex items-center gap-3">
         <IconMenu />
-        <NameMenu />
+        <NameMenu user={user} />
       </nav>
     </header>
   );

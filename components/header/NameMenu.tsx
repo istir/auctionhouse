@@ -3,13 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { User } from "@prisma/client";
 import React from "react";
 import { Manager, Popper, Reference } from "react-popper";
+import { simplifiedUser } from "../../types";
 import UserPopout from "./UserPopout";
 
 interface NameMenuProps {
   // name?: string;
   // avatar?: string;
   // isLogged?: boolean;
-  user?: User;
+  user?: simplifiedUser;
   // token: string;
   //! podpytać czy ma sens wysyłanie tokenów
 }
