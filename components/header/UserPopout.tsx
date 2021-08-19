@@ -9,19 +9,25 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Router from "next/router";
 import React from "react";
 import { Manager, Popper, Reference } from "react-popper";
-
+import Popup from "reactjs-popup";
+import "reactjs-popup/dist/index.css";
+import Login from "../login/login";
+import PopupLogin from "../login/PopupLogin";
+import PopupRegister from "../login/PopupRegister";
+import Register from "../login/register";
+import NameMenu from "./NameMenu";
 interface UserPopoutProps {
   username: string | { firstName: string; lastName: string }; //TODO probably need to change object later to a prisma object
   avatar?: string;
-  popperInitialElement?: (
-    popperReference: React.LegacyRef<HTMLDivElement> | undefined,
-    onClickFunction: React.MouseEventHandler<HTMLDivElement> | undefined
-  ) => JSX.Element;
-  initialPoppedState?: "open" | "close";
+  // popperInitialElement?: (
+  //   popperReference: React.LegacyRef<HTMLDivElement> | undefined,
+  //   onClickFunction: React.MouseEventHandler<HTMLDivElement> | undefined
+  // ) => JSX.Element;
+  // initialPoppedState?: "open" | "close";
   isLogged?: boolean;
 }
 interface UserPopoutState {
-  showPoppedElement: boolean;
+  // showPoppedElement: boolean;
 }
 
 /**
@@ -41,9 +47,9 @@ export default class UserPopout extends React.Component<
 
   constructor(props: UserPopoutProps) {
     super(props);
-    this.state = {
-      showPoppedElement: this.props.initialPoppedState === "open",
-    };
+    // this.state = {
+    //   showPoppedElement: this.props.initialPoppedState === "open",
+    // };
     this.refElement = React.createRef();
   }
 
@@ -67,29 +73,14 @@ export default class UserPopout extends React.Component<
    */
   renderMenuLoginCard() {
     //TODO: add some cool image and button to log in/register
-    const buttonClass = "rounded-md border-2 duration-150 font-semibold";
+    // const buttonClass = "rounded-md border-2 duration-150 font-semibold";
     return (
       <div className="w-full h-full flex items-center justify-center">
         <div className="flex flex-col gap-1">
           <p>Nie zalogowano</p>
-          <button
-            className={`${buttonClass} border-blue-200 bg-blue-100  hover:bg-blue-400 hover:border-blue-500 `}
-            onClick={() => {
-              Router.push("/login");
-              // console.log(process.env.SESSION_PASSWORD);
-            }}
-          >
-            Zaloguj
-          </button>
-          <button
-            className={`${buttonClass} border-red-200 bg-red-100 hover:bg-red-400 hover:border-red-500 `}
-            onClick={() => {
-              Router.push("/register");
-              // console.log(process.env.SESSION_PASSWORD);
-            }}
-          >
-            Zarejestruj
-          </button>
+
+          <PopupLogin />
+          <PopupRegister />
         </div>
       </div>
     );
@@ -116,35 +107,51 @@ export default class UserPopout extends React.Component<
   }
 
   render() {
-    return (
-      <div>
-        <Manager>
-          <Reference>
-            {({ ref }) =>
-              this.props.popperInitialElement &&
-              this.props.popperInitialElement(ref, () => {
-                this.setState((prevState) => ({
-                  showPoppedElement: !prevState.showPoppedElement,
-                }));
-              })
-            }
-          </Reference>
-          {this.state.showPoppedElement ? (
-            <Popper>
-              {({ ref, style, placement, arrowProps }) => (
-                <nav
-                  ref={ref}
-                  style={style}
-                  data-placement={placement}
-                  className="min-w-max w-full  sm:w-56 h-72 rounded-md border-2 border-blue-200 bg-gray-200 flex  mt-2  overflow-y-auto overflow-x-hidden shadow-md"
-                >
-                  {this.renderMenu()}
-                </nav>
-              )}
-            </Popper>
-          ) : null}
-        </Manager>
-      </div>
-    );
+    return this.renderMenu();
+    // return (
+    //   <div>
+
+    {
+      /* <nav
+        // ref={ref}
+        // style={style}
+        // data-placement={placement}
+        // className="min-w-max w-full  sm:w-56 h-72 rounded-md border-2 border-blue-200 bg-gray-200 flex  mt-2  overflow-y-auto overflow-x-hidden shadow-md"
+        >
+          {this.renderMenu()}
+        </nav> */
+    }
+    //     {/* <Popup trigger={this.props.popperInitialElement}>
+    //       <div>TEST</div>
+    //     </Popup> */}
+    //     {/* <div>TEST</div> */}
+    //     {/* <Manager>
+    //       <Reference>
+    //         {({ ref }) =>
+    //           this.props.popperInitialElement &&
+    //           this.props.popperInitialElement(ref, () => {
+    //             this.setState((prevState) => ({
+    //               showPoppedElement: !prevState.showPoppedElement,
+    //             }));
+    //           })
+    //         }
+    //       </Reference>
+    //       {this.state.showPoppedElement ? (
+    //         <Popper>
+    //           {({ ref, style, placement, arrowProps }) => (
+    //             <nav
+    //               ref={ref}
+    //               style={style}
+    //               data-placement={placement}
+    //               className="min-w-max w-full  sm:w-56 h-72 rounded-md border-2 border-blue-200 bg-gray-200 flex  mt-2  overflow-y-auto overflow-x-hidden shadow-md"
+    //             >
+    //               {this.renderMenu()}
+    //             </nav>
+    //           )}
+    //         </Popper>
+    //       ) : null}
+    //     </Manager> */}
+    //   </div>
+    // );
   }
 }

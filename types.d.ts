@@ -1,5 +1,7 @@
 export interface simplifiedUser {
   firstName: string;
   lastName: string;
-  id: number;
+  birthDateAsString: string;
+  email: string;
+  phoneNumber: string;
 }

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { User } from "@prisma/client";
 import React from "react";
 import { Manager, Popper, Reference } from "react-popper";
+import Popup from "reactjs-popup";
 import { simplifiedUser } from "../../types";
 import UserPopout from "./UserPopout";
 
@@ -82,11 +83,37 @@ export default class NameMenu extends React.Component<
   render() {
     return (
       <div>
-        <UserPopout
+        <Popup
+          nested
+          {...{
+            contentStyle: {
+              borderRadius: "0.375rem",
+              borderWidth: "2px",
+              borderColor: "rgba(191, 219, 254,1)",
+              backgroundColor: "rgba(229, 231, 235,1)",
+              height: "18rem",
+              // overflowX: "hidden",
+            },
+            arrowStyle: {
+              color: "rgba(229, 231, 235,1)",
+              // filter:"drop-shadow(0px -2px 0px rgba(191, 219, 254,1))"
+
+              // borderWidth: "2px",
+              stroke: "rgba(191, 219, 254,1)",
+              // textShadow:""
+            },
+          }}
+          // className="min-w-max w-full  sm:w-56 h-72 rounded-md border-2 border-blue-200 bg-gray-200 flex  mt-2  overflow-y-auto overflow-x-hidden shadow-md"
+          trigger={this.renderNameMenu()}
+        >
+          <UserPopout username={this.renderName()} />
+          {/* <div>LUL</div> */}
+        </Popup>
+        {/* <UserPopout
           username={this.renderName()}
           popperInitialElement={this.renderNameMenu.bind(this)}
           isLogged={this.props.isLogged}
-        />
+        /> */}
       </div>
     );
   }

@@ -1,15 +1,17 @@
 import { Session } from "next-iron-session";
 import prisma from "../prisma/prisma";
+import { simplifiedUser } from "../types";
 import withSession from "./ironSession";
 
 export default async function handleSessionToken(
   session: Session,
   token?: string,
+  user?: simplifiedUser,
   //   tokenToSave?: string,
   onlySaveOrDestroy?: "save" | "destroy"
 ) {
   async function destroy() {
-    const sessionToken = session.get("user");
+    const sessionToken = session.get("user")?.token;
     if (sessionToken) {
       session.destroy();
       await session.save();
@@ -18,7 +20,10 @@ export default async function handleSessionToken(
   }
   async function save() {
     if (token) {
-      session.set("user", token);
+      if (user) {
+        session.set("user", { token, user });
+      } else session.set("user", { token });
+
       await session.save();
       //   await prisma.token.create({
       //     data: {

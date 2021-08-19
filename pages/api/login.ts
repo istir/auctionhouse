@@ -16,6 +16,7 @@ import {
 import { Session } from "next-iron-session";
 import handleSessionToken from "../../libs/handleSessionToken";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
+import converTdateToString from "../../libs/convertDateToString";
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
     // > ------------------------- how it should work --------------------------- //
@@ -107,7 +108,13 @@ export default withSession(
       // ? 5. if successful send back 200 and generate token
 
       const token = await generateToken(user.id, rememberMe);
-      await handleSessionToken(req.session, token);
+      await handleSessionToken(req.session, token, {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        birthDateAsString: converTdateToString(user.birthDate),
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+      });
       res.status(200).end("OK");
       return;
     }
