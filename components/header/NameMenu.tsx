@@ -12,6 +12,7 @@ interface NameMenuProps {
   // avatar?: string;
   // isLogged?: boolean;
   user?: simplifiedUser;
+  refresh: () => void;
   // token: string;
   //! podpytać czy ma sens wysyłanie tokenów
 }
@@ -92,8 +93,14 @@ export default class NameMenu extends React.Component<
               borderColor: "rgba(191, 219, 254,1)",
               backgroundColor: "rgba(229, 231, 235,1)",
               height: "18rem",
+              right: "5px",
+              marginRight: "5px",
               // overflowX: "hidden",
             },
+            // overlayStyle: {
+            //   right: "20px",
+            //   marginRight: "20px",
+            // },
             arrowStyle: {
               color: "rgba(229, 231, 235,1)",
               // filter:"drop-shadow(0px -2px 0px rgba(191, 219, 254,1))"
@@ -106,7 +113,11 @@ export default class NameMenu extends React.Component<
           // className="min-w-max w-full  sm:w-56 h-72 rounded-md border-2 border-blue-200 bg-gray-200 flex  mt-2  overflow-y-auto overflow-x-hidden shadow-md"
           trigger={this.renderNameMenu()}
         >
-          <UserPopout username={this.renderName()} />
+          <UserPopout
+            user={this.props.user}
+            username={this.renderName()}
+            refresh={this.props.refresh}
+          />
           {/* <div>LUL</div> */}
         </Popup>
         {/* <UserPopout

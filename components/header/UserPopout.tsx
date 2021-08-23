@@ -11,6 +11,7 @@ import React from "react";
 import { Manager, Popper, Reference } from "react-popper";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
+import { simplifiedUser } from "../../types";
 import Login from "../login/login";
 import PopupLogin from "../login/PopupLogin";
 import PopupRegister from "../login/PopupRegister";
@@ -19,12 +20,14 @@ import NameMenu from "./NameMenu";
 interface UserPopoutProps {
   username: string | { firstName: string; lastName: string }; //TODO probably need to change object later to a prisma object
   avatar?: string;
+  user: simplifiedUser;
   // popperInitialElement?: (
   //   popperReference: React.LegacyRef<HTMLDivElement> | undefined,
   //   onClickFunction: React.MouseEventHandler<HTMLDivElement> | undefined
   // ) => JSX.Element;
   // initialPoppedState?: "open" | "close";
   isLogged?: boolean;
+  refresh: () => void;
 }
 interface UserPopoutState {
   // showPoppedElement: boolean;
@@ -79,7 +82,7 @@ export default class UserPopout extends React.Component<
         <div className="flex flex-col gap-1">
           <p>Nie zalogowano</p>
 
-          <PopupLogin />
+          <PopupLogin refresh={this.props.refresh} />
           <PopupRegister />
         </div>
       </div>
@@ -90,7 +93,7 @@ export default class UserPopout extends React.Component<
    * This method renders a menu
    */
   renderMenu() {
-    if (!this.props.isLogged) return this.renderMenuLoginCard(); //? render login card if not already logged
+    if (!this.props.user) return this.renderMenuLoginCard(); //? render login card if not already logged
     //! when testing change if
     return (
       <ul className="w-full">

@@ -1,7 +1,8 @@
 @media screen and (max-width: 600px) {
-  .popup-content {
-    /* width: 60% !important; */
-    
+  .popup-modal-content {
+    min-width: 90% !important;
+    min-height: 50% !important;
+    display: flex;
   }
 }
 

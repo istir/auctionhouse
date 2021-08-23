@@ -9,9 +9,10 @@ import { simplifiedUser } from "../../types";
 interface HeaderProps {
   user?: simplifiedUser;
   token?: string;
+  refresh: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ user }) => {
+export const Header: React.FC<HeaderProps> = ({ user, refresh, loggedIn }) => {
   // console.log(userId);
   // userId && ajaxUser(userId);
 
@@ -25,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({ user }) => {
       {drawLogo()}
       <nav className="flex items-center gap-3">
         <IconMenu />
-        <NameMenu user={user} />
+        <NameMenu user={user} refresh={refresh} />
       </nav>
     </header>
   );

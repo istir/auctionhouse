@@ -77,7 +77,7 @@ export const Register: React.FC<RegisterProps> = ({}) => {
       }}
     >
       {({ errors, touched }) => (
-        <Form className="flex flex-col gap-1">
+        <Form className="flex flex-col gap-1 justify-center w-max sm:w-full p-2">
           <label htmlFor="firstName" className="font-semibold ">
             Imię*
           </label>

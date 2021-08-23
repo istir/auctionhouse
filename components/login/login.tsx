@@ -1,9 +1,11 @@
 import { Field, Form, Formik, FormikTouched } from "formik";
 import React from "react";
 
-interface LoginProps {}
+interface LoginProps {
+  refresh: () => void;
+}
 
-export const Login: React.FC<LoginProps> = ({}) => {
+export const Login: React.FC<LoginProps> = (props: LoginProps) => {
   const inputClassName =
     "duration-150 border-2  rounded-md p-1 font-semibold focus:border-blue-200 outline-none";
   const errorDivClassName = "font-semibold text-red-500";
@@ -53,13 +55,14 @@ export const Login: React.FC<LoginProps> = ({}) => {
             console.log(xhttp.responseText);
             if (xhttp.status === 200) {
               setSubmitting(false);
+              props.refresh();
             }
           }
         };
       }}
     >
       {({ errors, touched }) => (
-        <Form className="flex flex-col gap-1">
+        <Form className="flex flex-col gap-1 justify-center w-full p-2">
           <label htmlFor="email" className="font-semibold ">
             Adres e-mail
           </label>

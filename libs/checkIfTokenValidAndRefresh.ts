@@ -14,7 +14,15 @@ export default async function checkIfTokenValidAndRefresh(
   session: Session,
   token?: string
 ) {
-  const sessionToken = token ? token : session.get("user").token;
+  let sessionToken;
+  if (token) {
+    sessionToken = token;
+  } else if (session.get("user") && session.get("user").token) {
+    sessionToken = session.get("user").token;
+  } else {
+    return false;
+  }
+  // const sessionToken = token ? token : session.get("user").token;
   if (sessionToken) {
     const foundToken = await prisma.token.findUnique({
       where: { token: sessionToken },
