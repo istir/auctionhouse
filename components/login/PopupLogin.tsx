@@ -4,11 +4,16 @@ import Login from "./login";
 
 interface PopupLoginProps {
   refresh: () => void;
+  closePopup: () => void;
 }
 
 export const PopupLogin: React.FC<PopupLoginProps> = (
   props: PopupLoginProps
 ) => {
+  console.log(props.closePopup);
+  if (props.closePopup) {
+    props.closePopup();
+  }
   return (
     <Popup
       modal

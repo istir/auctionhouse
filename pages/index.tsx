@@ -8,25 +8,36 @@ import withSession from "../libs/ironSession";
 import useSWR from "swr";
 import { simplifiedUser } from "../types";
 import { useRouter } from "next/router";
+import AuctionCmponent, {
+  AuctionComponent,
+} from "../components/auction/Auction";
+import prisma from "../prisma/prisma";
+import { Auction } from "@prisma/client";
 
 export const getServerSideProps: GetServerSideProps = withSession(
   async function ({ req }: { req: NextApiRequest & { session: Session } }) {
     // return await getUserFromSession(req);
+
+    const auctions = await prisma.auction.findMany();
+    console.log(auctions);
     const token = await checkIfTokenValidAndRefresh(req.session);
     if (token) {
       return {
         props: {
           token: token.token,
           user: token.user,
+          auctions: auctions ? auctions : [],
         },
       };
     } else {
-      return { props: { token: "" } };
+      return { props: { token: "", auctions: auctions ? auctions : [] } };
     }
   }
 );
 
-export default function Home(props: Token & { user?: simplifiedUser }) {
+export default function Home(
+  props: Token & { user?: simplifiedUser } & { auctions: Auction[] }
+) {
   const router = useRouter();
   const refreshData = () => {
     router.replace(router.asPath);
@@ -40,5 +51,12 @@ export default function Home(props: Token & { user?: simplifiedUser }) {
         refresh={refreshData}
       ></Header>
     );
-  return <Header refresh={refreshData}></Header>;
+  return (
+    <div>
+      <Header refresh={refreshData}></Header>
+      {props.auctions.map((value) => (
+        <AuctionComponent auction={value} />
+      ))}
+    </div>
+  );
 }

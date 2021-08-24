@@ -3,6 +3,7 @@ import React from "react";
 
 interface LoginProps {
   refresh: () => void;
+  closePopup: () => void;
 }
 
 export const Login: React.FC<LoginProps> = (props: LoginProps) => {
@@ -55,6 +56,7 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
             console.log(xhttp.responseText);
             if (xhttp.status === 200) {
               setSubmitting(false);
+
               props.refresh();
             }
           }

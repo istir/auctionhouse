@@ -12,7 +12,7 @@ interface HeaderProps {
   refresh: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ user, refresh, loggedIn }) => {
+export const Header: React.FC<HeaderProps> = ({ user, refresh }) => {
   // console.log(userId);
   // userId && ajaxUser(userId);
 

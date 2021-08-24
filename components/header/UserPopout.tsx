@@ -2,11 +2,13 @@ import {
   faAddressBook,
   faAddressCard,
   faBookmark,
+  faSignOutAlt,
   faUser,
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Router from "next/router";
+import router from "next/router";
+import Router, { useRouter } from "next/router";
 import React from "react";
 import { Manager, Popper, Reference } from "react-popper";
 import Popup from "reactjs-popup";
@@ -28,6 +30,7 @@ interface UserPopoutProps {
   // initialPoppedState?: "open" | "close";
   isLogged?: boolean;
   refresh: () => void;
+  closePopup?: () => void;
 }
 interface UserPopoutState {
   // showPoppedElement: boolean;
@@ -62,9 +65,16 @@ export default class UserPopout extends React.Component<
    * @type {IconDefinition?} faIcon
    * @returns React Component
    */
-  renderUserMenuItem(itemName: string, faIcon?: IconDefinition) {
+  renderUserMenuItem(
+    itemName: string,
+    faIcon?: IconDefinition,
+    onClick?: () => void
+  ) {
     return (
-      <li className="flex items-center gap-1 h-10 pl-3 pr-3 border-t-2 first:border-none even:border-blue-200 odd:border-blue-200 cursor-pointer hover:bg-blue-200 duration-150 font-semibold">
+      <li
+        className="flex items-center gap-1 h-10 pl-3 pr-3 border-t-2 first:border-none even:border-blue-200 odd:border-blue-200 cursor-pointer hover:bg-blue-200 duration-150 font-semibold"
+        onClick={onClick}
+      >
         {faIcon && <FontAwesomeIcon icon={faIcon} />}
         {itemName}
       </li>
@@ -82,8 +92,11 @@ export default class UserPopout extends React.Component<
         <div className="flex flex-col gap-1">
           <p>Nie zalogowano</p>
 
-          <PopupLogin refresh={this.props.refresh} />
-          <PopupRegister />
+          <PopupLogin
+            refresh={this.props.refresh}
+            closePopup={this.props.closePopup}
+          />
+          <PopupRegister closePopup={this.props.closePopup} />
         </div>
       </div>
     );
@@ -103,7 +116,9 @@ export default class UserPopout extends React.Component<
             : `${this.props.username.firstName} ${this.props.username.lastName}`,
           faUser
         )}
-        {this.renderUserMenuItem("B", faBookmark)}
+        {this.renderUserMenuItem("Wyloguj się", faSignOutAlt, () => {
+          router.replace("/api/logout");
+        })}
         {this.renderUserMenuItem("B", faBookmark)}
       </ul>
     );
