@@ -55,7 +55,7 @@ export default function Home(
     <div>
       <Header refresh={refreshData}></Header>
       {props.auctions.map((value) => (
-        <AuctionComponent auction={value} />
+        <AuctionComponent key={value.id} auction={value} />
       ))}
     </div>
   );
