@@ -5,3 +5,11 @@ export interface simplifiedUser {
   email: string;
   phoneNumber: string;
 }
+
+export interface RemainingTime {
+  months?: number;
+  days?: number;
+  hours?: number;
+  minutes?: number;
+  seconds?: number;
+}

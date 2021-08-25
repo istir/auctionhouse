@@ -13,6 +13,7 @@ import AuctionCmponent, {
 } from "../components/auction/Auction";
 import prisma from "../prisma/prisma";
 import { Auction } from "@prisma/client";
+import PickedForYou from "../components/mainPage/pickedForYou";
 
 export const getServerSideProps: GetServerSideProps = withSession(
   async function ({ req }: { req: NextApiRequest & { session: Session } }) {
@@ -54,9 +55,7 @@ export default function Home(
   return (
     <div>
       <Header refresh={refreshData}></Header>
-      {props.auctions.map((value) => (
-        <AuctionComponent key={value.id} auction={value} />
-      ))}
+      <PickedForYou auctionsToShow={props.auctions} />
     </div>
   );
 }
