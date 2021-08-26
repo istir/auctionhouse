@@ -6,6 +6,7 @@ import AuctionComponent from "../auction/Auction";
 
 interface PickedForYouProps {
   auctionsToShow: Auction[];
+  width?: string;
 }
 interface PickedForYouState {
   auctionsSeen: number;
@@ -45,9 +46,9 @@ export default class PickedForYou extends React.Component<
 
   render() {
     return (
-      <div className="relative flex items-center">
+      <div className="relative flex items-center m-4 ">
         <a
-          className="pickedForYouButton float-left z-20 cursor-pointer w-10 h-10 bg-white rounded-full flex shadow-md border-2 border-gray-200 border-opacity-20"
+          className={`pickedForYouButton float-left z-20 cursor-pointer w-10 h-10  bg-white rounded-full flex shadow-md border-2 border-gray-200 border-opacity-20 -mr-5 hover:scale-110 duration-150`}
           onClick={() => {
             this.setState((prevState) => {
               return { auctionsSeen: prevState.auctionsSeen - 1 };
@@ -61,7 +62,8 @@ export default class PickedForYou extends React.Component<
         </a>
         <div
           id="pickedForYouParent"
-          className="float-left overflow-hidden -ml-5 rounded-md shadow-md"
+          style={{ width: this.props.width ? this.props.width : "600px" }}
+          className={`float-left overflow-hidden  rounded-md shadow-md `}
         >
           <div
             id="pickedForYou"
@@ -76,7 +78,7 @@ export default class PickedForYou extends React.Component<
           </div>
         </div>
         <a
-          className="pickedForYouButton z-20 cursor-pointer w-10 h-10 bg-white rounded-full flex -ml-5 shadow-md border-2 border-gray-200 border-opacity-20"
+          className="pickedForYouButton z-20 cursor-pointer w-10 h-10 bg-white rounded-full flex -ml-5 shadow-md border-2 border-gray-200 border-opacity-20 hover:scale-110 duration-150"
           onClick={() => {
             this.setState((prevState) => {
               return {

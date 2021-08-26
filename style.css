@@ -19,9 +19,9 @@
 :root {
   --auction-width: 300px;
 }
-#pickedForYouParent {
+/* #pickedForYouParent {
   width: 800px;
-}
+} */
 #pickedForYou {
   width: max-content;
   /* grid-template-columns: repeat(auto-fill, 300px);*/
@@ -47,13 +47,25 @@
   max-height: 3em;
   line-height: 1.5em;
 }
-.auction {
+.auction,
+.categoryIcon {
   transition: all 0.3s;
   z-index: 1;
   /* grid-template-rows: 14rem auto auto auto auto; */
 }
+.categoryIcon:hover {
+  transform: scale(1.2);
+  border-radius: 0.375rem;
+  z-index: 2;
+  /* padding: 20px;
+  margin-left: -20px;
+  margin-top: -20px;
+  margin-right: -20px;
+  margin-bottom: -20px;
+  z-index: 10; */
+}
 .auction:hover {
-  padding: 20px;
+  /* padding: 20px; */
   /* width: calc(300px + 40px) !important;
   height: calc(380px + 40px) !important; */
   margin-left: -20px;

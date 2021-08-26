@@ -14,6 +14,7 @@ import AuctionCmponent, {
 import prisma from "../prisma/prisma";
 import { Auction } from "@prisma/client";
 import PickedForYou from "../components/mainPage/pickedForYou";
+import Categories from "../components/mainPage/categories/categories";
 
 export const getServerSideProps: GetServerSideProps = withSession(
   async function ({ req }: { req: NextApiRequest & { session: Session } }) {
@@ -55,7 +56,8 @@ export default function Home(
   return (
     <div>
       <Header refresh={refreshData}></Header>
-      <PickedForYou auctionsToShow={props.auctions} />
+      <PickedForYou width="100%" auctionsToShow={props.auctions} />
+      <Categories position="center" />
     </div>
   );
 }

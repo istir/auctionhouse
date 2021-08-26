@@ -66,7 +66,7 @@ export const AuctionComponent: React.FC<AuctionProps> = (props) => {
     <div className="auction bg-white flex flex-col  p-3 rounded-md shadow-md cursor-pointer select-none ">
       {renderImage(props.auction.image)}
       {/* <div>{renderRemainingTime(props.auction.dateEnd)}</div> */}
-      <div className="grid grid-cols-2 col-start-1 ">
+      <div className="grid grid-cols-2 col-start-1 h-6">
         {renderOldPrice(props.auction.price, props.auction.originalPrice)}
         <span
           className={`text-right col-start-2 font-semibold ${timeColor(
