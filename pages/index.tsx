@@ -20,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
     // return await getUserFromSession(req);
 
     const auctions = await prisma.auction.findMany();
-    console.log(auctions);
+    // console.log(auctions);
     const token = await checkIfTokenValidAndRefresh(req.session);
     if (token) {
       return {

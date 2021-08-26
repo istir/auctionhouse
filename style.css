@@ -1,3 +1,79 @@
-#pickedForYou {
-  width: 600px;
+@media screen and (max-width: 600px) {
+  #pickedForYouParent {
+    overflow-x: scroll;
+    margin-left: 0;
+    height: 400px;
+  }
+
+  /* #pickedForYou {
+    height: max-content;
+    grid-template-columns: repeat(1, var(--auction-width)) !important;
+    grid-template-rows: repeat(9, 380px) !important;
+  } */
+
+  .pickedForYouButton {
+    display: none;
+  }
 }
+
+:root {
+  --auction-width: 300px;
+}
+#pickedForYouParent {
+  width: 800px;
+}
+#pickedForYou {
+  width: max-content;
+  /* grid-template-columns: repeat(auto-fill, 300px);*/
+  grid-template-rows: repeat(auto-fill, 380px);
+  grid-template-columns: repeat(9, var(--auction-width));
+  overflow: hidden;
+  transition: 0.3s;
+  /* margin-left: calc(var(--auction-width) * -1 - 1.5rem);  */
+}
+/* #pickedForYou > .auction {
+  width: 300px;
+  height: 380px;
+  float: left;
+} */
+.auction-name-persons {
+  grid-template-rows: 2fr 1fr;
+  /* line-break: auto;
+  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+  overflow: hidden; */
+}
+.auction-name-persons > div {
+  max-height: 3em;
+  line-height: 1.5em;
+}
+.auction {
+  transition: all 0.3s;
+  z-index: 1;
+  /* grid-template-rows: 14rem auto auto auto auto; */
+}
+.auction:hover {
+  padding: 20px;
+  /* width: calc(300px + 40px) !important;
+  height: calc(380px + 40px) !important; */
+  margin-left: -20px;
+  margin-top: -20px;
+  margin-right: -20px;
+  margin-bottom: -20px;
+  /* margin: -20px; */
+  z-index: 10;
+  /* grid-template-rows: calc(14rem + 40px) auto auto auto auto; */
+  /* transform: scale(1.05); */
+}
+
+.auction:hover > img {
+  height: calc(14rem + 40px);
+}
+
+/* .auction:hover > img:before,
+.auction:hover > img:after {
+
+  content: " ";
+  display: block;
+  height: 5px;
+} */

@@ -14,12 +14,14 @@ export const AuctionComponent: React.FC<AuctionProps> = (props) => {
     if (imageUrl) {
       return (
         <img
-          className="w-full h-56 rounded-md shadow-lg object-contain bg-white  border-2 border-gray-200 border-opacity-20"
+          className="w-full h-56 rounded-md shadow-lg object-contain bg-white duration-300 border-2 border-gray-200 border-opacity-20"
           src={imageUrl}
         ></img>
       );
     } else {
-      return <div className="bg-black w-full h-56 rounded-md shadow-lg"></div>;
+      return (
+        <img className="bg-white w-full h-56 rounded-md shadow-lg duration-300 border-2 border-gray-200 border-opacity-20"></img>
+      );
     }
   }
 
@@ -61,7 +63,7 @@ export const AuctionComponent: React.FC<AuctionProps> = (props) => {
     return "text-gray-400";
   }
   return (
-    <div className="w-72 h-96 bg-white grid grid-flow-row p-3 rounded-md shadow-md">
+    <div className="auction bg-white flex flex-col  p-3 rounded-md shadow-md cursor-pointer select-none ">
       {renderImage(props.auction.image)}
       {/* <div>{renderRemainingTime(props.auction.dateEnd)}</div> */}
       <div className="grid grid-cols-2 col-start-1 ">
@@ -84,9 +86,13 @@ export const AuctionComponent: React.FC<AuctionProps> = (props) => {
           </span>
         </div>
       }
-      <div className="text-grey-500 font-semibold">{props.auction.name}</div>
-      <div className="text-grey-400 font-semibold">
-        {localizePersonsBought(props.auction.usersBought)}
+      <div className="grid auction-name-persons">
+        <div className="text-grey-500 font-semibold overflow-ellipsis overflow-hidden">
+          {props.auction.name}
+        </div>
+        <div className="text-grey-400 font-semibold">
+          {localizePersonsBought(props.auction.usersBought)}
+        </div>
       </div>
     </div>
   );
