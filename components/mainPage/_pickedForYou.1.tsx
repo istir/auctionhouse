@@ -25,34 +25,23 @@ export default class PickedForYou extends React.Component<
   PickedForYouState
 > {
   auctionsPicked: any[];
-  ref: React.RefObject<any>;
   constructor(props: PickedForYouProps) {
     super(props);
     // this.state = {
     //   visibleAuctions: [props.auctionsToShow[0], props.auctionsToShow[1]],
     // };
     // this.props.auctionsToShow
-    this.ref = React.createRef();
     this.auctionsPicked = [];
-    for (let j = 0; j < 3; j += 1) {
-      for (let i = 0; i < 8; i += 1) {
-        if (this.props.auctionsToShow[i])
-          this.auctionsPicked.push(this.props.auctionsToShow[i]);
-        // break;
-      }
-    }
 
+    for (let i = 0; i < 8; i += 1) {
+      if (this.props.auctionsToShow[i])
+        this.auctionsPicked.push(this.props.auctionsToShow[i]);
+      // break;
+    }
     this.auctionsPicked.push(this.props.auctionsToShow[0]);
     this.state = {
       auctionsSeen: 0,
     };
-  }
-
-  moveLeft() {
-    this.ref.current.scrollLeft -= 200;
-  }
-  moveRight() {
-    this.ref.current.scrollLeft += 200;
   }
 
   render() {
@@ -61,13 +50,12 @@ export default class PickedForYou extends React.Component<
         <a
           className={`pickedForYouButton float-left z-20 cursor-pointer w-10 h-10  bg-white rounded-full flex shadow-md border-2 border-gray-200 border-opacity-20 -mr-5 hover:scale-110 duration-150`}
           onClick={() => {
-            // this.setState((prevState) => {
-            //   return { auctionsSeen: prevState.auctionsSeen - 1 };
-            // });
-            // if (this.state.auctionsSeen < 1) {
-            //   this.setState({ auctionsSeen: 6 });
-            // }
-            this.moveLeft();
+            this.setState((prevState) => {
+              return { auctionsSeen: prevState.auctionsSeen - 1 };
+            });
+            if (this.state.auctionsSeen < 1) {
+              this.setState({ auctionsSeen: 6 });
+            }
           }}
         >
           {<FontAwesomeIcon className="m-auto" icon={faArrowLeft} />}
@@ -80,11 +68,9 @@ export default class PickedForYou extends React.Component<
           <div
             id="pickedForYou"
             className=" bg-grey-200 grid p-6 gap-6"
-            ref={this.ref}
-            // onWheel={(e) => {
-            //   if (e.deltaY > 0) this.ref.current.scrollLeft += 200;
-            //   else this.ref.current.scrollLeft -= 200;
-            // }}
+            style={{
+              marginLeft: `calc((var(--auction-width)  + 1.5rem) * -1 * ${this.state.auctionsSeen})`,
+            }}
           >
             {this.auctionsPicked.map((value) => (
               <AuctionComponent key={value.id} auction={value} />
@@ -94,13 +80,12 @@ export default class PickedForYou extends React.Component<
         <a
           className="pickedForYouButton z-20 cursor-pointer w-10 h-10 bg-white rounded-full flex -ml-5 shadow-md border-2 border-gray-200 border-opacity-20 hover:scale-110 duration-150"
           onClick={() => {
-            // this.setState((prevState) => {
-            //   return {
-            //     auctionsSeen:
-            //       prevState.auctionsSeen < 6 ? prevState.auctionsSeen + 1 : 0,
-            //   };
-            // });
-            this.moveRight();
+            this.setState((prevState) => {
+              return {
+                auctionsSeen:
+                  prevState.auctionsSeen < 6 ? prevState.auctionsSeen + 1 : 0,
+              };
+            });
             // if (this.state.auctionsSeen > 6) {
             //   this.setState({ auctionsSeen: 0 });
             // }

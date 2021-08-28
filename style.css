@@ -19,18 +19,28 @@
 :root {
   --auction-width: 300px;
 }
-/* #pickedForYouParent {
-  width: 800px;
-} */
+#pickedForYouParent {
+  /* scroll-snap-type: x mandatory; */
+}
 #pickedForYou {
-  width: max-content;
+  /* width: max-content; */
   /* grid-template-columns: repeat(auto-fill, 300px);*/
   grid-template-rows: repeat(auto-fill, 380px);
-  grid-template-columns: repeat(9, var(--auction-width));
-  overflow: hidden;
+  /* grid-template-columns: repeat(9, var(--auction-width)); */
+  grid-template-columns: repeat(100, var(--auction-width));
+  /* overflow: hidden; */
+  overflow: auto;
+  scroll-snap-stop: always;
+  scroll-snap-type: x mandatory;
+
   transition: 0.3s;
   /* margin-left: calc(var(--auction-width) * -1 - 1.5rem);  */
 }
+.auction {
+  scroll-snap-stop: always;
+  scroll-snap-align: start;
+}
+
 /* #pickedForYou > .auction {
   width: 300px;
   height: 380px;
