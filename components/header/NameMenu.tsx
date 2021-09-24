@@ -1,11 +1,12 @@
-import { faChevronDown, faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { User } from "@prisma/client";
+// import { faChevronDown, faUser } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { User } from "@prisma/client";
 import React from "react";
-import { Manager, Popper, Reference } from "react-popper";
-import Popup from "reactjs-popup";
+// import { Manager, Popper, Reference } from "react-popper";
+// import Popup from "reactjs-popup";
 import { simplifiedUser } from "../../types";
 import UserPopout from "./UserPopout";
+import { FaUser, FaChevronDown } from "react-icons/fa";
 
 interface NameMenuProps {
   // name?: string;
@@ -51,7 +52,7 @@ export default class NameMenu extends React.Component<
     //! later on might change for next/image
     if (this.props.avatar)
       return <img src={this.props.avatar} alt="Profilowe" />;
-    return <FontAwesomeIcon icon={faUser} />;
+    return <FaUser />;
   }
 
   renderNameMenu() {
@@ -62,17 +63,18 @@ export default class NameMenu extends React.Component<
       >
         {this.renderAvatar()}
         <p className="font-bold select-none">{this.renderName()}</p>
-        <FontAwesomeIcon
+        <FaChevronDown />
+        {/* <FontAwesomeIcon
           icon={faChevronDown}
           className="cursor-pointer duration-150"
-        />
+        /> */}
       </div>
     );
   }
   render() {
     return (
       <div>
-        <Popup
+        {/* <Popup
           ref={this.ref}
           // open={this.state.popoutOpen}
           // onClose={this.closePopup.bind(this)}
@@ -104,7 +106,7 @@ export default class NameMenu extends React.Component<
           // className="min-w-max w-full  sm:w-56 h-72 rounded-md border-2 border-blue-200 bg-gray-200 flex  mt-2  overflow-y-auto overflow-x-hidden shadow-md"
           trigger={this.renderNameMenu()}
         >
-          {/* {this.ref.current ? ( */}
+        
           <UserPopout
             user={this.props.user}
             username={this.renderName()}
@@ -115,16 +117,8 @@ export default class NameMenu extends React.Component<
                 : null
             }
           />
-          {/* ) : null} */}
-
-          {/* <div
-            onClick={() => {
-              if (this.ref) this.ref.current.close();
-            }}
-          >
-            LUL
-          </div> */}
-        </Popup>
+       
+        </Popup> */}
         {/* {this.renderNameMenu()} */}
         {/* <UserPopout
           username={this.renderName()}

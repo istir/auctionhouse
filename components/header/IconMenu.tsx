@@ -1,20 +1,16 @@
-// import {
-//   faBookmark,
-//   faSearch,
-//   faShoppingCart,
-// } from "@fortawesome/free-solid-svg-icons";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FaBookmark, FaShoppingCart } from "react-icons/fa";
-import React from "react";
+import React, { useContext } from "react";
 import SearchComponent from "./SearchComponent";
 import { IconButton } from "@chakra-ui/button";
 import { Flex } from "@chakra-ui/layout";
+import useColorSchemeContext from "../../libs/hooks/useColorSchemeContext";
+import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
 
-interface IconMenuProps {}
-
-export const IconMenu: React.FC<IconMenuProps> = ({}) => {
+export default function IconMenu(): JSX.Element {
   const buttonClass = "hover:text-blue-700 cursor-pointer duration-150 ";
 
+  const { color } = useContext(useColorSchemeContext);
+  const lightMode = useLightModeCheck();
   function universalClick(name?: string) {
     console.info("Clicked! " + name);
   }
@@ -22,7 +18,11 @@ export const IconMenu: React.FC<IconMenuProps> = ({}) => {
   return (
     <Flex
       gridGap="2"
-
+      color={lightMode ? `${color}.900` : `${color}.200`}
+      transition="color"
+      fontSize="xl"
+      justifySelf="end"
+      alignItems="center" //albo justify??
       // className="flex gap-2 text-gray-900 transition-colors text-xl justify-self-end items-center"
     >
       {/* ------------------------------- search icon ------------------------------ */}
@@ -68,5 +68,4 @@ export const IconMenu: React.FC<IconMenuProps> = ({}) => {
       />
     </Flex>
   );
-};
-export default IconMenu;
+}

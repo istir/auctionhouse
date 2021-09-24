@@ -1,6 +1,9 @@
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faSearch } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FaSearch } from "react-icons/fa";
+
 import React from "react";
+import { IconButton } from "@chakra-ui/react";
 
 interface SearchComponentProps {
   renderSearchIcon?: boolean;
@@ -24,14 +27,22 @@ export default class SearchComponent extends React.Component<
   renderSearchIcon() {
     if (this.props.renderSearchIcon)
       return (
-        <FontAwesomeIcon
-          className={this.props.searchIconClass}
-          icon={faSearch}
+        <IconButton
+          icon={<FaSearch />}
+          aria-label="Szukaj"
           onClick={() => {
             this.changeSearchBoxState();
             //   universalClick("Search");
           }}
         />
+        // <FontAwesomeIcon
+        //   className={this.props.searchIconClass}
+        //   icon={faSearch}
+        //   onClick={() => {
+        //     this.changeSearchBoxState();
+        //     //   universalClick("Search");
+        //   }}
+        // />
       );
   }
 
