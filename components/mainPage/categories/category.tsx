@@ -1,12 +1,13 @@
-import {
-  IconDefinition,
-  IconName,
-  IconPrefix,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-  FontAwesomeIcon,
-  FontAwesomeIconProps,
-} from "@fortawesome/react-fontawesome";
+// import {
+//   IconDefinition,
+//   IconName,
+//   IconPrefix,
+// } from "@fortawesome/free-solid-svg-icons";
+// import {
+//   FontAwesomeIcon,
+//   FontAwesomeIconProps,
+// } from "@fortawesome/react-fontawesome";
+import { IconButton } from "@chakra-ui/button";
 import React from "react";
 
 interface CategoryProps {
@@ -29,7 +30,8 @@ export const Category: React.FC<CategoryProps> = ({
       }  flex flex-col justify-around items-center float-left p-3 cursor-pointer categoryIcon w-36 first:rounded-l-md last:rounded-r-md select-none`}
       onClick={onClick}
     >
-      <FontAwesomeIcon icon={icon} opacity="0.7" size="2x" />
+      {/* <FontAwesomeIcon icon={icon} opacity="0.7" size="2x" /> */}
+      <IconButton icon={icon} aria-label={text} />
       <span className="opacity-70 font-semibold uppercase text-lg tracking-wide ">
         {text}
       </span>

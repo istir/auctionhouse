@@ -1,8 +1,11 @@
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+
 import { Auction } from "@prisma/client";
 import React from "react";
 import AuctionComponent from "../auction/Auction";
+import { IconButton } from "@chakra-ui/react";
 
 interface PickedForYouProps {
   auctionsToShow: Auction[];
@@ -70,7 +73,8 @@ export default class PickedForYou extends React.Component<
             this.moveLeft();
           }}
         >
-          {<FontAwesomeIcon className="m-auto" icon={faArrowLeft} />}
+          {/* {<FontAwesomeIcon className="m-auto" icon={faArrowLeft} />} */}
+          <IconButton icon={<FaArrowLeft />} aria-label="Lewo" />
         </a>
         <div
           id="pickedForYouParent"
@@ -110,7 +114,8 @@ export default class PickedForYou extends React.Component<
             // }
           }}
         >
-          {<FontAwesomeIcon className="m-auto" icon={faArrowRight} />}
+          {/* {<FontAwesomeIcon className="m-auto" icon={faArrowRight} />} */}
+          <IconButton icon={<FaArrowRight />} aria-label="Prawo" />
         </a>
       </div>
     );
