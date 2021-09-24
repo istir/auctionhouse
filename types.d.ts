@@ -13,3 +13,14 @@ export interface RemainingTime {
   minutes?: number;
   seconds?: number;
 }
+export type Color =
+  | 'gray'
+  | 'red'
+  | 'orange'
+  | 'yellow'
+  | 'green'
+  | 'teal'
+  | 'blue'
+  | 'cyan'
+  | 'purple'
+  | 'pink';

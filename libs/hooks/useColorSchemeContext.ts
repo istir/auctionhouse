@@ -1,23 +1,13 @@
-import React from 'react';
+import React from "react";
+import { Color } from "../../types";
 
-export type Color =
-  | 'gray'
-  | 'red'
-  | 'orange'
-  | 'yellow'
-  | 'green'
-  | 'teal'
-  | 'blue'
-  | 'cyan'
-  | 'purple'
-  | 'pink';
 export type ColorScheme = {
   // IsLightMode: () => boolean;
   color: Color;
   setColor: (color: Color) => void;
 };
 
-let currentColor = 'red';
+let currentColor = "red";
 function setColor(color: Color): void {
   currentColor = color;
 }

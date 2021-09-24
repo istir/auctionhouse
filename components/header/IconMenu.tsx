@@ -1,10 +1,11 @@
-import { FaBookmark, FaShoppingCart } from "react-icons/fa";
+import { FaBookmark, FaShoppingCart, FaSun } from "react-icons/fa";
 import React, { useContext } from "react";
 import SearchComponent from "./SearchComponent";
 import { IconButton } from "@chakra-ui/button";
 import { Flex } from "@chakra-ui/layout";
 import useColorSchemeContext from "../../libs/hooks/useColorSchemeContext";
 import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
+import ColorModeSwitcher from "../ColorModeSwitcher";
 
 export default function IconMenu(): JSX.Element {
   const buttonClass = "hover:text-blue-700 cursor-pointer duration-150 ";
@@ -44,6 +45,8 @@ export default function IconMenu(): JSX.Element {
         }}
       />
        */}
+      <ColorModeSwitcher />
+
       <IconButton
         icon={<FaBookmark />}
         aria-label="Zakładki"

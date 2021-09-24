@@ -57,7 +57,7 @@ export default function Home(
   return (
     <Box>
       <Header refresh={refreshData}></Header>
-      <PickedForYou width="100%" auctionsToShow={props.auctions} />
+      {/* <PickedForYou width="100%" auctionsToShow={props.auctions} /> */}
       <Categories position="center" />
     </Box>
   );

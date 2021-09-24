@@ -78,7 +78,9 @@ export default withSession(
       return;
     }
     //? 1 get JSON data from request
-    let { email, password, rememberMe } = JSON.parse(req.body);
+    let { email, password, rememberMe } = req.body;
+    // console.log("res", res);
+    // return;
     //? 1.5. validate the data
     if (validateEmail(email) || validatePassword(password)) {
       res.status(200).end("Data doesn't exist");

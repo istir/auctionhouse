@@ -1,15 +1,55 @@
+import axios from "axios";
+import useAxios from "axios-hooks";
 import { Field, Form, Formik, FormikTouched } from "formik";
 import React from "react";
 
 interface LoginProps {
-  refresh: () => void;
-  closePopup: () => void;
+  refresh?: () => void;
+  closePopup?: () => void;
 }
 
 export const Login: React.FC<LoginProps> = (props: LoginProps) => {
   const inputClassName =
     "duration-150 border-2  rounded-md p-1 font-semibold focus:border-blue-200 outline-none";
   const errorDivClassName = "font-semibold text-red-500";
+
+  type FormikValues = {
+    password: string;
+    email: string;
+    rememberMe: boolean;
+  };
+  const initialFormikValues: FormikValues = {
+    password: "",
+    email: "",
+    rememberMe: false,
+  };
+
+  function HandleOnSubmit(values: FormikValues) {
+    // const [{ data, loading, error }, refetch] = useAxios({
+    //   url: "/api/login",
+    //   method: "POST",
+    //   params: values,
+    // });
+    // console.log(data, loading, error, refetch);
+    try {
+      axios.post("/api/login", values).then(
+        (ful) => {
+          console.log(ful);
+          if (ful.status == 200 && ful.statusText === "OK") {
+            props?.refresh?.();
+            props?.closePopup?.();
+          }
+          // ful.status=200&&ful.statusText='OK'&&props?.refresh()&&props?.closePopup();
+        },
+        (rej) => {
+          console.error(rej);
+          //TOOD: show error
+        }
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   function checkForAnyError(error: any, touched: any) {
     const keys = Object.keys(error);
@@ -42,26 +82,22 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
 
   return (
     <Formik
-      initialValues={{
-        password: "",
-        email: "",
-        rememberMe: false,
-      }}
-      onSubmit={(values, { setSubmitting }) => {
-        const xhttp = new XMLHttpRequest();
-        xhttp.open("POST", "/api/login", true);
-        xhttp.send(JSON.stringify(values));
-        xhttp.onreadystatechange = () => {
-          if (xhttp.readyState === 4) {
-            console.log(xhttp.responseText);
-            if (xhttp.status === 200) {
-              setSubmitting(false);
-
-              props.refresh();
-            }
-          }
-        };
-      }}
+      initialValues={initialFormikValues}
+      // onSubmit={(values, { setSubmitting }) => {
+      //   // const xhttp = new XMLHttpRequest();
+      //   // xhttp.open("POST", "/api/login", true);
+      //   // xhttp.send(JSON.stringify(values));
+      //   // xhttp.onreadystatechange = () => {
+      //   //   if (xhttp.readyState === 4) {
+      //   //     console.log(xhttp.responseText);
+      //   //     if (xhttp.status === 200) {
+      //   //       setSubmitting(false);
+      //   //       props.refresh();
+      //   //     }
+      //   //   }
+      //   // };
+      // }}
+      onSubmit={HandleOnSubmit}
     >
       {({ errors, touched }) => (
         <Form className="flex flex-col gap-1 justify-center w-full p-2">

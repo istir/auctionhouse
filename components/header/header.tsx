@@ -48,10 +48,11 @@ export const Header: React.FC<HeaderProps> = ({ user, refresh }) => {
       shadow="md"
     >
       {drawLogo()}
-      <nav className="flex items-center gap-3">
+      <Flex as="nav" alignItems="center" gridGap="3">
+        {/* className="flex items-center gap-3" */}
         <IconMenu />
         <NameMenu user={user} refresh={refresh} />
-      </nav>
+      </Flex>
     </Flex>
   );
 };
