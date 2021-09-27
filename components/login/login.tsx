@@ -58,7 +58,7 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
         },
         (rej) => {
           console.error(rej);
-          setError(rej); //! ?
+          setError("Błąd krytyczny"); //! ?
           // TODO: show error
         }
       );
@@ -77,16 +77,16 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
 
   return (
     <Formik initialValues={initialFormikValues} onSubmit={HandleOnSubmit}>
-      <Form>
+      <Form style={{ width: "inherit" }}>
         <FormInput
-          validator={validateEmail}
+          // validator={validateEmail}
           label="Adres e-mail"
           name="email"
           // isError={setAnyFormikError}
         />
 
         <FormInput
-          validator={validatePassword}
+          // validator={validatePassword}
           label="Hasło"
           name="password"
           isPassword

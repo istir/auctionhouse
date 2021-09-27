@@ -45,49 +45,49 @@ export default class Categories extends React.Component<
       >
         <Category
           icon={<FaDesktop />}
-          tailwindBgColor="bg-blue-300"
+          color="blue.300"
           text="KOMPUTERY"
           onClick={() => {}}
         />
         <Category
           icon={<FaGamepad />}
-          tailwindBgColor="bg-pink-200"
+          color="pink.200"
           text="GRY"
           onClick={() => {}}
         />
         <Category
           icon={<FaTshirt />}
-          tailwindBgColor="bg-red-300"
+          color="red.300"
           text="ubrania"
           onClick={() => {}}
         />
         <Category
           icon={<FaFirstAid />}
-          tailwindBgColor="bg-green-300"
+          color="green.300"
           text="zdrowie"
           onClick={() => {}}
         />
         <Category
           icon={<FaVolleyballBall />}
-          tailwindBgColor="bg-yellow-200"
+          color="yellow.200"
           text="sport"
           onClick={() => {}}
         />
         <Category
           icon={<FaCar />}
-          tailwindBgColor="bg-red-400"
+          color="red.400"
           text="motoryzacja"
           onClick={() => {}}
         />
         <Category
           icon={<FaHome />}
-          tailwindBgColor="bg-blue-300"
+          color="blue.300"
           text="dom"
           onClick={() => {}}
         />
         <Category
           icon={<FaCamera />}
-          tailwindBgColor="bg-green-200"
+          color="green.200"
           text="fotografia"
           onClick={() => {}}
         />

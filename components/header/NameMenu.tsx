@@ -41,9 +41,9 @@ interface NameMenuState {
 }
 
 export default function NameMenu(props: NameMenuProps): JSX.Element {
-  const { colorScheme } = React.useContext(useColorSchemeContext);
+  const { color } = React.useContext(useColorSchemeContext);
   // const getColor = useColorValue;
-  // const light = useLightModeCheck();
+  const light = useLightModeCheck();
   // const [open, setOpen] = React.useState<boolean>(false);
   // function openPopup() {
   //   setOpen(true);
@@ -104,10 +104,25 @@ export default function NameMenu(props: NameMenuProps): JSX.Element {
         </PopoverTrigger>
         <PopoverContent
           mr="2"
+          mt="3"
           h="md"
           w="sm"
-          justifyContent="center"
-          alignItems="center"
+          overflow="hidden"
+          // border="2px solid #000"
+          transitionProperty="box-shadow"
+          transitionDuration="normal"
+          boxShadow={
+            light
+              ? `0 0 0 2px var(--chakra-colors-${color}-200)`
+              : `0 0 0 2px var(--chakra-colors-${color}-700)`
+          }
+          _focus={{
+            boxShadow: light
+              ? `0 0 0 3px var(--chakra-colors-${color}-300)`
+              : `0 0 0 3px var(--chakra-colors-${color}-600)`,
+          }}
+          // justifyContent="center"
+          // alignItems="center"
         >
           <PopoverArrow />
 

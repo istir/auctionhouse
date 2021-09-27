@@ -20,7 +20,7 @@ export default function PopupRegister(props: PopupRegisterProps): JSX.Element {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   function getSize(currentBreakpoint: string | undefined) {
-    console.log(currentBreakpoint);
+    // console.log(currentBreakpoint);
     if (undefined) return "md";
     switch (currentBreakpoint) {
       case "base":
@@ -47,7 +47,12 @@ export default function PopupRegister(props: PopupRegisterProps): JSX.Element {
         {/* <ModalHeader>Modal Title</ModalHeader> */}
         <ModalContent>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody
+            display="flex"
+            w="full"
+            justifyItems="center"
+            alignItems="center"
+          >
             <Register
             //  refresh={props.refresh} closePopup={onClose}
             />

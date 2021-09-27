@@ -68,6 +68,14 @@ const components = {
       },
     }),
   },
+  // Flex: {
+  //   baseStyle: ({ colorScheme }: { colorScheme: string }) => ({
+  //     // _hover: {
+  //     //   backgroundColor: `rgba(0,0,0,0.5)`,
+  //     // },
+  //     backgroundColor: `rgba(0,0,0,0.5)`,
+  //   }),
+  // },
   // Input: {
   //   variants: {
   //     correctOutline: {

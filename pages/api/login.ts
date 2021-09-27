@@ -98,7 +98,30 @@ export default withSession(
       return;
     }
     //? 3. compare hash and password of a user
-    const isPasswordOk = argon2.verify({
+
+    argon2
+      .verify({
+        pass: password,
+        encoded: user.password,
+      })
+      .then(async () => {
+        const token = await generateToken(user.id, rememberMe);
+        await handleSessionToken(req.session, token, {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          birthDateAsString: converTdateToString(user.birthDate),
+          email: user.email,
+          phoneNumber: user.phoneNumber,
+        });
+        res.status(200).end("OK");
+        return;
+      })
+      .catch((e) => {
+        res.status(200).end("Data doesn't exist");
+        return;
+      });
+    return;
+    const isPasswordOk = await argon2.verify({
       pass: password,
       encoded: user.password,
     });

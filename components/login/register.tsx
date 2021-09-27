@@ -103,7 +103,7 @@ export const Register: React.FC<RegisterProps> = (props) => {
   }
   return (
     <Formik initialValues={initialFormikValues} onSubmit={HandleOnSubmit}>
-      <Form>
+      <Form style={{ width: "inherit" }}>
         <Grid templateColumns="auto auto" gridGap="3" mt="8">
           <FormInput validator={validateName} name="firstName" label="Imię*" />
           <FormInput

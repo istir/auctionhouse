@@ -7,9 +7,9 @@
 // //   IconDefinition,
 // // } from "@fortawesome/free-solid-svg-icons";
 // // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import router from "next/router";
+import router from "next/router";
 // import { FaBookmark, FaSignOutAlt, FaUser } from "react-icons/fa";
-// import Router, { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 // import React from "react";
 // // import { Manager, Popper, Reference } from "react-popper";
 // // import Popup from "reactjs-popup";
@@ -48,9 +48,13 @@
 
 import { Flex, Text } from "@chakra-ui/layout";
 import React from "react";
+import { FaBookmark, FaSignOutAlt, FaUser } from "react-icons/fa";
+import { IconType } from "react-icons/lib";
 import { simplifiedUser } from "../../types";
 import PopupLogin from "../login/PopupLogin";
 import PopupRegister from "../login/PopupRegister";
+import HeaderUserMenuItem from "./headerUserMenuItem";
+import axios from "axios";
 
 interface UserPopoutProps {
   username: string | { firstName: string; lastName: string }; //TODO probably need to change object later to a prisma object
@@ -70,46 +74,57 @@ export default function UserPopout(props: UserPopoutProps): JSX.Element {
    * @returns React Component
    */
 
-  function renderMenuItem(
-    itemName: string,
-    faIcon?: JSX.Element,
-    onClick?: () => void
-  ) {
+  /**
+   * This method renders a menu
+   */
+  function renderMenu() {
+    if (!props.user) return renderMenuLoginCard(); //? render login card if not already logged
+    //! when testing change if
     return (
-      <Flex
-        as="li"
-        alignItems="center"
-        gridGap="1"
-        h="10"
-        px="3"
-        borderTop="2"
-        _first={{ borderTop: "none" }}
-        onClick={onClick}
-      >
-        {faIcon}
-        {itemName}
-      </Flex>
+      <ul className="w-full">
+        <HeaderUserMenuItem
+          name={
+            typeof props.username === "string"
+              ? props.username
+              : `${props.username.firstName} ${props.username.lastName}`
+          }
+          icon={<FaUser />}
+          onClick={() => console.log("user")}
+        />
+        <HeaderUserMenuItem
+          name="Wyloguj się"
+          icon={<FaSignOutAlt />}
+          onClick={() => {
+            axios.get("/api/logout").then(() => {
+              router.reload();
+            });
+          }}
+        />
+      </ul>
     );
   }
+
   /**
    * This method renders a login card for when user is not logged in.
    */
-  function renderMenuLoginCard() {
+  function renderMenuLoginCard() {``
     //TODO: add some cool image and button to log in/register
     // const buttonClass = "rounded-md border-2 duration-150 font-semibold";
     return (
       // <Flex w="full" h="full" alignItems="center" justifyContent="center">
       // <Text></Text>
-      <>
-        <PopupLogin refresh={props.refresh} />
-        <PopupRegister />
-      </>
+      <Flex w="full" h="full" justifyContent="center" alignItems="center">
+        <Flex flexDirection="column" gridGap="3">
+          <PopupLogin refresh={props.refresh} />
+          <PopupRegister />
+        </Flex>
+      </Flex>
       //   </div>
       // </div>
     );
   }
 
-  return renderMenuLoginCard();
+  return renderMenu();
 }
 
 // export default class UserPopout extends React.Component<
