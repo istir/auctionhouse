@@ -50,6 +50,7 @@ import { Flex, Text } from "@chakra-ui/layout";
 import React from "react";
 import { simplifiedUser } from "../../types";
 import PopupLogin from "../login/PopupLogin";
+import PopupRegister from "../login/PopupRegister";
 
 interface UserPopoutProps {
   username: string | { firstName: string; lastName: string }; //TODO probably need to change object later to a prisma object
@@ -99,21 +100,10 @@ export default function UserPopout(props: UserPopoutProps): JSX.Element {
     return (
       // <Flex w="full" h="full" alignItems="center" justifyContent="center">
       // <Text></Text>
-      <PopupLogin refresh={props.refresh} />
-      // </Flex>
-      // <div className="w-full h-full flex items-center justify-center">
-      //   <div className="flex flex-col gap-1">
-      //     <p>Nie zalogowano</p>
-      //     {/* <PopupLogin
-      //       refresh={this.props.refresh}
-      //       closePopup={this.props.closePopup}
-      //       isModalOpen={true}
-      //     /> */}
-      //     {/* <PopupLogin
-      //       refresh={this.props.refresh}
-      //       // closePopup={this.props.closePopup}
-      //     />
-      //     <PopupRegister closePopup={this.props.closePopup} /> */}
+      <>
+        <PopupLogin refresh={props.refresh} />
+        <PopupRegister />
+      </>
       //   </div>
       // </div>
     );

@@ -92,7 +92,16 @@ export default function NameMenu(props: NameMenuProps): JSX.Element {
     <>
       {/* {renderNameMenu()} */}
       <Popover>
-        <PopoverTrigger>{renderNameMenu()}</PopoverTrigger>
+        <PopoverTrigger>
+          {/* //! chakra-ui issue https://github.com/chakra-ui/chakra-ui/issues/4328 */}
+          <Button gridGap="2" aria-label="Użytkownik">
+            {renderAvatar()}
+            <Text fontWeight="bold" userSelect="none">
+              {getName()}
+            </Text>
+            <FaChevronDown />
+          </Button>
+        </PopoverTrigger>
         <PopoverContent
           mr="2"
           h="md"
@@ -101,27 +110,11 @@ export default function NameMenu(props: NameMenuProps): JSX.Element {
           alignItems="center"
         >
           <PopoverArrow />
-          {/* <PopoverHeader fontWeight="semibold">Confirmation</PopoverHeader>
-          <PopoverArrow />
-          <PopoverCloseButton />
-          <PopoverBody>
-            Are you sure you want to continue with your action?
-          </PopoverBody>
-          <PopoverFooter d="flex" justifyContent="flex-end">
-            <ButtonGroup size="sm">
-              <Button variant="outline">Cancel</Button>
-              <Button colorScheme="red">Apply</Button>
-            </ButtonGroup>
-          </PopoverFooter> */}
+
           <UserPopout
             user={props.user}
             username={getName()}
             refresh={props.refresh}
-            // closePopup={
-            //   this.ref?.current?.close
-            //     ? this.ref.current.close.bind(this)
-            //     : null
-            // }
           />
         </PopoverContent>
       </Popover>
