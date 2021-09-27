@@ -6,7 +6,7 @@ import {
   ModalCloseButton,
   ModalOverlay,
 } from "@chakra-ui/modal";
-import { ModalContent } from "@chakra-ui/react";
+import { ModalContent, useBreakpoint } from "@chakra-ui/react";
 import React from "react";
 import Register from "./register";
 
@@ -19,10 +19,30 @@ interface PopupRegisterProps {
 export default function PopupRegister(props: PopupRegisterProps): JSX.Element {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  function getSize(currentBreakpoint: string | undefined) {
+    console.log(currentBreakpoint);
+    if (undefined) return "md";
+    switch (currentBreakpoint) {
+      case "base":
+        return "full";
+      case "sm":
+        return "full";
+      // case "md":
+      //   return "lg";
+      default:
+        return "md";
+    }
+  }
+
   return (
     <>
       <Button onClick={onOpen}>Zarejestruj</Button>
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        isCentered
+        size={getSize(useBreakpoint())}
+      >
         <ModalOverlay />
         {/* <ModalHeader>Modal Title</ModalHeader> */}
         <ModalContent>

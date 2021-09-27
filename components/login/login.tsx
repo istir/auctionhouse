@@ -13,7 +13,6 @@ import React from "react";
 import { localizeErrors } from "../../libs/localizeStrings";
 import { validateEmail, validatePassword } from "../../libs/validator";
 import FormInput from "../form/FormInput";
-import FormParent from "../form/FormParent";
 
 interface LoginProps {
   refresh?: () => void;
@@ -21,10 +20,6 @@ interface LoginProps {
 }
 
 export const Login: React.FC<LoginProps> = (props: LoginProps) => {
-  const inputClassName =
-    "duration-150 border-2  rounded-md p-1 font-semibold focus:border-blue-200 outline-none";
-  const errorDivClassName = "font-semibold text-red-500";
-
   const [error, setError] = React.useState<string>("");
   // const [anyFormikError, setAnyFormikError] = React.useState<boolean[]>([
   //   false,
@@ -80,40 +75,7 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
     return false;
   }
 
-  // function styleFormikError(
-  //   error: any,
-  //   touched?: boolean | FormikTouched<Date> | undefined | boolean[]
-  // ) {
-  //   if (Array.isArray(error) && Array.isArray(touched)) {
-  //     if (touched.some((element) => element === true)) {
-  //       for (let i = 0; i < error.length; i += 1) {
-  //         if (error[i] !== undefined && touched[i]) return "border-red-400";
-  //       }
-  //       return "border-blue-400";
-  //     }
-  //     return "border-gray-400";
-  //   }
-  //   if (touched) {
-  //     if (error !== undefined) return "border-red-400";
-  //     // if (touched)
-  //     return "border-blue-400";
-  //   }
-  //   return "border-gray-400";
-  // }
-
   return (
-    // <FormParent>
-    // {()}
-    //   <Field name="email" validate={validateEmail}>
-    //     {({ field, form }) => (
-    //       <FormControl>
-    //         <FormLabel htmlFor="email">Adres e-mail</FormLabel>
-    //         <Input {...field} id="email" placeholder="Adres e-mail" />
-    //         {/* <FormErrorMessage>{errors.email}</FormErrorMessage> */}
-    //       </FormControl>
-    //     )}
-    //   </Field>
-    // </FormParent>
     <Formik initialValues={initialFormikValues} onSubmit={HandleOnSubmit}>
       <Form>
         <FormInput
