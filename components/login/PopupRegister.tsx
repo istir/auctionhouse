@@ -30,7 +30,7 @@ export default function PopupRegister(props: PopupRegisterProps): JSX.Element {
       // case "md":
       //   return "lg";
       default:
-        return "md";
+        return "lg";
     }
   }
 

@@ -104,7 +104,7 @@ export const Register: React.FC<RegisterProps> = (props) => {
   return (
     <Formik initialValues={initialFormikValues} onSubmit={HandleOnSubmit}>
       <Form>
-        <Grid templateColumns="auto auto" gridGap="3">
+        <Grid templateColumns="auto auto" gridGap="3" mt="8">
           <FormInput validator={validateName} name="firstName" label="Imię*" />
           <FormInput
             validator={validateName}
@@ -119,7 +119,7 @@ export const Register: React.FC<RegisterProps> = (props) => {
           <FormInput
             validator={validatePhoneNumber}
             name="phoneNumber"
-            label="Number Telefonu*"
+            label="Numer Telefonu*"
           />
           <FormInput
             validator={validatePassword}
@@ -131,19 +131,13 @@ export const Register: React.FC<RegisterProps> = (props) => {
             validator={validateDate}
             label="Data urodzenia*"
           />
-          <fieldset>
-            <FormInput
-              name="street"
-              label="Ulica*"
-              validator={validateAddress}
-            />
-            <FormInput
-              name="zipCode"
-              label="Kod Pocztowy*"
-              validator={validateZipCode}
-            />
-            <FormInput name="city" label="Miasto*" validator={validateName} />
-          </fieldset>
+          <FormInput name="street" label="Ulica*" validator={validateAddress} />
+          <FormInput
+            name="zipCode"
+            label="Kod Pocztowy*"
+            validator={validateZipCode}
+          />
+          <FormInput name="city" label="Miasto*" validator={validateName} />
         </Grid>
         <Button
           type="submit"
