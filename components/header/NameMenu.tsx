@@ -25,6 +25,7 @@ import { useColorModePreference } from "@chakra-ui/media-query";
 import useColorSchemeContext from "../../libs/hooks/useColorSchemeContext";
 import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
 import useColorValue from "../../libs/hooks/useColorBasedOnColorSchemeAndLightMode";
+import { Portal } from "@chakra-ui/react";
 
 interface NameMenuProps {
   name?: string;
@@ -102,36 +103,38 @@ export default function NameMenu(props: NameMenuProps): JSX.Element {
             <FaChevronDown />
           </Button>
         </PopoverTrigger>
-        <PopoverContent
-          mr="2"
-          mt="3"
-          h="md"
-          w="sm"
-          overflow="hidden"
-          // border="2px solid #000"
-          transitionProperty="box-shadow"
-          transitionDuration="normal"
-          boxShadow={
-            light
-              ? `0 0 0 2px var(--chakra-colors-${color}-200)`
-              : `0 0 0 2px var(--chakra-colors-${color}-700)`
-          }
-          _focus={{
-            boxShadow: light
-              ? `0 0 0 3px var(--chakra-colors-${color}-300)`
-              : `0 0 0 3px var(--chakra-colors-${color}-600)`,
-          }}
-          // justifyContent="center"
-          // alignItems="center"
-        >
-          <PopoverArrow />
+        <Portal>
+          <PopoverContent
+            mr="2"
+            mt="3"
+            h="md"
+            w="sm"
+            overflow="hidden"
+            // border="2px solid #000"
+            transitionProperty="box-shadow"
+            transitionDuration="normal"
+            boxShadow={
+              light
+                ? `0 0 0 2px var(--chakra-colors-${color}-200)`
+                : `0 0 0 2px var(--chakra-colors-${color}-700)`
+            }
+            _focus={{
+              boxShadow: light
+                ? `0 0 0 3px var(--chakra-colors-${color}-300)`
+                : `0 0 0 3px var(--chakra-colors-${color}-600)`,
+            }}
+            // justifyContent="center"
+            // alignItems="center"
+          >
+            <PopoverArrow />
 
-          <UserPopout
-            user={props.user}
-            username={getName()}
-            refresh={props.refresh}
-          />
-        </PopoverContent>
+            <UserPopout
+              user={props.user}
+              username={getName()}
+              refresh={props.refresh}
+            />
+          </PopoverContent>
+        </Portal>
       </Popover>
     </>
   );

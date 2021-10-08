@@ -16,6 +16,7 @@ import { Auction } from "@prisma/client";
 import PickedForYou from "../components/mainPage/pickedForYou";
 import Categories from "../components/mainPage/categories/categories";
 import { Box } from "@chakra-ui/layout";
+import CategoriesSmall from "../components/mainPage/categories/CategoriesSmall";
 
 export const getServerSideProps: GetServerSideProps = withSession(
   async function ({ req }: { req: NextApiRequest & { session: Session } }) {
@@ -48,11 +49,14 @@ export default function Home(
 
   if (props.user && props.token)
     return (
-      <Header
-        user={props.user}
-        token={props.token}
-        refresh={refreshData}
-      ></Header>
+      <Box>
+        <Header
+          user={props.user}
+          token={props.token}
+          refresh={refreshData}
+        ></Header>
+        <CategoriesSmall />
+      </Box>
     );
   return (
     <Box>
