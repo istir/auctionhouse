@@ -6,28 +6,18 @@ import useLightModeCheck from "../../../libs/hooks/useLightModeCheck";
 interface AuctionImagesProps {
   image: string;
   name: string;
+  scroll: number;
 }
 
 export default function AuctionImages(props: AuctionImagesProps): JSX.Element {
   const isLightMode = useLightModeCheck();
-  const [scroll, setScroll] = React.useState<number>(0);
+  //   const [scroll, setScroll] = React.useState<number>(0);
   function handleParallaxScrolling() {
-    const scrolled = (scroll * -0.5).toString();
-    console.log(scrolled);
+    const scrolled = (props.scroll * -0.5).toString();
+    // console.log(scrolled);
     return scrolled + "px";
   }
-  React.useEffect(() => {
-    if (typeof window === "undefined") return;
-    window.addEventListener("scroll", () => {
-      setScroll(window.scrollY);
-    });
 
-    return () => {
-      window.removeEventListener("scroll", () => {
-        setScroll(window.scrollY);
-      });
-    };
-  }, []);
   return (
     <Box>
       <Image

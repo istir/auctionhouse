@@ -1,7 +1,10 @@
 import { Auction, Category, User } from ".prisma/client";
-import { Box, Text } from "@chakra-ui/layout";
+import { Box, Flex, Grid, Text } from "@chakra-ui/layout";
 import { Button, Image } from "@chakra-ui/react";
 import React from "react";
+import useLightModeCheck from "../../../libs/hooks/useLightModeCheck";
+import AuctionBuyNow from "./AuctionBuyNow";
+import AuctionSeller from "./AuctionSeller";
 
 interface AuctionHeaderProps {
   auction: Auction & {
@@ -16,42 +19,17 @@ export default function AuctionHeader({
   ...props
 }: AuctionHeaderProps): JSX.Element {
   const imageRef = React.useRef<HTMLImageElement>(null);
+  const lightMode = useLightModeCheck();
 
-  function renderSellerAvatar() {
-    // console.log(auction.seller.avatar);
-    if (auction.seller.avatar) {
-      return (
-        <Image
-          src={auction.seller.avatar}
-          alt={`${auction.seller.firstName} ${auction.seller.lastName}`}
-          w={["24px", "32px"]}
-          h={["24px", "32px"]}
-          objectFit="cover"
-          borderRadius="full"
-          shadow="md"
-        />
-      );
-    }
-  }
   // console.log(imageRef.current?.height);
+
+  //TODO: Kategoria1 -> Kategoria2 -> KATEGORIA3 jako linki
+  //TODO: Na desktopie poprawiony header
+  //TODO: na mobilce hamburger menu
   return (
     <Box>
-      {/* <Image
-        ref={imageRef}
-        src={auction.image}
-        borderRadius="2xl"
-        shadow="lg"
-        alt={auction.name}
-        pos="fixed"
-        top="0"
-        // w={`calc(100% - 2 * var(--chakra-space-${["0", "10", "20"]}))`}
-        w={[
-          "calc(100% - 2 * var(--chakra-space-0))",
-          "calc(100% - 2 * var(--chakra-space-10))",
-          "calc(100% - 2 * var(--chakra-space-20))",
-        ]}
-      /> */}
-      <Box zIndex="1" pos="relative">
+      <Box pos="relative">
+        <Text>{auction.category.name}</Text>
         <Text
           mt={`${imageRef.current?.height}px`}
           fontWeight="bold"
@@ -60,10 +38,10 @@ export default function AuctionHeader({
         >
           {auction.name}
         </Text>
-        <Button variant="pill" minH="fit-content">
-          {renderSellerAvatar()}
-          <Text ml="2">{`${auction.seller.firstName} ${auction.seller.lastName}`}</Text>
-        </Button>
+        <Flex justifyContent="space-between">
+          <AuctionSeller auction={auction} />
+          <AuctionBuyNow auction={auction} />
+        </Flex>
       </Box>
     </Box>
   );

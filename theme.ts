@@ -49,6 +49,16 @@ const config: ThemeConfig = {
   useSystemColorMode: false,
 };
 const components = {
+  IconButton: {
+    variants: {
+      forsenCD: (props) => ({
+        _hover: {
+          // color: mode("gray.200", "gray.700")(props),
+          color: "#f00",
+        },
+      }),
+    },
+  },
   Button: {
     baseStyle: ({ colorScheme }: { colorScheme: string }) => ({
       _focus: {
@@ -56,10 +66,51 @@ const components = {
       },
     }),
     variants: {
-      pill: (props) => ({
+      pill: (props: { promo: boolean }) => ({
         borderRadius: "full",
-        bg: mode("white", "gray.800")(props),
+        bg: mode(
+          props.promo ? "red.100" : "gray.50",
+          props.promo ? "red.900" : "gray.700"
+        )(props),
         shadow: "md",
+        my: "2",
+        // outline: "5px solid transparent",
+        // outlineOffset: "0",
+        transitionProperty: "box-shadow background-color",
+        _hover: {
+          boxShadow: `0 0 0 5px var(--chakra-colors-${mode(
+            props.promo ? "red-200" : "blackAlpha-300",
+            props.promo ? "red-800" : "whiteAlpha-500"
+          )(props)}) `,
+          // borderColor: "#fff",
+          // outline: `5px solid
+          // var(--chakra-colors-${mode("white", "gray-800")(props)})
+          // `,
+          bg: mode(
+            props.promo ? "red.200" : "blackAlpha.300",
+            props.promo ? "red.800" : "whiteAlpha.500"
+          )(props),
+        },
+      }),
+      transparent: (props) => ({
+        filter: `drop-shadow(0px 0px 1px var(--chakra-colors-gray-${mode(
+          "200",
+          "900"
+        )(props)}))`,
+        WebkitTapHighlightColor: "transparent",
+        _hover: {
+          color: mode("gray.600", "gray.200")(props),
+          boxShadow: "none",
+        },
+        _active: {
+          boxShadow: "none",
+        },
+        _focus: {
+          boxShadow: "none",
+        },
+        _focusWithin: {
+          boxShadow: "none",
+        },
       }),
     },
   },
