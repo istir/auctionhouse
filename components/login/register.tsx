@@ -79,7 +79,9 @@ export const Register: React.FC<RegisterProps> = (props) => {
   function HandleOnSubmit(values: FormikValues) {
     try {
       setError("");
-      axios.post("/api/login", values).then(
+
+      axios({ url: "/api/register", method: "post", data: values }).then(
+        // axios.post("/api/register", values).then(
         (ful) => {
           console.log(ful);
           if (ful.status == 200 && ful.data === "OK") {
@@ -124,6 +126,7 @@ export const Register: React.FC<RegisterProps> = (props) => {
           <FormInput
             validator={validatePassword}
             name="password"
+            isPassword
             label="Hasło*"
           />
           <FormDate

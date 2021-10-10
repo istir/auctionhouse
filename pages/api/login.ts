@@ -82,10 +82,10 @@ export default withSession(
     // console.log("res", res);
     // return;
     //? 1.5. validate the data
-    if (validateEmail(email) || validatePassword(password)) {
-      res.status(200).end("Data doesn't exist");
-      return;
-    }
+    // if (validateEmail(email) || validatePassword(password)) {
+    //   res.status(200).end("Data doesn't exist");
+    //   return;
+    // }
 
     //? 2 get user by email
 

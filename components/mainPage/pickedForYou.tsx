@@ -4,7 +4,7 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 import { Auction } from "@prisma/client";
 import React from "react";
-import AuctionComponent from "../auction/Auction";
+import AuctionComponent from "../auction/AuctionThumbnail";
 import { IconButton } from "@chakra-ui/react";
 
 interface PickedForYouProps {

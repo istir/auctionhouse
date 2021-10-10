@@ -12,9 +12,9 @@ import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
 interface HeaderProps {
   user?: simplifiedUser;
   token?: string;
-  refresh: () => void;
+  refresh?: () => void;
 }
-
+//TODO: Change logic so that user is axios'd
 export const Header: React.FC<HeaderProps> = ({ user, refresh }) => {
   // console.log(userId);
   // userId && ajaxUser(userId);

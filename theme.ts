@@ -1,5 +1,5 @@
 import { Colors, ThemeConfig, extendTheme } from "@chakra-ui/react";
-import { Styles } from "@chakra-ui/theme-tools";
+import { mode, Styles } from "@chakra-ui/theme-tools";
 // import isLight from "./libs/isLightMode";
 // const customTheme:Theme {
 //   ...
@@ -30,11 +30,13 @@ const shadows = {
 };
 
 const styles: Styles = {
-  global: () => ({
+  global: (props) => ({
     "html, body": {
       // color: isLight()?"gray.":"white",
       // lineHeight: "tall",
-      // backgroundColor: mode("gray.50", "gray.900")(props),
+      backgroundColor: mode("gray.50", "gray.900")(props),
+      transitionDuration: "0.2s",
+      transitionProperty: "background-color",
     },
 
     // a: {
@@ -53,6 +55,13 @@ const components = {
         boxShadow: `0 0 0 3px var(--chakra-colors-${colorScheme}-200)`,
       },
     }),
+    variants: {
+      pill: (props) => ({
+        borderRadius: "full",
+        bg: mode("white", "gray.800")(props),
+        shadow: "md",
+      }),
+    },
   },
   Input: {
     baseStyle: ({ colorScheme }: { colorScheme: string }) => ({

@@ -12,7 +12,10 @@ import {
   validatePhoneNumber,
   validateZipCode,
 } from "../../libs/validator";
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function register(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   // > ------------------------- how it should work --------------------------- //
   // > 0. if using GET throw an error
   // > 1. get JSON data from request
@@ -38,7 +41,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     zipCode,
     city,
     birthDate,
-  } = JSON.parse(req.body);
+  } = req.body;
 
   //? 1.5. validate the data
   if (
@@ -114,4 +117,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       return;
     }
   }
-};
+}

@@ -2,7 +2,7 @@ import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Auction } from "@prisma/client";
 import React from "react";
-import AuctionComponent from "../auction/Auction";
+import AuctionComponent from "../auction/AuctionThumbnail";
 
 interface PickedForYouProps {
   auctionsToShow: Auction[];
