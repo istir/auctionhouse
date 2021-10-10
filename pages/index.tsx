@@ -55,7 +55,7 @@ export default function Home(
           token={props.token}
           refresh={refreshData}
         ></Header>
-        <CategoriesSmall />
+        <Categories small />
       </Box>
     );
   return (
