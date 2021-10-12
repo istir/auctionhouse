@@ -68,6 +68,8 @@ const components = {
     variants: {
       pill: (props: { promo: boolean }) => ({
         borderRadius: "full",
+        WebkitTapHighlightColor: "transparent",
+
         bg: mode(
           props.promo ? "red.100" : "gray.50",
           props.promo ? "red.900" : "gray.700"
@@ -97,7 +99,10 @@ const components = {
           "200",
           "900"
         )(props)}))`,
+        // css: {
         WebkitTapHighlightColor: "transparent",
+        // },
+        className: "no-tap",
         _hover: {
           color: mode("gray.600", "gray.200")(props),
           boxShadow: "none",

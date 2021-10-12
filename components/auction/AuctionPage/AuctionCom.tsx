@@ -18,6 +18,8 @@ import ReactMarkdown from "react-markdown";
 import AuctionBuyNow from "./AuctionBuyNow";
 import { Image } from "@chakra-ui/image";
 import AuctionGradient from "./AuctionGradient";
+import { useBreakpoint } from "@chakra-ui/media-query";
+import { useDisclosure } from "@chakra-ui/hooks";
 interface AuctionProps {
   auction: Auction & {
     category: Category;
@@ -29,17 +31,57 @@ interface AuctionProps {
 export default function AuctionCom(props: AuctionProps): JSX.Element {
   const isLightMode = useLightModeCheck();
   const colorScheme = React.useContext(useColorSchemeContext);
+  // const [breakpointSize, setBreakpointSize] = React.useState<string>(
+  //   getSize(useBreakpoint())
+  // );
+  // const [drawerBreakpointSize, setDrawerBreakpointSize] =
+  //   React.useState<string>(getSize(useBreakpoint()));
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
+  function getSize(currentBreakpoint: string | undefined): string {
+    // max-width: var(--chakra-sizes-xs);
+    // console.log(currentBreakpoint);
+
+    if (undefined) return "md";
+    switch (currentBreakpoint) {
+      case "base":
+        // setDrawerBreakpointSize("full");
+        return "sm";
+      case "sm":
+        // setDrawerBreakpointSize("full");
+        return "full";
+      // case "md":
+      //   return "lg";
+      default:
+        // setDrawerBreakpointSize("lg");
+        return "lg";
+    }
+  }
+  function getDrawerBreakpointMargin(breakpoint: string | undefined) {
+    // const breakpoint = getSize(useBreakpoint());
+    console.log(`var(--chakra-sizes-${getSize(breakpoint)})`);
+    if (isOpen) {
+      return `var(--chakra-sizes-${getSize(breakpoint)})`;
+    }
+    return "0";
+  }
   return (
     <Box>
       {/* <style>{`ul {margin-left:2rem}`}</style> */}
-      <Header />
-      <ColorModeSwitcher zIndex="2" variant="transparent" />
+      <Header
+        drawerWidth={getSize(useBreakpoint())}
+        isDrawerOpen={isOpen}
+        onDrawerOpen={onOpen}
+        onDrawerClose={onClose}
+      />
       <Box
         bg={isLightMode ? "white" : "gray.800"}
         m={["0", "10", "20"]}
+        // mr={["0","10","20"]}
         shadow={["none", "md"]}
         // px={["3", "10"]}
+        // transform={`translateX(${getDrawerBreakpointMargin(useBreakpoint())})`}
+        // marginLeft={getDrawerBreakpointMargin(useBreakpoint())}
         // py="8"
         borderRadius="2xl"
         overflow="hidden"

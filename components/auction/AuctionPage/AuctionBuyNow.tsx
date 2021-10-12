@@ -39,6 +39,10 @@ export default function AuctionBuyNow({
       promo={auction.originalPrice && auction.originalPrice > auction.price}
       size={props.size}
       width={props.full ? "full" : "fit-content"}
+
+      // style={{ WebkitTapHighlightColor: "transparent" }}
+      // css={{ WebkitTapHighlightColor: "transparent" }}
+      // __css={{ WebkitTapHighlightColor: "transparent" }}
     >
       <Flex alignItems="center">
         <Text>Kup Teraz |</Text> {renderPrice()}

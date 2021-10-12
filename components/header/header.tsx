@@ -14,9 +14,18 @@ interface HeaderProps {
   user?: simplifiedUser;
   token?: string;
   refresh?: () => void;
+  drawerWidth: string;
+  isDrawerOpen: boolean;
+  onDrawerOpen: () => void;
+  onDrawerClose: () => void;
 }
 //TODO: Change logic so that user is axios'd
-export const Header: React.FC<HeaderProps> = ({ user, refresh }) => {
+export const Header: React.FC<HeaderProps> = ({
+  user,
+  refresh,
+  drawerWidth,
+  ...props
+}) => {
   // console.log(userId);
   // userId && ajaxUser(userId);
 
@@ -30,12 +39,33 @@ export const Header: React.FC<HeaderProps> = ({ user, refresh }) => {
   function renderCorrectMenu(currentSize: string | undefined) {
     switch (currentSize) {
       case "base":
-        return <HamburgerMenu />;
+        return (
+          <HamburgerMenu
+            drawerWidth={drawerWidth}
+            isDrawerOpen={props.isDrawerOpen}
+            onDrawerOpen={props.onDrawerOpen}
+            onDrawerClose={props.onDrawerClose}
+          />
+        );
       case "sm":
-        return <HamburgerMenu />;
+        return (
+          <HamburgerMenu
+            drawerWidth={drawerWidth}
+            isDrawerOpen={props.isDrawerOpen}
+            onDrawerOpen={props.onDrawerOpen}
+            onDrawerClose={props.onDrawerClose}
+          />
+        );
 
       default:
-        return <HamburgerMenu />;
+        return (
+          <HamburgerMenu
+            drawerWidth={drawerWidth}
+            isDrawerOpen={props.isDrawerOpen}
+            onDrawerOpen={props.onDrawerOpen}
+            onDrawerClose={props.onDrawerClose}
+          />
+        );
     }
   }
   return renderCorrectMenu(useBreakpoint());
