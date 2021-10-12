@@ -17,6 +17,7 @@ import AuctionImages from "./AuctionImages";
 import ReactMarkdown from "react-markdown";
 import AuctionBuyNow from "./AuctionBuyNow";
 import { Image } from "@chakra-ui/image";
+import AuctionGradient from "./AuctionGradient";
 interface AuctionProps {
   auction: Auction & {
     category: Category;
@@ -29,34 +30,6 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
   const isLightMode = useLightModeCheck();
   const colorScheme = React.useContext(useColorSchemeContext);
 
-  const [scroll, setScroll] = React.useState<number>(0);
-
-  React.useEffect(() => {
-    if (typeof window === "undefined") return;
-    window.addEventListener("scroll", () => {
-      setScroll(window.scrollY);
-    });
-
-    return () => {
-      window.removeEventListener("scroll", () => {
-        setScroll(window.scrollY);
-      });
-    };
-  }, []);
-  function gradientTransform() {
-    if (scroll < 100) {
-      return `scaleY(${scroll / 100})`;
-    } else {
-      return "scaleY(1)";
-    }
-  }
-  function gradientOpacity() {
-    if (scroll < 200) {
-      return `${(scroll * 0.5) / 100}`;
-    } else {
-      return "1";
-    }
-  }
   return (
     <Box>
       {/* <style>{`ul {margin-left:2rem}`}</style> */}
@@ -74,22 +47,10 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
         <AuctionImages
           name={props.auction.name}
           image={props.auction.image}
-          scroll={scroll}
+          // scroll={scroll}
         />
         <Box zIndex="2" pos="relative" mt={["65vh", "65vh", "50vh"]}>
-          <Box
-            mt="-52"
-            bgImage={`linear-gradient(180deg, rgba(255,0,0,0) 0%, var(--chakra-colors-${
-              isLightMode ? "white" : "gray-800"
-            }) 100%);`}
-            // transform={gradientTransform()}
-            style={{
-              opacity: gradientOpacity(),
-            }}
-            // opacity={gradientOpacity()}
-            transformOrigin="bottom"
-            h="48"
-          ></Box>
+          <AuctionGradient lightMode={isLightMode} />
           <Box
             // bg={isLightMode ? "gray.50" : "gray.900"}
             bg={isLightMode ? "white" : "gray.800"}
