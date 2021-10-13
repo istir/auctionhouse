@@ -11,12 +11,16 @@ model User {
   id          Int       @default(autoincrement())  @id
   firstName   String
   lastName    String
+  username    String?   //? if seller is a store or doesn't want to display real name
+  avatar      String?
   email       String    @unique
   address     Address?  @relation()
   phoneNumber String    
   password    String
   birthDate   DateTime
   tokens       Token[]   @relation()
+  auctionsAsSeller Auction[] @relation(name:"seller")
+  auctionsAsBuyer Auction[] @relation(name:"buyer")
 }
 
 model Address {
@@ -48,6 +52,12 @@ model Auction {
   usersBought   Int
   category      Category @relation(fields:[categoryId],references: [id])
   categoryId    Int
+  seller        User    @relation(name:"seller",fields:[sellerId],references: [id])
+  sellerId      Int
+  buyer         User?    @relation(name:"buyer",fields:[buyerId],references: [id])
+  buyerId       Int?
+  url           String? @unique
+  markdown      String?
 }
 
 model Category {
@@ -59,6 +69,8 @@ model Category {
   auctions    Auction[] 
   
 }
+
+
 
 generator client {
   provider = "prisma-client-js"

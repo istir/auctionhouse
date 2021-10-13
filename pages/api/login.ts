@@ -1,18 +1,8 @@
-import { Address, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import argon2 from "argon2-browser";
 import randomSalt from "../../libs/randomSalt";
 import prisma from "../../prisma/prisma";
 import withSession from "../../libs/ironSession";
-import {
-  validateAddress,
-  validateDate,
-  validateEmail,
-  validateName,
-  validatePassword,
-  validatePhoneNumber,
-  validateZipCode,
-} from "../../libs/validator";
 import { Session } from "next-iron-session";
 import handleSessionToken from "../../libs/handleSessionToken";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
@@ -78,12 +68,14 @@ export default withSession(
       return;
     }
     //? 1 get JSON data from request
-    let { email, password, rememberMe } = JSON.parse(req.body);
+    let { email, password, rememberMe } = req.body;
+    // console.log("res", res);
+    // return;
     //? 1.5. validate the data
-    if (validateEmail(email) || validatePassword(password)) {
-      res.status(200).end("Data doesn't exist");
-      return;
-    }
+    // if (validateEmail(email) || validatePassword(password)) {
+    //   res.status(200).end("Data doesn't exist");
+    //   return;
+    // }
 
     //? 2 get user by email
 
@@ -96,27 +88,28 @@ export default withSession(
       return;
     }
     //? 3. compare hash and password of a user
-    const isPasswordOk = argon2.verify({
-      pass: password,
-      encoded: user.password,
-    });
-    // ? 4. if password doesn't work throw a generic error
-    if (!isPasswordOk) {
-      res.status(200).end("Data doesn't exist");
-      return;
-    } else {
-      // ? 5. if successful send back 200 and generate token
 
-      const token = await generateToken(user.id, rememberMe);
-      await handleSessionToken(req.session, token, {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        birthDateAsString: converTdateToString(user.birthDate),
-        email: user.email,
-        phoneNumber: user.phoneNumber,
+    argon2
+      .verify({
+        pass: password,
+        encoded: user.password,
+      })
+      .then(async () => {
+        const token = await generateToken(user.id, rememberMe);
+        await handleSessionToken(req.session, token, {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          birthDateAsString: converTdateToString(user.birthDate),
+          email: user.email,
+          phoneNumber: user.phoneNumber,
+        });
+        res.status(200).end("OK");
+        return;
+      })
+      .catch((e) => {
+        res.status(200).end("Data doesn't exist");
+        return;
       });
-      res.status(200).end("OK");
-      return;
-    }
+    return;
   }
 );

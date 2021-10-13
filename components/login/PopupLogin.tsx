@@ -1,41 +1,60 @@
+import { Button } from "@chakra-ui/button";
+import { useDisclosure } from "@chakra-ui/hooks";
+import {
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalOverlay,
+} from "@chakra-ui/modal";
+import { ModalContent, useBreakpoint } from "@chakra-ui/react";
 import React from "react";
-import Popup from "reactjs-popup";
 import Login from "./login";
 
 interface PopupLoginProps {
-  refresh: () => void;
-  closePopup: () => void;
+  refresh?: () => void;
+  // closePopup: () => void;
+  // isModalOpen: boolean;
 }
 
-export const PopupLogin: React.FC<PopupLoginProps> = (
-  props: PopupLoginProps
-) => {
-  console.log(props.closePopup);
-  if (props.closePopup) {
-    props.closePopup();
+export default function PopupLogin(props: PopupLoginProps): JSX.Element {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  function getSize(currentBreakpoint: string | undefined) {
+    // console.log(currentBreakpoint);
+    if (undefined) return "md";
+    switch (currentBreakpoint) {
+      case "base":
+        return "full";
+      case "sm":
+        return "full";
+      // case "md":
+      //   return "lg";
+      default:
+        return "lg";
+    }
   }
   return (
-    <Popup
-      modal
-      {...{
-        contentStyle: {
-          borderRadius: "0.375rem",
-          borderWidth: "2px",
-          borderColor: "rgba(191, 219, 254,1)",
-          minWidth: "fit-content",
-        },
-      }}
-      className="popup-modal"
-      trigger={
-        <button
-          className={`rounded-md border-2 duration-150 font-semibold border-blue-200 bg-blue-100  hover:bg-blue-400 hover:border-blue-500 `}
-        >
-          Zaloguj
-        </button>
-      }
-    >
-      <Login refresh={props.refresh} />
-    </Popup>
+    <>
+      <Button onClick={onOpen}>Zaloguj</Button>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        isCentered
+        size={getSize(useBreakpoint())}
+      >
+        <ModalOverlay />
+        {/* <ModalHeader>Modal Title</ModalHeader> */}
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody
+            display="flex"
+            w="full"
+            justifyItems="center"
+            alignItems="center"
+          >
+            <Login refresh={props.refresh} closePopup={onClose} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </>
   );
-};
-export default PopupLogin;
+}

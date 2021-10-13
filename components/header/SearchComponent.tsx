@@ -1,6 +1,9 @@
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faSearch } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FaSearch } from "react-icons/fa";
+
 import React from "react";
+import { IconButton } from "@chakra-ui/react";
 
 interface SearchComponentProps {
   renderSearchIcon?: boolean;
@@ -24,14 +27,22 @@ export default class SearchComponent extends React.Component<
   renderSearchIcon() {
     if (this.props.renderSearchIcon)
       return (
-        <FontAwesomeIcon
-          className={this.props.searchIconClass}
-          icon={faSearch}
+        <IconButton
+          icon={<FaSearch />}
+          aria-label="Szukaj"
           onClick={() => {
             this.changeSearchBoxState();
             //   universalClick("Search");
           }}
         />
+        // <FontAwesomeIcon
+        //   className={this.props.searchIconClass}
+        //   icon={faSearch}
+        //   onClick={() => {
+        //     this.changeSearchBoxState();
+        //     //   universalClick("Search");
+        //   }}
+        // />
       );
   }
 
@@ -59,7 +70,7 @@ export default class SearchComponent extends React.Component<
 
   /* --------------------------------- render --------------------------------- */
   renderSearchBox() {
-    if (!this.state.searchOpen) return;
+    // if (!this.state.searchOpen) return;
     return (
       //TODO modify tailwind css later
 
@@ -67,7 +78,12 @@ export default class SearchComponent extends React.Component<
         // onBlur={() => {
         //   this.changeSearchBoxState("close"); //? close search box when not selected
         // }}
-        className="p-1 sm:p-2 text-lg sm:text-sm rounded-md focus:outline-none focus:ring-2"
+        style={
+          this.state.searchOpen
+            ? { opacity: "1", visibility: "visible" }
+            : { width: "0", opacity: "0", visibility: "hidden" }
+        }
+        className="w-204 duration-150 p-1 sm:p-2 text-lg sm:text-sm rounded-md focus:outline-none focus:ring-2"
       ></input>
     );
   }

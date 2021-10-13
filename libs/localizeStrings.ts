@@ -18,3 +18,12 @@ export function localizePersonsBought(howMany: number) {
       return `${howMany} osób kupiło`;
   }
 }
+
+export function localizeErrors(errorMessage: string) {
+  switch (errorMessage) {
+    case "Data doesn't exist":
+      return "Dane nie istnieją";
+    default:
+      return errorMessage;
+  }
+}
