@@ -8,9 +8,6 @@ import withSession from "../libs/ironSession";
 import useSWR from "swr";
 import { simplifiedUser } from "../types";
 import { Router, useRouter } from "next/router";
-import AuctionCmponent, {
-  AuctionComponent,
-} from "../components/auction/AuctionThumbnail";
 import prisma from "../prisma/prisma";
 import { Auction } from "@prisma/client";
 import PickedForYou from "../components/mainPage/pickedForYou";
