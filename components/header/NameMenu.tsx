@@ -6,25 +6,18 @@ import React from "react";
 // import Popup from "reactjs-popup";
 import { simplifiedUser } from "../../types";
 import UserPopout from "./UserPopout";
-import { FaUser, FaChevronDown } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
 import {
   Popover,
   PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
   PopoverContent,
-  PopoverFooter,
-  PopoverHeader,
   PopoverTrigger,
 } from "@chakra-ui/popover";
 import { Image } from "@chakra-ui/image";
-import { Flex, Text } from "@chakra-ui/layout";
-import { Button, ButtonGroup, IconButton } from "@chakra-ui/button";
-import { useDisclosure } from "@chakra-ui/hooks";
-import { useColorModePreference } from "@chakra-ui/media-query";
+import { Text } from "@chakra-ui/layout";
+import { Button } from "@chakra-ui/button";
 import useColorSchemeContext from "../../libs/hooks/useColorSchemeContext";
 import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
-import useColorValue from "../../libs/hooks/useColorBasedOnColorSchemeAndLightMode";
 import { Portal } from "@chakra-ui/react";
 
 interface NameMenuProps {
@@ -32,7 +25,7 @@ interface NameMenuProps {
   avatar?: string;
   isLogged?: boolean;
   user?: simplifiedUser;
-  refresh: () => void;
+  refresh?: () => void;
   // token: string;
 
   //! podpytać czy ma sens wysyłanie tokenów

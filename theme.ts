@@ -49,16 +49,6 @@ const config: ThemeConfig = {
   useSystemColorMode: false,
 };
 const components = {
-  IconButton: {
-    variants: {
-      forsenCD: (props) => ({
-        _hover: {
-          // color: mode("gray.200", "gray.700")(props),
-          color: "#f00",
-        },
-      }),
-    },
-  },
   Button: {
     baseStyle: ({ colorScheme }: { colorScheme: string }) => ({
       _focus: {
@@ -94,7 +84,7 @@ const components = {
           )(props),
         },
       }),
-      transparent: (props) => ({
+      transparent: (props: any) => ({
         filter: `drop-shadow(0px 0px 1px var(--chakra-colors-gray-${mode(
           "200",
           "900"

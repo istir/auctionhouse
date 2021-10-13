@@ -7,21 +7,15 @@
 //   FontAwesomeIcon,
 //   FontAwesomeIconProps,
 // } from "@fortawesome/react-fontawesome";
-import { Button, IconButton } from "@chakra-ui/button";
+import { Button } from "@chakra-ui/button";
 import {
   Box,
-  Flex,
   Popover,
-  PopoverArrow,
   PopoverBody,
-  PopoverCloseButton,
   PopoverContent,
-  PopoverFooter,
-  PopoverHeader,
   PopoverTrigger,
   Portal,
 } from "@chakra-ui/react";
-import { useColorModeValue } from "@chakra-ui/color-mode";
 import React from "react";
 import useLightModeCheck from "../../../libs/hooks/useLightModeCheck";
 import CategoryTree from "./CategoryTree";

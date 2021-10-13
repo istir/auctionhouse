@@ -21,7 +21,7 @@ import {
 
 import React from "react";
 import Category from "./category";
-import { Flex, Grid } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 
 interface CategoriesProps {
   position?: "left" | "center" | "right";

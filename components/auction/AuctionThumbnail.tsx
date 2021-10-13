@@ -2,7 +2,7 @@ import { Auction } from "@prisma/client";
 import React, { useState } from "react";
 import { localizePersonsBought } from "../../libs/localizeStrings";
 import { convertMillisecondsToTime, formatTime } from "../../libs/time";
-import { RemainingTime } from "../../types";
+// import { RemainingTime } from "../../types";
 
 interface AuctionProps {
   auction: Auction;

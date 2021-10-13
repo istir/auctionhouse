@@ -1,6 +1,5 @@
 import { Auction, Category, User } from ".prisma/client";
-import { Box, Flex, Grid, Text } from "@chakra-ui/layout";
-import { Button, Image } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/layout";
 import React from "react";
 import useLightModeCheck from "../../../libs/hooks/useLightModeCheck";
 import AuctionBuyNow from "./AuctionBuyNow";

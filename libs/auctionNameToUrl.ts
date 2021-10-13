@@ -1,4 +1,4 @@
-function auctionNameToUrl(name: string, auctionId: number) {
+export default function auctionNameToUrl(name: string, auctionId: number) {
   let url = name;
   function replacePolishCharacters() {
     url = url.replace(/ś/gi, "s");

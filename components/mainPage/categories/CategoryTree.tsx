@@ -1,5 +1,4 @@
-import { Category } from ".prisma/client";
-import { Box, Grid, VStack } from "@chakra-ui/react";
+import { Grid } from "@chakra-ui/react";
 import axios from "axios";
 import React from "react";
 

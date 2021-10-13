@@ -109,7 +109,7 @@ export default async function register(
       res.status(200).end("OK");
       return;
     }
-  } catch (err) {
+  } catch (err: any) {
     //? 4 if email is already there throw a generic error
     console.error(err.code);
     if (err.code === "P2002") {

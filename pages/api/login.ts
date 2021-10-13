@@ -1,18 +1,9 @@
-import { Address, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import argon2 from "argon2-browser";
 import randomSalt from "../../libs/randomSalt";
 import prisma from "../../prisma/prisma";
 import withSession from "../../libs/ironSession";
-import {
-  validateAddress,
-  validateDate,
-  validateEmail,
-  validateName,
-  validatePassword,
-  validatePhoneNumber,
-  validateZipCode,
-} from "../../libs/validator";
+
 import { Session } from "next-iron-session";
 import handleSessionToken from "../../libs/handleSessionToken";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
@@ -121,27 +112,5 @@ export default withSession(
         return;
       });
     return;
-    const isPasswordOk = await argon2.verify({
-      pass: password,
-      encoded: user.password,
-    });
-    // ? 4. if password doesn't work throw a generic error
-    if (!isPasswordOk) {
-      res.status(200).end("Data doesn't exist");
-      return;
-    } else {
-      // ? 5. if successful send back 200 and generate token
-
-      const token = await generateToken(user.id, rememberMe);
-      await handleSessionToken(req.session, token, {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        birthDateAsString: converTdateToString(user.birthDate),
-        email: user.email,
-        phoneNumber: user.phoneNumber,
-      });
-      res.status(200).end("OK");
-      return;
-    }
   }
 );

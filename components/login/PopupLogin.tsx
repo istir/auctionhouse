@@ -11,7 +11,7 @@ import React from "react";
 import Login from "./login";
 
 interface PopupLoginProps {
-  refresh: () => void;
+  refresh?: () => void;
   // closePopup: () => void;
   // isModalOpen: boolean;
 }

@@ -1,17 +1,9 @@
 import { Button } from "@chakra-ui/button";
-import {
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-} from "@chakra-ui/form-control";
-import { Input } from "@chakra-ui/input";
 import { Text } from "@chakra-ui/layout";
 import axios from "axios";
-import useAxios from "axios-hooks";
-import { Field, Form, Formik, FormikTouched } from "formik";
+import { Form, Formik } from "formik";
 import React from "react";
 import { localizeErrors } from "../../libs/localizeStrings";
-import { validateEmail, validatePassword } from "../../libs/validator";
 import FormInput from "../form/FormInput";
 
 interface LoginProps {

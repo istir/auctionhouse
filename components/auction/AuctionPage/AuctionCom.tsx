@@ -2,15 +2,15 @@ import { Auction, Category, User } from ".prisma/client";
 import {
   Box,
   Flex,
-  Heading,
+  // Heading,
   ListItem,
   Text,
   UnorderedList,
 } from "@chakra-ui/layout";
 import React from "react";
-import useColorSchemeContext from "../../../libs/hooks/useColorSchemeContext";
+// import useColorSchemeContext from "../../../libs/hooks/useColorSchemeContext";
 import useLightModeCheck from "../../../libs/hooks/useLightModeCheck";
-import ColorModeSwitcher from "../../ColorModeSwitcher";
+// import ColorModeSwitcher from "../../ColorModeSwitcher";
 import Header from "../../header/header";
 import AuctionHeader from "./AuctionHeader";
 import AuctionImages from "./AuctionImages";
@@ -30,7 +30,7 @@ interface AuctionProps {
 
 export default function AuctionCom(props: AuctionProps): JSX.Element {
   const isLightMode = useLightModeCheck();
-  const colorScheme = React.useContext(useColorSchemeContext);
+  // const colorScheme = React.useContext(useColorSchemeContext);
   // const [breakpointSize, setBreakpointSize] = React.useState<string>(
   //   getSize(useBreakpoint())
   // );

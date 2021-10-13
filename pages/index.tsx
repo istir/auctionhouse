@@ -7,7 +7,7 @@ import checkIfTokenValidAndRefresh from "../libs/checkIfTokenValidAndRefresh";
 import withSession from "../libs/ironSession";
 import useSWR from "swr";
 import { simplifiedUser } from "../types";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import AuctionCmponent, {
   AuctionComponent,
 } from "../components/auction/AuctionThumbnail";
@@ -16,6 +16,7 @@ import { Auction } from "@prisma/client";
 import PickedForYou from "../components/mainPage/pickedForYou";
 import Categories from "../components/mainPage/categories/categories";
 import { Box } from "@chakra-ui/layout";
+import { Button } from "@chakra-ui/button";
 
 export const getServerSideProps: GetServerSideProps = withSession(
   async function ({ req }: { req: NextApiRequest & { session: Session } }) {
@@ -54,12 +55,26 @@ export default function Home(
           token={props.token}
           refresh={refreshData}
         ></Header>
+        <Button
+          onClick={() => {
+            router.push("/auction/krzeslo-komputerowe-2");
+          }}
+        >
+          Testowa aukcja
+        </Button>
         <Categories small />
       </Box>
     );
   return (
     <Box>
       <Header refresh={refreshData}></Header>
+      <Button
+        onClick={() => {
+          router.push("/auction/krzeslo-komputerowe-2");
+        }}
+      >
+        Testowa aukcja
+      </Button>
       {/* <PickedForYou width="100%" auctionsToShow={props.auctions} /> */}
       <Categories position="center" />
     </Box>

@@ -9,7 +9,6 @@
 // // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import router from "next/router";
 // import { FaBookmark, FaSignOutAlt, FaUser } from "react-icons/fa";
-import Router, { useRouter } from "next/router";
 // import React from "react";
 // // import { Manager, Popper, Reference } from "react-popper";
 // // import Popup from "reactjs-popup";
@@ -62,7 +61,7 @@ interface UserPopoutProps {
   user?: simplifiedUser;
 
   isLogged?: boolean;
-  refresh: () => void;
+  refresh?: () => void;
   closePopup?: () => void;
 }
 
@@ -107,7 +106,8 @@ export default function UserPopout(props: UserPopoutProps): JSX.Element {
   /**
    * This method renders a login card for when user is not logged in.
    */
-  function renderMenuLoginCard() {``
+  function renderMenuLoginCard() {
+    ``;
     //TODO: add some cool image and button to log in/register
     // const buttonClass = "rounded-md border-2 duration-150 font-semibold";
     return (

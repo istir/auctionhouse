@@ -1,9 +1,7 @@
-import { Button, IconButton } from "@chakra-ui/button";
-import { Box, Text } from "@chakra-ui/layout";
+import { IconButton } from "@chakra-ui/button";
+import { Box } from "@chakra-ui/layout";
 import React from "react";
-import { FaBars, FaHamburger } from "react-icons/fa";
 import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
-import styles from "../../styles/hamburgers.module.css";
 import { Spin as Hamburger } from "hamburger-react";
 import {
   Drawer,
@@ -11,18 +9,15 @@ import {
   DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
-  DrawerHeader,
   DrawerOverlay,
 } from "@chakra-ui/modal";
-import { useDisclosure } from "@chakra-ui/hooks";
-import { Input } from "@chakra-ui/input";
 import HamburgerOptions from "./HamburgerOptions";
 import ColorModeSwitcher from "../ColorModeSwitcher";
 interface HamburgerMenuProps {
-  drawerWidth: string;
-  isDrawerOpen: boolean;
-  onDrawerOpen: () => void;
-  onDrawerClose: () => void;
+  drawerWidth?: string;
+  isDrawerOpen?: boolean;
+  onDrawerOpen?: () => void;
+  onDrawerClose?: () => void;
 }
 
 export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
@@ -43,26 +38,28 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
         // onMouseLeave={() => setHover(false)}
         m="2"
       />
-      <Drawer
-        isOpen={props.isDrawerOpen}
-        placement="left"
-        onClose={props.onDrawerClose}
-        size={props.drawerWidth}
-        // finalFocusRef={btnRef}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
+      {props.isDrawerOpen && props.onDrawerClose ? (
+        <Drawer
+          isOpen={props.isDrawerOpen}
+          placement="left"
+          onClose={props.onDrawerClose}
+          size={props.drawerWidth}
+          // finalFocusRef={btnRef}
+        >
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
 
-          <DrawerBody onClick={props.onDrawerClose}>
-            <HamburgerOptions />
-          </DrawerBody>
+            <DrawerBody onClick={props.onDrawerClose}>
+              <HamburgerOptions />
+            </DrawerBody>
 
-          <DrawerFooter>
-            <ColorModeSwitcher zIndex="2" text="Zmień motyw" />
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
+            <DrawerFooter>
+              <ColorModeSwitcher zIndex="2" text="Zmień motyw" />
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+      ) : null}
     </Box>
     // <Box zIndex="10" pos="relative">
     //   <Hamburger direction="left" size={20} />

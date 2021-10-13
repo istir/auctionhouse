@@ -1,7 +1,7 @@
 import { Button } from "@chakra-ui/button";
 import { Grid } from "@chakra-ui/layout";
 import axios from "axios";
-import { Field, Form, Formik, FormikTouched } from "formik";
+import { Form, Formik } from "formik";
 import React from "react";
 import {
   validateAddress,
@@ -10,7 +10,6 @@ import {
   validateName,
   validatePassword,
   validatePhoneNumber,
-  validateUserName,
   validateZipCode,
 } from "../../libs/validator";
 import FormDate from "../form/FormDate";
@@ -74,6 +73,7 @@ export const Register: React.FC<RegisterProps> = (props) => {
 
     phoneNumber: "",
     birthDate: "",
+    rememberMe: false,
   };
 
   function HandleOnSubmit(values: FormikValues) {
