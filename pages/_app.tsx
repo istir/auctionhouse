@@ -11,6 +11,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         transform: "translateX(0)",
         position: "absolute",
         transition: "0.3s",
+        overflow: "visible",
       }}
     >
       <div id="everything-container-black-out">
