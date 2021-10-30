@@ -11,10 +11,14 @@ function MyApp({ Component, pageProps }: AppProps) {
         transform: "translateX(0)",
         position: "absolute",
         transition: "0.3s",
-        overflow: "visible",
+        overflowX: "hidden",
+        overflowY: "visible",
       }}
     >
-      <div id="everything-container-black-out">
+      <div
+        id="everything-container-black-out"
+        style={{ overflowX: "hidden", overflowY: "visible" }}
+      >
         <ChakraProvider theme={theme}>
           <Component {...pageProps} />
         </ChakraProvider>

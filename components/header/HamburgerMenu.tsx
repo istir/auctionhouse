@@ -65,7 +65,6 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
       // touchStart = { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY }
     });
     window.addEventListener("touchmove", (e) => {
-      console.log(e);
       calculateTouchScroll(
         e.changedTouches[0].clientX,
         e.changedTouches[0].clientY
