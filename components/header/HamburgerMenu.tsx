@@ -25,7 +25,7 @@ interface HamburgerMenuProps {
 export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
   // const [hover, setHover] = React.useState<boolean>(false);
   // const { isOpen, onOpen, onClose } = useDisclosure();
-  const [drawerPercentage, setDrawerPercentage] = React.useState<number>(100);
+  const [drawerPercentage, setDrawerPercentage] = React.useState<number>(0);
   const scrollContainer = document.querySelector(
     "#everything-container"
   ) as HTMLElement;
@@ -49,8 +49,8 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
         onClick={() => {
           if (props.isDrawerOpen) {
             props.onDrawerClose?.();
-            setDrawerPercentage(100);
-            modifyScroll(100);
+            setDrawerPercentage(80);
+            modifyScroll(80);
             return;
           }
           props.onDrawerOpen?.();
