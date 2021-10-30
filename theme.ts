@@ -56,13 +56,13 @@ const components = {
       },
     }),
     variants: {
-      pill: (props: { promo: boolean }) => ({
+      pill: (props: { promo: "true" | "false" }) => ({
         borderRadius: "full",
         WebkitTapHighlightColor: "transparent",
 
         bg: mode(
-          props.promo ? "red.100" : "gray.50",
-          props.promo ? "red.900" : "gray.700"
+          props.promo === "true" ? "red.100" : "gray.50",
+          props.promo === "true" ? "red.900" : "gray.700"
         )(props),
         shadow: "md",
         my: "2",
@@ -71,16 +71,16 @@ const components = {
         transitionProperty: "box-shadow background-color",
         _hover: {
           boxShadow: `0 0 0 5px var(--chakra-colors-${mode(
-            props.promo ? "red-200" : "blackAlpha-300",
-            props.promo ? "red-800" : "whiteAlpha-500"
+            props.promo === "true" ? "red-200" : "blackAlpha-300",
+            props.promo === "true" ? "red-800" : "whiteAlpha-500"
           )(props)}) `,
           // borderColor: "#fff",
           // outline: `5px solid
           // var(--chakra-colors-${mode("white", "gray-800")(props)})
           // `,
           bg: mode(
-            props.promo ? "red.200" : "blackAlpha.300",
-            props.promo ? "red.800" : "whiteAlpha.500"
+            props.promo === "true" ? "red.200" : "blackAlpha.300",
+            props.promo === "true" ? "red.800" : "whiteAlpha.500"
           )(props),
         },
       }),
