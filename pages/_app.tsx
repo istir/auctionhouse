@@ -11,12 +11,13 @@ function MyApp({ Component, pageProps }: AppProps) {
         transform: "translateX(0)",
         position: "absolute",
         transition: "0.3s",
-        overflow: "hidden",
       }}
     >
-      <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
-      </ChakraProvider>
+      <div id="everything-container-black-out">
+        <ChakraProvider theme={theme}>
+          <Component {...pageProps} />
+        </ChakraProvider>
+      </div>
     </div>
   );
 }

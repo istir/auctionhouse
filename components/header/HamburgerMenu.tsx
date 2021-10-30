@@ -29,12 +29,60 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
   const scrollContainer = document.querySelector(
     "#everything-container"
   ) as HTMLElement;
+
+  const blackOut = document.querySelector(
+    "#everything-container-black-out"
+  ) as HTMLElement;
+
   // body?.style.transform="translateX(50%)"
   // function handleScrolling(percentage:number) {
 
   // }
+  let touchStart = { x: undefined, y: undefined } as {
+    x: number | undefined;
+    y: number | undefined;
+  };
+
+  function setTouchStart(x: number, y: number) {
+    touchStart = { x: x, y: y };
+  }
+  function calculateTouchScroll(x: number, y: number) {
+    if (touchStart.x) {
+      if (touchStart.x - x >= 100) {
+        //OK
+        // setDrawerPercentage(0);
+        modifyScroll(0);
+        // modifyScroll(Math.floor(((touchStart.x - x) / window.innerWidth) * 100));
+      }
+    }
+  }
+  React.useEffect(() => {
+    scrollContainer.addEventListener("touchstart", (e) => {
+      modifyScroll(0);
+    });
+    window.addEventListener("touchstart", (e) => {
+      setTouchStart(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+      // touchStart = { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY }
+    });
+    window.addEventListener("touchmove", (e) => {
+      console.log(e);
+      calculateTouchScroll(
+        e.changedTouches[0].clientX,
+        e.changedTouches[0].clientY
+      );
+    });
+    modifyScroll(0);
+    return () => {
+      //cleanup - ComponentWillUnmount
+    };
+  }, []);
   function modifyScroll(percentage: number) {
     if (scrollContainer) {
+      if (blackOut) {
+        if (percentage < 1) blackOut.style.pointerEvents = "all";
+        if (percentage > 1) blackOut.style.pointerEvents = "none";
+      }
+      setDrawerPercentage(percentage);
       scrollContainer.style.transform = `translateX(${percentage}%)`;
     }
   }
@@ -43,19 +91,28 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
     <Box>
       <IconButton
         zIndex="5"
-        icon={<Hamburger direction="left" size={20} />}
+        icon={
+          <Hamburger
+            direction="left"
+            size={20}
+            toggled={drawerPercentage > 0}
+          />
+        }
         aria-label="Menu"
         variant="transparent"
+        pointerEvents="all"
         onClick={() => {
-          if (props.isDrawerOpen) {
+          console.log(props.isDrawerOpen);
+          if (!props.isDrawerOpen) {
             props.onDrawerClose?.();
-            setDrawerPercentage(80);
+            // setDrawerPercentage(80);
             modifyScroll(80);
             return;
+          } else {
+            props.onDrawerOpen?.();
+            // setDrawerPercentage(0);
+            modifyScroll(0);
           }
-          props.onDrawerOpen?.();
-          setDrawerPercentage(0);
-          modifyScroll(0);
           // props.isDrawerOpen ? props.onDrawerClose?.() : props.onDrawerOpen?.();
         }}
         // onMouseOver={() => {
@@ -70,14 +127,20 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
           pos="fixed"
           left="0"
           top="50px"
-          w="80vw"
+          w="100vw"
           h="100vh"
-          zIndex="10"
+          zIndex="-1"
           bg="twitter.500"
           transition="0.3s"
-          transform={`translateX(${-100 + drawerPercentage}%)`}
+          transform={`translateX(${-80 + drawerPercentage}%)`}
+          padding="10"
+          // onTouchStart
+          // onTouchMove={(e) => {
+          //   console.log(e);
+          // }}
         >
-          a
+          <HamburgerOptions />
+          <ColorModeSwitcher zIndex="2" text="Zmień motyw" />
         </Box>
       </Portal>
       {/**</Box>// <Drawer
