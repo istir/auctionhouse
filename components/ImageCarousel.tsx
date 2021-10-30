@@ -17,6 +17,10 @@ export default function ImageCarousel(props: ImageCarouselProps): JSX.Element {
   const [canScrollRight, setCanScrollRight] = React.useState<boolean>(
     emblaApi ? emblaApi.canScrollNext() : props.images.length > 1 ? true : false
   );
+  emblaApi?.on("scroll", () => {
+    setCanScrollLeft(emblaApi.canScrollPrev());
+    setCanScrollRight(emblaApi.canScrollNext());
+  });
   function renderImages() {
     return props.images.map((image) => (
       <Image
@@ -68,8 +72,8 @@ export default function ImageCarousel(props: ImageCarouselProps): JSX.Element {
           if (emblaApi) {
             if (type == "left") emblaApi.scrollPrev();
             if (type == "right") emblaApi.scrollNext();
-            setCanScrollLeft(emblaApi.canScrollPrev());
-            setCanScrollRight(emblaApi.canScrollNext());
+            // setCanScrollLeft(emblaApi.canScrollPrev());
+            // setCanScrollRight(emblaApi.canScrollNext());
           }
         }}
         w="14"
