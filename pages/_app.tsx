@@ -5,9 +5,19 @@ import theme from "../theme";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ChakraProvider theme={theme}>
-      <Component {...pageProps} />
-    </ChakraProvider>
+    <div
+      id="everything-container"
+      style={{
+        transform: "translateX(0)",
+        position: "absolute",
+        transition: "0.3s",
+        overflow: "hidden",
+      }}
+    >
+      <ChakraProvider theme={theme}>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </div>
   );
 }
 export default MyApp;
