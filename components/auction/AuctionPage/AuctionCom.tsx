@@ -88,10 +88,10 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
       >
         <AuctionImages
           name={props.auction.name}
-          image={props.auction.image}
+          images={props.auction.image}
           // scroll={scroll}
         />
-        <Box zIndex="2" pos="relative" mt={["65vh", "65vh", "50vh"]}>
+        <Box zIndex="2" pos="relative" mt={["70vh", "70vh", "55vh"]}>
           <AuctionGradient lightMode={isLightMode} />
           <Box
             // bg={isLightMode ? "gray.50" : "gray.900"}
@@ -131,6 +131,7 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
                         // children={node.children}
                         ml="8"
                         {...props}
+                        ordered={props.ordered.toString()}
                       ></UnorderedList>
                     ),
                     li: ({ node, ...props }) => (

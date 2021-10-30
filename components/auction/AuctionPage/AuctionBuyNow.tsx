@@ -36,7 +36,10 @@ export default function AuctionBuyNow({
   return (
     <Button
       variant="pill"
-      promo={auction.originalPrice && auction.originalPrice > auction.price}
+      promo={
+        auction.originalPrice &&
+        (auction.originalPrice > auction.price).toString()
+      }
       size={props.size}
       width={props.full ? "full" : "fit-content"}
 
