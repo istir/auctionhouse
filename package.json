@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "sync-db": "npx prisma db push --preview-feature",
+    "sync-db": "npx prisma db push",
     "open-client": "npx prisma studio",
     "generate-client": "npx prisma generate"
   },
@@ -33,6 +33,7 @@
   "devDependencies": {
     "@types/argon2-browser": "^1.18.1",
     "@types/react": "17.0.24",
+    "embla-carousel-react": "^5.0.1",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
     "prisma": "^3.1.1",

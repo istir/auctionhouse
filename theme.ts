@@ -56,14 +56,20 @@ const components = {
       },
     }),
     variants: {
-      pill: (props: { promo: "true" | "false" }) => ({
+      pill: (props: {
+        promo: "true" | "false";
+        bg: string;
+        transparent?: "true" | "false";
+      }) => ({
         borderRadius: "full",
         WebkitTapHighlightColor: "transparent",
 
-        bg: mode(
-          props.promo === "true" ? "red.100" : "gray.50",
-          props.promo === "true" ? "red.900" : "gray.700"
-        )(props),
+        bg: props.bg
+          ? props.bg
+          : mode(
+              props.promo === "true" ? "red.100" : "gray.50",
+              props.promo === "true" ? "red.900" : "gray.700"
+            )(props),
         shadow: "md",
         my: "2",
         // outline: "5px solid transparent",
@@ -71,17 +77,35 @@ const components = {
         transitionProperty: "box-shadow background-color",
         _hover: {
           boxShadow: `0 0 0 5px var(--chakra-colors-${mode(
-            props.promo === "true" ? "red-200" : "blackAlpha-300",
-            props.promo === "true" ? "red-800" : "whiteAlpha-500"
+            props.promo === "true"
+              ? "red-200"
+              : props.transparent === "false"
+              ? "black-300"
+              : "blackAlpha-300",
+            props.promo === "true"
+              ? "red-800"
+              : props.transparent === "false"
+              ? "white-500"
+              : "whiteAlpha-500"
           )(props)}) `,
           // borderColor: "#fff",
           // outline: `5px solid
           // var(--chakra-colors-${mode("white", "gray-800")(props)})
           // `,
-          bg: mode(
-            props.promo === "true" ? "red.200" : "blackAlpha.300",
-            props.promo === "true" ? "red.800" : "whiteAlpha.500"
-          )(props),
+          bg: props.bg
+            ? props.bg
+            : mode(
+                props.promo === "true"
+                  ? "red.200"
+                  : props.transparent === "false"
+                  ? "black.300"
+                  : "blackAlpha.300",
+                props.promo === "true"
+                  ? "red.800"
+                  : props.transparent === "false"
+                  ? "white.500"
+                  : "whiteAlpha.500"
+              )(props),
         },
       }),
       transparent: (props: any) => ({

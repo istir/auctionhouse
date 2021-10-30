@@ -46,7 +46,7 @@ model Auction {
   name          String
   price         Float
   originalPrice Float? //? if sale this would be HIGHER from 'price'
-  image         String
+  image         String[] 
   dateEnd       String
   timesBought   Int
   usersBought   Int
