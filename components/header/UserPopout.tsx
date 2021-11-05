@@ -54,11 +54,12 @@ import PopupLogin from "../login/PopupLogin";
 import PopupRegister from "../login/PopupRegister";
 import HeaderUserMenuItem from "./headerUserMenuItem";
 import axios from "axios";
+import { User } from ".prisma/client";
 
 interface UserPopoutProps {
   username: string | { firstName: string; lastName: string }; //TODO probably need to change object later to a prisma object
   avatar?: string;
-  user?: simplifiedUser;
+  user?: User;
 
   isLogged?: boolean;
   refresh?: () => void;
