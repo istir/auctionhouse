@@ -33,9 +33,15 @@ interface AuctionPageProps {
 // }
 
 export const getServerSideProps: GetServerSideProps = withSession(
-  async function ({ req }: { req: NextApiRequest & { session: Session } }) {
+  async function ({
+    req,
+    params,
+  }: {
+    req: NextApiRequest & { session: Session };
+    params: { url: string };
+  }) {
     let auction = await prisma.auction.findUnique({
-      where: { url: req.url?.replace("/auction/", "") },
+      where: { url: params.url },
       include: {
         category: true,
         seller: { select: { firstName: true, lastName: true, avatar: true } },
