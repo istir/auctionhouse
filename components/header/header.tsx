@@ -7,8 +7,9 @@ import useColorSchemeContext from "../../libs/hooks/useColorSchemeContext";
 import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
 import HamburgerMenu from "./HamburgerMenu";
 import HeaderBar from "./HeaderBar";
+import { User } from ".prisma/client";
 interface HeaderProps {
-  user?: simplifiedUser;
+  user?: User;
   token?: string;
   refresh?: () => void;
   drawerWidth?: string;
@@ -33,6 +34,7 @@ export const Header: React.FC<HeaderProps> = ({
       case "base":
         return (
           <HamburgerMenu
+            user={user}
             drawerWidth={drawerWidth}
             isDrawerOpen={props.isDrawerOpen}
             onDrawerOpen={props.onDrawerOpen}
@@ -42,6 +44,7 @@ export const Header: React.FC<HeaderProps> = ({
       case "sm":
         return (
           <HamburgerMenu
+            user={user}
             drawerWidth={drawerWidth}
             isDrawerOpen={props.isDrawerOpen}
             onDrawerOpen={props.onDrawerOpen}
@@ -50,8 +53,8 @@ export const Header: React.FC<HeaderProps> = ({
         );
 
       default:
-        return <HeaderBar refresh={refresh} />;
     }
+    return <HeaderBar refresh={refresh} user={user} />;
   }
   return renderCorrectMenu(useBreakpoint());
   // return (

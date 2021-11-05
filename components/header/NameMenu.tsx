@@ -19,12 +19,13 @@ import { Button } from "@chakra-ui/button";
 import useColorSchemeContext from "../../libs/hooks/useColorSchemeContext";
 import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
 import { Portal } from "@chakra-ui/react";
+import { User } from ".prisma/client";
 
 interface NameMenuProps {
   name?: string;
   avatar?: string;
   isLogged?: boolean;
-  user?: simplifiedUser;
+  user?: User;
   refresh?: () => void;
   // token: string;
 

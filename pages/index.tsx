@@ -37,7 +37,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
 );
 
 export default function Home(
-  props: Token & { user?: simplifiedUser } & { auctions: Auction[] }
+  props: Token & { user?: User } & { auctions: Auction[] }
 ) {
   const router = useRouter();
   const refreshData = () => {

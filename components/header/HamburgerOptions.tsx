@@ -1,5 +1,7 @@
 import { Box, VStack } from "@chakra-ui/layout";
 import React from "react";
+import ColorModeSwitcher from "../ColorModeSwitcher";
+import PopupLogin from "../login/PopupLogin";
 
 interface HamburgerOptionsProps {}
 
@@ -12,8 +14,10 @@ export default function HamburgerOptions(
         e.stopPropagation();
       }}
     >
-      <VStack>
-        <Box>1</Box>
+      <VStack justifyContent="center" alignItems="center">
+        <ColorModeSwitcher />
+        {/* <Box onClick={}>Zaloguj się</Box> */}
+        <PopupLogin />
         <Box>2</Box>
         <Box>3</Box>
         <Box>4</Box>

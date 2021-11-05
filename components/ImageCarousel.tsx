@@ -12,9 +12,9 @@ interface ImageCarouselProps {
 
 export default function ImageCarousel(props: ImageCarouselProps): JSX.Element {
   const isLightMode = useLightModeCheck();
-  const [emblaRef, emblaApi] = useEmblaCarousel();
-  const [currentImage, setCurrentImage] = React.useState<number[]>(
-    emblaApi?.slidesInView() || [0]
+  const [emblaRef, emblaApi] = useEmblaCarousel({ containScroll: "keepSnaps" });
+  const [currentImage, setCurrentImage] = React.useState<number>(
+    emblaApi?.selectedScrollSnap() || 0
   );
   const [canScrollLeft, setCanScrollLeft] = React.useState<boolean>(
     emblaApi ? emblaApi.canScrollPrev() : false
@@ -22,13 +22,11 @@ export default function ImageCarousel(props: ImageCarouselProps): JSX.Element {
   const [canScrollRight, setCanScrollRight] = React.useState<boolean>(
     emblaApi ? emblaApi.canScrollNext() : props.images.length > 1 ? true : false
   );
-  emblaApi?.on("settle", () => {
+  emblaApi?.on("select", () => {
     setCanScrollLeft(emblaApi.canScrollPrev());
     setCanScrollRight(emblaApi.canScrollNext());
-    // console.log(emblaApi?.slidesInView());
-    // setCurrentImage(emblaApi?.slidesInView() || [0]);
+    setCurrentImage(emblaApi?.selectedScrollSnap());
   });
-
   function renderImages() {
     return props.images.map((image) => (
       <Image
@@ -36,7 +34,7 @@ export default function ImageCarousel(props: ImageCarouselProps): JSX.Element {
         src={image}
         alt="Image"
         pos="relative"
-        w="100%"
+        w="100vw"
         pointerEvents="all"
         objectFit="contain"
         // flex="0 0 100%"
@@ -104,9 +102,7 @@ export default function ImageCarousel(props: ImageCarouselProps): JSX.Element {
           w="4"
           h="4"
           m="1"
-          transform={
-            emblaApi?.slidesInView().includes(id) ? `scale(1.2)` : "scale(1.0)"
-          }
+          transform={currentImage === id ? `scale(1.2)` : "scale(1.0)"}
           transition="0.3s"
           zIndex="5"
           backgroundColor={isLightMode ? "white" : "black"}

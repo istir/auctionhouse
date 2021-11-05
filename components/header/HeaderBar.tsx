@@ -5,8 +5,10 @@ import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
 import IconMenu from "./IconMenu";
 import NameMenu from "./NameMenu";
 import vercel from "../../public/vercel.svg";
+import { User } from ".prisma/client";
 interface HeaderBarProps {
   refresh?: () => void;
+  user?: User;
 }
 
 export default function HeaderBar(props: HeaderBarProps): JSX.Element {
@@ -34,7 +36,7 @@ export default function HeaderBar(props: HeaderBarProps): JSX.Element {
       <Flex as="nav" alignItems="center" gridGap="3">
         {/* className="flex items-center gap-3" */}
         <IconMenu />
-        <NameMenu refresh={props.refresh} />
+        <NameMenu refresh={props.refresh} user={props.user} />
       </Flex>
     </Flex>
   );
