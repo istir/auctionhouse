@@ -7,13 +7,13 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <div
       id="everything-container"
-      style={{
-        transform: "translateX(0)",
-        position: "absolute",
-        transition: "0.3s",
-        overflowX: "hidden",
-        overflowY: "visible",
-      }}
+      // style={{
+      //   transform: "translateX(0)",
+      //   position: "absolute",
+      //   transition: "0.3s",
+      //   overflowX: "hidden",
+      //   overflowY: "visible",
+      // }}
     >
       <div
         id="everything-container-black-out"

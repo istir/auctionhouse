@@ -45,6 +45,7 @@ export default function AuctionGradient(
         props.lightMode ? "white" : "gray-800"
       }) 100%);`}
       // transform={gradientTransform()}
+      pointerEvents="none"
       style={{
         opacity: gradientOpacity(),
       }}

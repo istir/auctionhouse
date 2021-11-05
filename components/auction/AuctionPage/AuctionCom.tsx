@@ -92,7 +92,8 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
           // scroll={scroll}
         />
         <Box zIndex="2" pos="relative" mt={["70vh", "70vh", "55vh"]}>
-          <AuctionGradient lightMode={isLightMode} />
+          {/* <AuctionGradient lightMode={isLightMode} /> */}
+          {/*//TODO: somehow fix so that gradient won't affect <ImageCarousel/> */}
           <Box
             // bg={isLightMode ? "gray.50" : "gray.900"}
             bg={isLightMode ? "white" : "gray.800"}
