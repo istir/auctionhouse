@@ -17,7 +17,6 @@ interface AuctionPageProps {
   };
 }
 // test
-import { Component } from "react";
 // export async function getStaticPaths() {
 //   const auctions = await prisma.auction.findMany({
 //     where: { url: { not: null } },
