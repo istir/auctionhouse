@@ -1,5 +1,5 @@
 import { Colors, ThemeConfig, extendTheme } from "@chakra-ui/react";
-import { mode, Styles } from "@chakra-ui/theme-tools";
+import { Styles, mode } from "@chakra-ui/theme-tools";
 // import isLight from "./libs/isLightMode";
 // const customTheme:Theme {
 //   ...
