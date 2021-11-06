@@ -99,7 +99,8 @@ export default withSession(
         await handleSessionToken(req.session, token, {
           firstName: user.firstName,
           lastName: user.lastName,
-          birthDateAsString: converTdateToString(user.birthDate),
+          // birthDateAsString: converTdateToString(user.birthDate),
+          // birthDate:user.birthDate,
           email: user.email,
           phoneNumber: user.phoneNumber,
         });

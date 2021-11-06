@@ -7,7 +7,7 @@ import withSession from "./ironSession";
 export default async function handleSessionToken(
   session: Session,
   token?: string,
-  user?: User,
+  user?: Omit<User, "id" | "birthDate" | "password" | "username" | "avatar">,
   //   tokenToSave?: string,
   onlySaveOrDestroy?: "save" | "destroy"
 ) {

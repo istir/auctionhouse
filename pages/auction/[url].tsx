@@ -40,7 +40,16 @@ export const getServerSideProps: GetServerSideProps = withSession(
     req: NextApiRequest & { session: Session };
     params: { url: string };
   }) {
-    let auction = await prisma.auction.findUnique({
+    // let auction = await prisma.auction.findUnique({
+    //   where: { url: params.url },
+    //   include: {
+    //     category: true,
+    //     seller: { select: { firstName: true, lastName: true, avatar: true } },
+    //     buyer: { select: { firstName: true, lastName: true, avatar: true } },
+    //   },
+    // });
+    const token = await checkIfTokenValidAndRefresh(req.session);
+    const auction = await prisma.auction.findUnique({
       where: { url: params.url },
       include: {
         category: true,
@@ -49,7 +58,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
       },
     });
     // console.log(auction);
-    let token = await checkIfTokenValidAndRefresh(req.session);
+
     if (token) {
       const user = await prisma.user.findUnique({
         where: { email: token.user.email },
