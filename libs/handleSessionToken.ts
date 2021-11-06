@@ -1,8 +1,6 @@
 import { User } from ".prisma/client";
 import { Session } from "next-iron-session";
 import prisma from "../prisma/prisma";
-import { simplifiedUser } from "../types";
-import withSession from "./ironSession";
 
 export default async function handleSessionToken(
   session: Session,

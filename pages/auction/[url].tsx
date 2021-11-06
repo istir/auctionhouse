@@ -2,11 +2,9 @@ import { Auction, Category, Token, User } from ".prisma/client";
 import { Box } from "@chakra-ui/react";
 import {
   GetServerSideProps,
-  GetStaticPropsContext,
   NextApiRequest,
 } from "next";
 import { Session } from "next-iron-session";
-import { useRouter } from "next/router";
 import React from "react";
 import AuctionCom from "../../components/auction/AuctionPage/AuctionCom";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";

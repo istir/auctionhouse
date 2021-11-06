@@ -1,10 +1,10 @@
 import * as React from "react";
 import {
+  Button,
+  IconButtonProps,
+  Text,
   useColorMode,
   useColorModeValue,
-  IconButtonProps,
-  Button,
-  Text,
 } from "@chakra-ui/react";
 import { FaMoon, FaSun } from "react-icons/fa";
 

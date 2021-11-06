@@ -1,20 +1,14 @@
 import { Button, IconButton } from "@chakra-ui/button";
-import { Box, Flex, Text } from "@chakra-ui/layout";
+import { Flex, Text } from "@chakra-ui/layout";
 import React, { useRef } from "react";
 import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
 import { Spin as Hamburger } from "hamburger-react";
 import {
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
-  DrawerFooter,
-  DrawerOverlay,
 } from "@chakra-ui/modal";
 import HamburgerOptions from "./HamburgerOptions";
-import ColorModeSwitcher from "../ColorModeSwitcher";
-import { Portal } from "@chakra-ui/portal";
-import { Slide } from "@chakra-ui/transition";
 import { User } from ".prisma/client";
 import { Image } from "@chakra-ui/image";
 interface HamburgerMenuProps {

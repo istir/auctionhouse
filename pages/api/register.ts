@@ -1,4 +1,3 @@
-import { Address, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import argon2 from "argon2-browser";
 import randomSalt from "../../libs/randomSalt";

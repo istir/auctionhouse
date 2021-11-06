@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import React from "react";
 import Image from "next/image";
 import useLightModeCheck from "../../libs/hooks/useLightModeCheck";

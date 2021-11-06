@@ -1,22 +1,8 @@
-import { Address, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-import argon2 from "argon2-browser";
-import randomSalt from "../../libs/randomSalt";
 import prisma from "../../prisma/prisma";
-import withSession from "../../libs/ironSession";
-import {
-  validateAddress,
-  validateDate,
-  validateEmail,
-  validateName,
-  validatePassword,
-  validatePhoneNumber,
-  validateZipCode,
-} from "../../libs/validator";
+
+
 import { Session } from "next-iron-session";
-import handleSessionToken from "../../libs/handleSessionToken";
-import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
-import converTdateToString from "../../libs/convertDateToString";
 // export default withSession(
 export default async function getCategories(
   req: NextApiRequest & { session: Session },

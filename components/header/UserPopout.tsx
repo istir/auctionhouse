@@ -45,11 +45,9 @@ import router from "next/router";
 //  * @type {string?} avatar
 //  */
 
-import { Flex, Text } from "@chakra-ui/layout";
+import { Flex } from "@chakra-ui/layout";
 import React from "react";
-import { FaBookmark, FaSignOutAlt, FaUser } from "react-icons/fa";
-import { IconType } from "react-icons/lib";
-import { simplifiedUser } from "../../types";
+import { FaSignOutAlt, FaUser } from "react-icons/fa";
 import PopupLogin from "../login/PopupLogin";
 import PopupRegister from "../login/PopupRegister";
 import HeaderUserMenuItem from "./headerUserMenuItem";

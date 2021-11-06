@@ -4,7 +4,6 @@
 import React from "react";
 // import { Manager, Popper, Reference } from "react-popper";
 // import Popup from "reactjs-popup";
-import { simplifiedUser } from "../../types";
 import UserPopout from "./UserPopout";
 import { FaChevronDown } from "react-icons/fa";
 import {

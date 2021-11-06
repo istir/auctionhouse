@@ -1,16 +1,12 @@
 import { Token, User } from ".prisma/client";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
-import Head from "next/head";
 import Header from "../components/header/header";
 import checkIfTokenValidAndRefresh from "../libs/checkIfTokenValidAndRefresh";
 import withSession from "../libs/ironSession";
-import useSWR from "swr";
-import { simplifiedUser } from "../types";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import prisma from "../prisma/prisma";
 import { Auction } from "@prisma/client";
-import PickedForYou from "../components/mainPage/pickedForYou";
 import Categories from "../components/mainPage/categories/categories";
 import { Box } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/button";

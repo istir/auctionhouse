@@ -17,7 +17,6 @@ import AuctionImages from "./AuctionImages";
 import ReactMarkdown from "react-markdown";
 import AuctionBuyNow from "./AuctionBuyNow";
 import { Image } from "@chakra-ui/image";
-import AuctionGradient from "./AuctionGradient";
 import { useBreakpoint } from "@chakra-ui/media-query";
 import { useDisclosure } from "@chakra-ui/hooks";
 interface AuctionProps {

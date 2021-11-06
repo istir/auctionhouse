@@ -6,7 +6,6 @@ import withSession from "../../libs/ironSession";
 import { Session } from "next-iron-session";
 import handleSessionToken from "../../libs/handleSessionToken";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
-import converTdateToString from "../../libs/convertDateToString";
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
     // > ------------------------- how it should work --------------------------- //

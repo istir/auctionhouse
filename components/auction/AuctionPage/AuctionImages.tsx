@@ -1,8 +1,6 @@
-import { Image } from "@chakra-ui/image";
 // import Image from "next/image";
 import { Box } from "@chakra-ui/react";
 import React from "react";
-import useLightModeCheck from "../../../libs/hooks/useLightModeCheck";
 import ImageCarousel from "../../ImageCarousel";
 
 interface AuctionImagesProps {

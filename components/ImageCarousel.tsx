@@ -1,4 +1,4 @@
-import { Box, Flex, Grid } from "@chakra-ui/layout";
+import { Box, Flex } from "@chakra-ui/layout";
 import React from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { Image } from "@chakra-ui/image";

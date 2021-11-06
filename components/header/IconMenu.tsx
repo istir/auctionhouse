@@ -1,4 +1,4 @@
-import { FaBookmark, FaShoppingCart, FaSun } from "react-icons/fa";
+import { FaBookmark, FaShoppingCart } from "react-icons/fa";
 import React, { useContext } from "react";
 import SearchComponent from "./SearchComponent";
 import { IconButton } from "@chakra-ui/button";

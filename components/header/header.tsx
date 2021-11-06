@@ -1,10 +1,7 @@
 import React, { useContext } from "react";
-import Image from "next/image";
 
-import { simplifiedUser } from "../../types";
 import { useBreakpoint } from "@chakra-ui/react";
 import useColorSchemeContext from "../../libs/hooks/useColorSchemeContext";
-import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
 import HamburgerMenu from "./HamburgerMenu";
 import HeaderBar from "./HeaderBar";
 import { User } from ".prisma/client";
