@@ -1,9 +1,6 @@
 import { Auction, Category, Token, User } from ".prisma/client";
 import { Box } from "@chakra-ui/react";
-import {
-  GetServerSideProps,
-  NextApiRequest,
-} from "next";
+import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
 import React from "react";
 import AuctionCom from "../../components/auction/AuctionPage/AuctionCom";
@@ -19,7 +16,8 @@ interface AuctionPageProps {
     buyer: User | null;
   };
 }
-
+// test
+import { Component } from "react";
 // export async function getStaticPaths() {
 //   const auctions = await prisma.auction.findMany({
 //     where: { url: { not: null } },
