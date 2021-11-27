@@ -1,9 +1,13 @@
 import { Box, VStack } from "@chakra-ui/layout";
 import React from "react";
 import ColorModeSwitcher from "../ColorModeSwitcher";
+import LogoutButton from "../login/LogoutButton";
 import PopupLogin from "../login/PopupLogin";
 
-interface HamburgerOptionsProps {}
+interface HamburgerOptionsProps {
+  refresh?: () => void;
+  loggedIn: boolean;
+}
 
 export default function HamburgerOptions(
   props: HamburgerOptionsProps
@@ -17,7 +21,11 @@ export default function HamburgerOptions(
       <VStack justifyContent="center" alignItems="center">
         <ColorModeSwitcher />
         {/* <Box onClick={}>Zaloguj się</Box> */}
-        <PopupLogin />
+        {props.loggedIn ? (
+          <LogoutButton refresh={props.refresh} />
+        ) : (
+          <PopupLogin refresh={props.refresh} />
+        )}
         <Box>2</Box>
         <Box>3</Box>
         <Box>4</Box>

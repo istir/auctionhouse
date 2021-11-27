@@ -7,7 +7,6 @@
 // //   IconDefinition,
 // // } from "@fortawesome/free-solid-svg-icons";
 // // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import router from "next/router";
 // import { FaBookmark, FaSignOutAlt, FaUser } from "react-icons/fa";
 // import React from "react";
 // // import { Manager, Popper, Reference } from "react-popper";
@@ -93,8 +92,10 @@ export default function UserPopout(props: UserPopoutProps): JSX.Element {
           name="Wyloguj się"
           icon={<FaSignOutAlt />}
           onClick={() => {
-            axios.get("/api/logout").then(() => {
-              router.reload();
+            axios.post("/api/logout").then(() => {
+              // router.reload();
+              props.refresh?.();
+              props.closePopup?.();
             });
           }}
         />

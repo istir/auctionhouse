@@ -41,6 +41,7 @@ export const Header: React.FC<HeaderProps> = ({
             isDrawerOpen={props.isDrawerOpen}
             onDrawerOpen={props.onDrawerOpen}
             onDrawerClose={props.onDrawerClose}
+            refresh={props.refresh}
           />
         );
       case "sm":
@@ -51,6 +52,7 @@ export const Header: React.FC<HeaderProps> = ({
             isDrawerOpen={props.isDrawerOpen}
             onDrawerOpen={props.onDrawerOpen}
             onDrawerClose={props.onDrawerClose}
+            refresh={props.refresh}
           />
         );
 

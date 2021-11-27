@@ -3,11 +3,7 @@ import { Flex, Text } from "@chakra-ui/layout";
 import React, { useRef } from "react";
 import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
 import { Spin as Hamburger } from "hamburger-react";
-import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-} from "@chakra-ui/modal";
+import { Drawer, DrawerBody, DrawerContent } from "@chakra-ui/modal";
 import HamburgerOptions from "./HamburgerOptions";
 import { User } from ".prisma/client";
 import { Image } from "@chakra-ui/image";
@@ -17,6 +13,7 @@ interface HamburgerMenuProps {
   isDrawerOpen?: boolean;
   onDrawerOpen?: () => void;
   onDrawerClose?: () => void;
+  refresh?: () => void;
 }
 
 export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
@@ -39,7 +36,10 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
             }px`}
           >
             <DrawerBody onClick={props.onDrawerClose}>
-              <HamburgerOptions />
+              <HamburgerOptions
+                refresh={props.refresh}
+                loggedIn={props.user ? true : false}
+              />
             </DrawerBody>
           </DrawerContent>
         </Drawer>
