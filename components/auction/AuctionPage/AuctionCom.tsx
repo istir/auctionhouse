@@ -21,6 +21,7 @@ import { useBreakpoint } from "@chakra-ui/media-query";
 import { useDisclosure } from "@chakra-ui/hooks";
 interface AuctionProps {
   user?: User;
+  refresh?: () => void;
   auction: Auction & {
     category: Category;
     seller: User;
@@ -74,6 +75,7 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
         onDrawerOpen={onOpen}
         onDrawerClose={onClose}
         user={props.user}
+        refresh={props.refresh}
       />
       <Box
         bg={isLightMode ? "white" : "gray.800"}

@@ -110,6 +110,7 @@ export default withSession(
         res.status(200).end("Data doesn't exist");
         return;
       });
+    // res.status(200).end();
     return;
   }
 );

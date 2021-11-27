@@ -17,7 +17,7 @@ interface HeaderProps {
 //TODO: Change logic so that user is axios'd
 export const Header: React.FC<HeaderProps> = ({
   user,
-  refresh,
+  // refresh,
   drawerWidth,
   ...props
 }) => {
@@ -25,7 +25,12 @@ export const Header: React.FC<HeaderProps> = ({
   // userId && ajaxUser(userId);
 
   const { color } = useContext(useColorSchemeContext);
+  const [refresh, setRefresh] = React.useState<number>(0);
 
+  // function performRefresh() {
+  //   console.log("refreshing...", user);
+  //   setRefresh(refresh + 1);
+  // }
   function renderCorrectMenu(currentSize: string | undefined) {
     switch (currentSize) {
       case "base":
@@ -51,7 +56,7 @@ export const Header: React.FC<HeaderProps> = ({
 
       default:
     }
-    return <HeaderBar refresh={refresh} user={user} />;
+    return <HeaderBar refresh={props.refresh} user={user} />;
   }
   return renderCorrectMenu(useBreakpoint());
   // return (

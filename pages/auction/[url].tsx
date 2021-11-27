@@ -2,6 +2,7 @@ import { Auction, Category, Token, User } from ".prisma/client";
 import { Box } from "@chakra-ui/react";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
+import { useRouter } from "next/router";
 import React from "react";
 import AuctionCom from "../../components/auction/AuctionPage/AuctionCom";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
@@ -81,11 +82,15 @@ export const getServerSideProps: GetServerSideProps = withSession(
 // }
 
 export default function AuctionPage(props: AuctionPageProps): JSX.Element {
+  const router = useRouter();
   if (!props.auction) return <Box>404</Box>;
   return (
     <AuctionCom
       auction={props.auction}
       user={props.token?.user || props.user}
+      refresh={() => {
+        router.replace(router.asPath);
+      }}
     />
   );
 }

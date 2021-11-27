@@ -40,6 +40,7 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
         (ful) => {
           console.log(ful);
           if (ful.status == 200 && ful.data === "OK") {
+            // setUser();
             props?.refresh?.();
             props?.closePopup?.();
           } else {

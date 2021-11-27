@@ -37,7 +37,7 @@ export default function AuctionHeader({
         >
           {auction.name}
         </Text>
-        <Flex justifyContent="space-between">
+        <Flex justifyContent="space-between" gridGap="2">
           <AuctionSeller auction={auction} />
           <AuctionBuyNow auction={auction} />
         </Flex>

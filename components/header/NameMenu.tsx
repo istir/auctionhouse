@@ -85,9 +85,8 @@ export default function NameMenu(props: NameMenuProps): JSX.Element {
   return (
     <>
       {/* {renderNameMenu()} */}
-      <Popover>
+      <Popover id="popover-nameMenu">
         <PopoverTrigger>
-          {/* //! chakra-ui issue https://github.com/chakra-ui/chakra-ui/issues/4328 */}
           <Button gridGap="2" aria-label="Użytkownik">
             {renderAvatar()}
             <Text fontWeight="bold" userSelect="none">
