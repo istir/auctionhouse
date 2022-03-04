@@ -38,6 +38,7 @@ export default function AuctionBuyNow({
     <AuctionBuyModal auction={auction}>
       <Button
         variant="pill"
+        // @ts-ignore
         promo={
           auction.originalPrice &&
           (auction.originalPrice > auction.price).toString()

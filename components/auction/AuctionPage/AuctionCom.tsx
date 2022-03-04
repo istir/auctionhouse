@@ -136,12 +136,14 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
                         // children={node.children}
                         ml="8"
                         {...props}
+                        // @ts-ignore
                         ordered={props.ordered.toString()}
                       ></UnorderedList>
                     ),
                     li: ({ node, ...props }) => (
                       <ListItem
                         {...props}
+                        // @ts-ignore
                         ordered={props.ordered + ""}
                       ></ListItem>
                     ),
