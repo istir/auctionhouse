@@ -95,6 +95,7 @@ export default function ImageCarousel(props: ImageCarouselProps): JSX.Element {
       </Button>
     );
   }
+
   function renderSizeBar(
     clickHandler: (e: React.MouseEvent | React.KeyboardEvent) => void,
     isSelected: boolean,
@@ -115,6 +116,7 @@ export default function ImageCarousel(props: ImageCarouselProps): JSX.Element {
           border="2px solid"
           borderColor={isLightMode ? "black" : "white"}
           borderRadius="full"
+          // @ts-ignore
           value={index}
           display="inline-block"
           onClick={clickHandler}

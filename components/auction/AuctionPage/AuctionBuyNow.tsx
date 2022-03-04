@@ -3,6 +3,7 @@ import { Button } from "@chakra-ui/button";
 import { Flex, Grid, Text } from "@chakra-ui/react";
 import React from "react";
 import useLightModeCheck from "../../../libs/hooks/useLightModeCheck";
+import AuctionBuyModal from "../AuctionBuyWindow.tsx/AuctionBuyModal";
 
 interface AuctionBuyNowProps {
   auction: Auction;
@@ -34,22 +35,24 @@ export default function AuctionBuyNow({
   }
 
   return (
-    <Button
-      variant="pill"
-      promo={
-        auction.originalPrice &&
-        (auction.originalPrice > auction.price).toString()
-      }
-      size={props.size}
-      width={props.full ? "full" : "fit-content"}
+    <AuctionBuyModal auction={auction}>
+      <Button
+        variant="pill"
+        promo={
+          auction.originalPrice &&
+          (auction.originalPrice > auction.price).toString()
+        }
+        size={props.size}
+        width={props.full ? "full" : "fit-content"}
 
-      // style={{ WebkitTapHighlightColor: "transparent" }}
-      // css={{ WebkitTapHighlightColor: "transparent" }}
-      // __css={{ WebkitTapHighlightColor: "transparent" }}
-    >
-      <Flex alignItems="center">
-        <Text>Kup Teraz |</Text> {renderPrice()}
-      </Flex>
-    </Button>
+        // style={{ WebkitTapHighlightColor: "transparent" }}
+        // css={{ WebkitTapHighlightColor: "transparent" }}
+        // __css={{ WebkitTapHighlightColor: "transparent" }}
+      >
+        <Flex alignItems="center">
+          <Text>Kup Teraz |</Text> {renderPrice()}
+        </Flex>
+      </Button>
+    </AuctionBuyModal>
   );
 }

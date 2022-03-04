@@ -77,6 +77,7 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
         user={props.user}
         refresh={props.refresh}
       />
+
       <Box
         bg={isLightMode ? "white" : "gray.800"}
         m={["0", "10", "20"]}
