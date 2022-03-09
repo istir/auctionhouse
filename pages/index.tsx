@@ -10,6 +10,7 @@ import { Auction } from "@prisma/client";
 import Categories from "../components/mainPage/categories/categories";
 import { Box } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/button";
+import AuctionMoreFromUser from "../components/auction/AuctionBuyWindow.tsx/AuctionMoreFromUser";
 
 export const getServerSideProps: GetServerSideProps = withSession(
   async function ({ req }: { req: NextApiRequest & { session: Session } }) {
@@ -55,6 +56,9 @@ export default function Home(
         >
           Testowa aukcja
         </Button>
+
+        <AuctionMoreFromUser userId={1} />
+
         <Categories small />
       </Box>
     );
@@ -68,6 +72,7 @@ export default function Home(
       >
         Testowa aukcja
       </Button>
+      <AuctionMoreFromUser userId={1} />
       {/* <PickedForYou width="100%" auctionsToShow={props.auctions} /> */}
       <Categories position="center" />
     </Box>

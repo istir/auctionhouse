@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../theme";
+import NextNProgress from "nextjs-progressbar";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -20,6 +21,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         style={{ overflowX: "hidden", overflowY: "visible" }}
       >
         <ChakraProvider theme={theme}>
+          <NextNProgress />
           <Component {...pageProps} />
         </ChakraProvider>
       </div>

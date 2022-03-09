@@ -6,8 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "lint-fix": "next lint --fix",
+    "lint": "eslint . --ext .tsx,.ts",
+    "lint-fix": "eslint . --ext .tsx,.ts --fix",
     "sync-db": "npx prisma db push",
     "open-client": "npx prisma studio",
     "generate-client": "npx prisma generate"
@@ -25,11 +25,13 @@
     "hamburger-react": "^2.4.1",
     "next": "^12.0.1",
     "next-iron-session": "^4.2.0",
+    "nextjs-progressbar": "^0.0.14",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-icons": "^4.2.0",
     "react-markdown": "^7.0.1",
     "react-responsive-carousel": "^3.2.23",
+    "swiper": "^8.0.7",
     "swr": "^1.0.1"
   },
   "devDependencies": {

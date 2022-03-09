@@ -1,6 +1,12 @@
 import { Auction } from ".prisma/client";
-import { Box } from "@chakra-ui/layout";
-import React from "react";
+import { Box, Flex, Grid } from "@chakra-ui/layout";
+import { Image } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+
+import React, { useContext } from "react";
+import useColorSchemeContext from "../../libs/hooks/useColorSchemeContext";
+import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
+import AuctionTimer from "./AuctionTimer";
 
 interface AuctionThumbnailProps {
   auction: Auction;
@@ -9,7 +15,94 @@ interface AuctionThumbnailProps {
 export default function AuctionThumbnail(
   props: AuctionThumbnailProps
 ): JSX.Element {
-  return <Box>TEMP!!</Box>;
+  const isLightMode = useLightModeCheck();
+  const { color } = useContext(useColorSchemeContext);
+  const router = useRouter();
+  function renderImage(image: string) {
+    if (!image) return <Box></Box>;
+    return (
+      <Image
+        width="full"
+        height="full"
+        objectFit="contain"
+        src={image}
+        alt={props.auction.name}
+        backgroundColor="white"
+        borderBottomRadius={"lg"}
+        shadow="md"
+      />
+    );
+  }
+  function renderCorrectPrice(
+    currentPrice: number,
+    originalPrice: number | null
+  ) {
+    function renderOldPrice(oldPrice: number) {
+      return (
+        <Box
+          display="inline-block"
+          color={isLightMode ? "gray.600" : "gray.400"}
+          fontSize={"sm"}
+          fontWeight={"normal"}
+          textDecoration={"line-through"}
+          // textTransform={"uppercase"}
+          marginRight="1.5"
+        >
+          {(oldPrice.toFixed(2) + "").replace(".", ",").replace(",00", "")} zł
+        </Box>
+      );
+    }
+    function renderCurrentPrice(currentPrice: number, sale: boolean) {
+      return (
+        <Box
+          display="inline-block"
+          fontWeight={"bold"}
+          fontSize={sale ? "lg" : "md"}
+          color={sale ? (isLightMode ? "red.400" : "red.600") : "current"}
+        >
+          {currentPrice} zł
+        </Box>
+      );
+    }
+    if (originalPrice && originalPrice > currentPrice) {
+      // return <span className="line-through text-grey-400 font-semibold"></span>;
+      return (
+        <Flex alignItems={"center"}>
+          {renderOldPrice(originalPrice)}
+          {renderCurrentPrice(currentPrice, true)}
+        </Flex>
+      );
+    } else {
+      return renderCurrentPrice(currentPrice, false);
+    }
+  }
+  return (
+    <Grid
+      width="64"
+      height="80"
+      backgroundColor={isLightMode ? `white` : `gray.800`}
+      borderRadius="lg"
+      shadow={"lg"}
+      margin="3"
+      overflow={"hidden"}
+      cursor={"pointer"}
+      onClick={() => {
+        props.auction.url && router.push(`/auction/${props.auction.url}`);
+      }}
+      transition="all 0.2s ease-in-out"
+      _hover={{ transform: "scale(1.05)" }}
+      templateRows="70% auto"
+    >
+      {renderImage(props.auction.image[0])}
+      <Grid templateRows={"3"} padding="2">
+        <Box fontWeight={"bold"} noOfLines={1}>
+          {props.auction.name}
+        </Box>
+        {renderCorrectPrice(props.auction.price, props.auction.originalPrice)}
+        <AuctionTimer dateToEnd={props.auction.dateEnd} />
+      </Grid>
+    </Grid>
+  );
 }
 // import { Auction } from "@prisma/client";
 // import React, { useState } from "react";

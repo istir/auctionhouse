@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Modal,
   ModalBody,
@@ -11,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { Auction } from "@prisma/client";
 import React from "react";
+import AuctionMoreFromUser from "./AuctionMoreFromUser";
 
 interface AuctionBuyModalProps {
   children: React.ReactNode;
@@ -35,7 +37,12 @@ export default function AuctionBuyModal(
         <ModalContent>
           <ModalHeader>{props.auction.name}</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>Dodano do koszyka, czy chcesz cośtamcośtam</ModalBody>
+          <ModalBody>
+            <Box>
+              Dodano do koszyka, czy chcesz cośtamcośtam
+              <AuctionMoreFromUser userId={props.auction.sellerId} />
+            </Box>
+          </ModalBody>
 
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={onClose}>
