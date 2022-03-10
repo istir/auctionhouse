@@ -35,7 +35,7 @@ export default function AuctionBuyNow({
   }
 
   return (
-    <AuctionBuyModal auction={auction}>
+    <AuctionBuyModal auction={auction} onPress={() => {}}>
       <Button
         variant="pill"
         // @ts-ignore
