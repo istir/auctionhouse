@@ -1,22 +1,30 @@
 import { Auction } from ".prisma/client";
 import { Button } from "@chakra-ui/button";
 import { Flex, Grid, Text } from "@chakra-ui/react";
+import axios from "axios";
 import React from "react";
 import useLightModeCheck from "../../../libs/hooks/useLightModeCheck";
 import AuctionBuyModal from "../AuctionBuyWindow.tsx/AuctionBuyModal";
 
-interface AuctionBuyNowProps {
+interface AuctionAddToCartProps {
   auction: Auction;
   size?: "md" | "lg";
   full?: boolean;
 }
 
-export default function AuctionBuyNow({
+export default function AuctionAddToCart({
   auction,
   ...props
-}: AuctionBuyNowProps): JSX.Element {
+}: AuctionAddToCartProps): JSX.Element {
   const lightMode = useLightModeCheck();
-
+  function sendAjaxRequest() {
+    console.log("ZAAAMN");
+    axios({
+      method: "POST",
+      url: "/api/addItemToCart",
+      data: { auctionId: auction.id },
+    });
+  }
   function renderPrice() {
     if (auction.originalPrice && auction.originalPrice > auction.price) {
       return (
@@ -35,7 +43,7 @@ export default function AuctionBuyNow({
   }
 
   return (
-    <AuctionBuyModal auction={auction}>
+    <AuctionBuyModal auction={auction} onPress={sendAjaxRequest}>
       <Button
         variant="pill"
         // @ts-ignore
@@ -46,12 +54,13 @@ export default function AuctionBuyNow({
         size={props.size}
         width={props.full ? "full" : "fit-content"}
         overflow="hidden"
+
         // style={{ WebkitTapHighlightColor: "transparent" }}
         // css={{ WebkitTapHighlightColor: "transparent" }}
         // __css={{ WebkitTapHighlightColor: "transparent" }}
       >
         <Flex alignItems="center">
-          <Text>Kup Teraz |</Text> {renderPrice()}
+          <Text>Dodaj do koszyka |</Text> {renderPrice()}
         </Flex>
       </Button>
     </AuctionBuyModal>

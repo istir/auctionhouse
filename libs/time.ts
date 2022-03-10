@@ -10,25 +10,31 @@ export function convertMillisecondsToTime(
   let hours;
   let minutes;
   let seconds;
-  if (biggest === "months")
-    months = Math.floor(convertedSeconds / (3600 * 24 * 30));
-  if (biggest === "months" || biggest === "days")
-    days = Math.floor(convertedSeconds / (3600 * 24));
-  if (biggest === "months" || biggest === "days" || biggest === "hours")
-    hours = Math.floor((convertedSeconds % (3600 * 24)) / 3600);
+  const b = biggest || "months";
+  if (b === "months") months = Math.floor(convertedSeconds / (3600 * 24 * 30));
+  if (b === "months" || b === "days" || !months)
+    days = Math.floor(
+      (convertedSeconds - (months || 0) * 3600 * 24 * 30) / (3600 * 24)
+    );
+  if (b === "months" || b === "days" || b === "hours" || (!months && !days))
+    hours = Math.floor(
+      ((convertedSeconds - (days || 0) * (3600 * 24)) % (3600 * 24)) / 3600
+    );
   if (
-    biggest === "months" ||
-    biggest === "days" ||
-    biggest === "hours" ||
-    biggest === "minutes"
+    b === "months" ||
+    b === "days" ||
+    b === "hours" ||
+    b === "minutes" ||
+    (!months && !days && !hours)
   )
     minutes = Math.floor((convertedSeconds % 3600) / 60);
   if (
-    biggest === "months" ||
-    biggest === "days" ||
-    biggest === "hours" ||
-    biggest === "minutes" ||
-    biggest === "seconds"
+    b === "months" ||
+    b === "days" ||
+    b === "hours" ||
+    b === "minutes" ||
+    b === "seconds" ||
+    (!months && !days && !hours && !minutes)
   )
     seconds = Math.floor(convertedSeconds % 60);
   // return `${months > 0 ? `${months} miesiąc ` : " "}${
@@ -45,21 +51,27 @@ export function formatTime(time: RemainingTime) {
     return number + "";
   }
   let str = `${
-    time.months ? (time.months > 0 ? `${padZeroes(time.months)}:` : "00") : ""
-  }${time.days ? (time.days > 0 ? `${padZeroes(time.days)}:` : "00") : ""}${
-    time.hours ? (time.hours > 0 ? `${padZeroes(time.hours)}:` : "00") : ""
+    time.months
+      ? time.months > 0
+        ? `${padZeroes(time.months)}  ${
+            time.months == 1 ? "miesiąc" : "miesięcy"
+          } `
+        : "00"
+      : ""
   }${
+    time.days
+      ? time.days > 0
+        ? `${padZeroes(time.days)} ${time.days == 1 ? "dzień" : "dni"} `
+        : "00"
+      : ""
+  }${time.hours ? (time.hours > 0 ? `${padZeroes(time.hours)}:` : "00") : ""}${
     time.minutes
       ? time.minutes > 0
         ? `${padZeroes(time.minutes)}:`
         : "00"
       : ""
   }${
-    time.seconds
-      ? time.seconds > 0
-        ? `${padZeroes(time.seconds)}`
-        : "00"
-      : "00"
+    time.seconds ? (time.seconds > 0 ? `${padZeroes(time.seconds)}` : "00") : ""
   }`;
   str = str.replace(/:\s*$/g, "");
 

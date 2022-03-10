@@ -10,6 +10,7 @@ import AuctionTimer from "./AuctionTimer";
 
 interface AuctionThumbnailProps {
   auction: Auction;
+  width?: string | number;
 }
 
 export default function AuctionThumbnail(
@@ -78,7 +79,7 @@ export default function AuctionThumbnail(
   }
   return (
     <Grid
-      width="64"
+      width={props.width || "64"}
       height="80"
       backgroundColor={isLightMode ? `white` : `gray.800`}
       borderRadius="lg"
@@ -91,7 +92,7 @@ export default function AuctionThumbnail(
       }}
       transition="all 0.2s ease-in-out"
       _hover={{ transform: "scale(1.05)" }}
-      templateRows="70% auto"
+      templateRows="65% auto"
     >
       {renderImage(props.auction.image[0])}
       <Grid templateRows={"3"} padding="2">

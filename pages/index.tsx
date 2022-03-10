@@ -11,6 +11,7 @@ import Categories from "../components/mainPage/categories/categories";
 import { Box } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/button";
 import AuctionMoreFromUser from "../components/auction/AuctionBuyWindow.tsx/AuctionMoreFromUser";
+import AuctionGetRandomAuctions from "../components/auction/AuctionBuyWindow.tsx/AuctionGetRandomAuctions";
 
 export const getServerSideProps: GetServerSideProps = withSession(
   async function ({ req }: { req: NextApiRequest & { session: Session } }) {
@@ -57,7 +58,7 @@ export default function Home(
           Testowa aukcja
         </Button>
 
-        <AuctionMoreFromUser userId={1} />
+        <AuctionGetRandomAuctions />
 
         <Categories small />
       </Box>

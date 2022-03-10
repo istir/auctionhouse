@@ -29,7 +29,7 @@ export default function AuctionSeller({
   }
 
   return (
-    <Button variant="pill" minH="fit-content">
+    <Button variant="pill" minH="fit-content" overflow="hidden">
       {renderSellerAvatar()}
       <Text ml="2">{`${auction.seller.firstName} ${auction.seller.lastName}`}</Text>
     </Button>

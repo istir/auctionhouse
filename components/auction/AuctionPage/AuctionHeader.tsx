@@ -2,7 +2,8 @@ import { Auction, Category, User } from ".prisma/client";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import React from "react";
 import useLightModeCheck from "../../../libs/hooks/useLightModeCheck";
-import AuctionBuyNow from "./AuctionBuyNow";
+import AuctionAddToCart from "./AuctionAddToCart";
+// import AuctionBuyNow from "./AuctionBuyNow";
 import AuctionSeller from "./AuctionSeller";
 
 interface AuctionHeaderProps {
@@ -39,7 +40,7 @@ export default function AuctionHeader({
         </Text>
         <Flex justifyContent="space-between" gridGap="2">
           <AuctionSeller auction={auction} />
-          <AuctionBuyNow auction={auction} />
+          <AuctionAddToCart auction={auction} />
         </Flex>
       </Box>
     </Box>

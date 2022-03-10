@@ -16,7 +16,7 @@ export default async function checkIfTokenValidAndRefresh(
   let sessionToken;
   if (token) {
     sessionToken = token;
-  } else if (session.get("user") && session.get("user").token) {
+  } else if (session?.get("user") && session?.get("user")?.token) {
     sessionToken = session.get("user").token;
   } else {
     return false;

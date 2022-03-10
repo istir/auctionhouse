@@ -19,10 +19,16 @@ model User {
   password    String
   birthDate   DateTime
   tokens       Token[]   @relation()
+  cart       Cart? @relation()
   auctionsAsSeller Auction[] @relation(name:"seller")
   auctionsAsBuyer Auction[] @relation(name:"buyer")
 }
-
+model Cart {
+  id          Int        @default(autoincrement()) @id
+  user        User      @relation(fields:[userId],references: [id])      
+  userId      Int
+  items       Auction[] 
+}
 model Address {
   id          Int        @default(autoincrement()) @id
   user        User      @relation(fields:[userId],references: [id])      
@@ -56,6 +62,7 @@ model Auction {
   sellerId      Int
   buyer         User?    @relation(name:"buyer",fields:[buyerId],references: [id])
   buyerId       Int?
+  inUserCart    Cart[]   
   url           String? @unique
   markdown      String?
 }

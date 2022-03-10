@@ -8,6 +8,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  useBreakpoint,
   useDisclosure,
 } from "@chakra-ui/react";
 import { Auction } from "@prisma/client";
@@ -17,22 +18,46 @@ import AuctionMoreFromUser from "./AuctionMoreFromUser";
 interface AuctionBuyModalProps {
   children: React.ReactNode;
   auction: Auction;
+  onPress: () => void;
 }
 
 export default function AuctionBuyModal(
   props: AuctionBuyModalProps
 ): JSX.Element {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  function getSize(currentBreakpoint: string | undefined) {
+    // if (!currentBreakpoint) return "md";
+    switch (currentBreakpoint) {
+      case "base":
+        return "full";
+      case "sm":
+        return "full";
+      case "md":
+        return "2xl";
+      case "lg":
+        return "4xl";
+      case "xl":
+        return "5xl";
+      case "2xl":
+        return "6xl";
+      default:
+        return "6xl";
+    }
+  }
   return (
     <>
       {React.Children.map(props.children, (child) => {
         return React.cloneElement(child as React.ReactElement, {
-          onClick: onOpen,
+          onClick: () => {
+            // console.log("ZAMN1");
+            onOpen();
+
+            props.onPress();
+          },
         });
       })}
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} size={getSize(useBreakpoint())}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>{props.auction.name}</ModalHeader>
@@ -40,7 +65,7 @@ export default function AuctionBuyModal(
           <ModalBody>
             <Box>
               Dodano do koszyka, czy chcesz cośtamcośtam
-              <AuctionMoreFromUser userId={props.auction.sellerId} />
+              <AuctionMoreFromUser userId={props.auction.sellerId} smaller />
             </Box>
           </ModalBody>
 

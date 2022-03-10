@@ -6,7 +6,9 @@ import AuctionCarousel from "../AuctionCarousel/AuctionCarousel";
 
 interface AuctionMoreFromUserProps {
   userId: number;
+  getRandomAuctions?: boolean;
   limit?: number;
+  smaller?: boolean;
 }
 
 export default function AuctionMoreFromUser(
@@ -15,16 +17,29 @@ export default function AuctionMoreFromUser(
   const [auctions, setAuctions] = React.useState<Auction[]>([]);
   // const ref = useRef<HTMLDivElement>(null);
   React.useEffect(() => {
-    axios({
-      url: "/api/getAuctionsFromUser",
-      method: "GET",
-      params: { userId: props.userId, limit: props.limit },
-    }).then((res) => {
-      if (res.status === 200) {
-        const auctions: Auction[] = res.data;
-        setAuctions(auctions);
-      }
-    });
+    if (props.getRandomAuctions || props.userId == 0) {
+      axios({
+        url: "/api/getRandomAuctions",
+        method: "GET",
+        params: { limit: props.limit },
+      }).then((res) => {
+        if (res.status === 200) {
+          const auctions: Auction[] = res.data;
+          setAuctions(auctions);
+        }
+      });
+    } else {
+      axios({
+        url: "/api/getAuctionsFromUser",
+        method: "GET",
+        params: { userId: props.userId, limit: props.limit },
+      }).then((res) => {
+        if (res.status === 200) {
+          const auctions: Auction[] = res.data;
+          setAuctions(auctions);
+        }
+      });
+    }
     return () => {
       //cleanup - ComponentWillUnmount
     };
@@ -35,6 +50,7 @@ export default function AuctionMoreFromUser(
       {/* {ref?.current?.clientWidth ? ( */}
       <AuctionCarousel
         auctions={auctions}
+        smaller={props.smaller}
         // width={ref?.current?.clientWidth}
       />
       {/* ) : null} */}
