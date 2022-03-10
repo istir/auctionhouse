@@ -78,7 +78,7 @@ export default function AuctionCarousel(
         modules={[Navigation]}
       >
         {props.auctions.map((auction) => (
-          <SwiperSlide key={auction.id}>
+          <SwiperSlide key={auction?.id}>
             <AuctionThumbnail auction={auction} width={w} />
           </SwiperSlide>
         ))}
