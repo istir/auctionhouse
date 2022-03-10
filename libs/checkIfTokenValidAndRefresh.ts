@@ -12,7 +12,22 @@ import prisma from "../prisma/prisma";
 export default async function checkIfTokenValidAndRefresh(
   session: Session,
   token?: string
-) {
+): Promise<
+  | false
+  | undefined
+  | {
+      token: string;
+      user: {
+        firstName: string;
+        lastName: string;
+        email: string;
+        phoneNumber?: string | undefined;
+      };
+    }
+> {
+  if (!session) {
+    console.error("NO SESSION FOUND. MAKE SURE TO USE withSession HOOK!!!");
+  }
   let sessionToken;
   if (token) {
     sessionToken = token;
@@ -52,4 +67,5 @@ export default async function checkIfTokenValidAndRefresh(
     }
     return false;
   }
+  return false;
 }

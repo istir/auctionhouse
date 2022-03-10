@@ -11,28 +11,22 @@ export default withSession(
       res.status(400).end("Wrong method");
       return;
     }
-    //? -1 if session contains token, check if possible to authenticate with it
-    // const userId = parseInt(req.body.userId as string) || 0;
-    // const token = (req.body.token as string) || "";
+
     const auctionId = parseInt(req.body.auctionId as string) || 0;
     const isValidToken = await checkIfTokenValidAndRefresh(req.session);
-    // console.log(isValidToken);
-    // const isValidToken = true;
+
     if (!isValidToken) {
       res.status(401).end("Unauthorized");
       return;
     }
-    // if (userId === 0) {
-    //   res.status(400).end("Wrong User Id");
-    //   return;
-    // }
+
     if (auctionId == 0) {
       res.status(401).end("Wrong auction Id");
       return;
     }
-    const auction = await prisma.auction.findUnique({
-      where: { id: auctionId },
-    });
+    // const auction = await prisma.auction.findUnique({
+    //   where: { id: auctionId },
+    // });
     const user = await prisma.user.findUnique({
       where: { email: isValidToken.user.email },
     });
@@ -44,23 +38,17 @@ export default withSession(
       where: { userId: user.id },
       include: { items: true },
     });
-    if (cart && auction) {
+    if (cart) {
       const updatedCart = await prisma.cart.update({
         where: { userId: user.id },
         include: { items: true },
-        data: { items: { connect: { id: auctionId } } },
+        data: { items: { disconnect: { id: auctionId } } },
       });
       if (!updatedCart) {
         res.status(400).end("No items in cart");
         return;
       }
       res.status(201).end(JSON.stringify(updatedCart));
-      return;
-    } else if (auction) {
-      const items = await prisma.cart.create({
-        data: { userId: user.id, items: { connect: { id: auctionId } } },
-      });
-      res.status(201).end(JSON.stringify(items));
       return;
     } else {
       res.status(401).end("Wrong auction id");
