@@ -42,7 +42,7 @@ model Address {
 model Token {
   id            Int      @default(autoincrement()) @id
   token         String   @unique
-  validTime     Int
+  validTime     String
   timeGenerated DateTime
   user          User     @relation(fields:[userId],references: [id])
   userId        Int

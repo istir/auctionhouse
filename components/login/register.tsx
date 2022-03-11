@@ -1,8 +1,9 @@
 import { Button } from "@chakra-ui/button";
-import { Grid } from "@chakra-ui/layout";
+import { Grid, Text } from "@chakra-ui/layout";
 import axios from "axios";
 import { Form, Formik } from "formik";
 import React from "react";
+import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
 import {
   validateAddress,
   validateDate,
@@ -15,11 +16,14 @@ import {
 import FormDate from "../form/FormDate";
 import FormInput from "../form/FormInput";
 
-interface RegisterProps {}
+interface RegisterProps {
+  refresh?: () => void;
+  closePopup?: () => void;
+}
 
 export const Register: React.FC<RegisterProps> = (props) => {
   const [error, setError] = React.useState<string>("");
-
+  const isLightMode = useLightModeCheck();
   // function checkForAnyError(error: any, touched: any) {
   //   const keys = Object.keys(error);
   //   for (let i = 0; i < keys.length; i += 1) {
@@ -77,80 +81,102 @@ export const Register: React.FC<RegisterProps> = (props) => {
   };
 
   function HandleOnSubmit(values: FormikValues) {
-    try {
-      setError("");
+    // try {
+    setError("");
 
-      axios({ url: "/api/register", method: "post", data: values }).then(
-        // axios.post("/api/register", values).then(
-        (ful) => {
-          console.log(ful);
-          if (ful.status == 200 && ful.data === "OK") {
-            // props?.refresh?.();
-            // props?.closePopup?.();
-          } else {
-            // TODO: show error
-            setError(ful.data);
+    axios({ url: "/api/register", method: "post", data: values }).then(
+      // axios.post("/api/register", values).then(
+      (ful) => {
+        // console.log(ful);
+        console.log(ful.data);
+        if (ful.status === 200) {
+          if (ful.data === "OK" || ful.data === "OK + Address") {
+            props?.refresh?.();
+            props?.closePopup?.();
+            return;
+          }
+          if (ful.data === "email already exists") {
+            // console.log("...");
+            setError("Email już istnieje");
+            return;
           }
           // ful.status=200&&ful.statusText='OK'&&props?.refresh()&&props?.closePopup();
-        },
-        (rej) => {
-          console.error(rej);
-          setError(rej); //! ?
+        } else {
           // TODO: show error
+          setError(ful.data);
         }
-      );
-    } catch (err) {
-      console.error(err);
-    }
+      },
+      (rej) => {
+        console.error(rej);
+        // console.log("reject", rej.status, rej.data);
+
+        setError(rej); //! ?
+        // TODO: show error
+      }
+    );
+    // } catch (err) {
+    //   console.error("3", err);
+    // }
   }
   return (
     <Formik initialValues={initialFormikValues} onSubmit={HandleOnSubmit}>
-      <Form style={{ width: "inherit" }}>
-        <Grid templateColumns="auto auto" gridGap="3" mt="8">
-          <FormInput validator={validateName} name="firstName" label="Imię*" />
-          <FormInput
-            validator={validateName}
-            name="lastName"
-            label="Nazwisko*"
-          />
-          <FormInput
-            validator={validateEmail}
-            name="email"
-            label="Adres e-mail*"
-          />
-          <FormInput
-            validator={validatePhoneNumber}
-            name="phoneNumber"
-            label="Numer Telefonu*"
-          />
-          <FormInput
-            validator={validatePassword}
-            name="password"
-            isPassword
-            label="Hasło*"
-          />
-          <FormDate
-            name="birthDate"
-            validator={validateDate}
-            label="Data urodzenia*"
-          />
-          <FormInput name="street" label="Ulica*" validator={validateAddress} />
-          <FormInput
-            name="zipCode"
-            label="Kod Pocztowy*"
-            validator={validateZipCode}
-          />
-          <FormInput name="city" label="Miasto*" validator={validateName} />
-        </Grid>
-        <Button
-          type="submit"
-          mt="2"
-          colorScheme="blue"
-          // colorScheme={anyFormikError ? "red" : "blue"}
-        >
-          Zarejestruj
-        </Button>
-      </Form>
+      <>
+        <Form style={{ width: "inherit" }}>
+          <Grid templateColumns="auto auto" gridGap="3" mt="8">
+            <FormInput
+              validator={validateName}
+              name="firstName"
+              label="Imię*"
+            />
+            <FormInput
+              validator={validateName}
+              name="lastName"
+              label="Nazwisko*"
+            />
+            <FormInput
+              validator={validateEmail}
+              name="email"
+              label="Adres e-mail*"
+            />
+            <FormInput
+              validator={validatePhoneNumber}
+              name="phoneNumber"
+              label="Numer Telefonu*"
+            />
+            <FormInput
+              validator={validatePassword}
+              name="password"
+              isPassword
+              label="Hasło*"
+            />
+            <FormDate
+              name="birthDate"
+              validator={validateDate}
+              label="Data urodzenia*"
+            />
+            <FormInput
+              name="street"
+              label="Ulica*"
+              validator={validateAddress}
+            />
+            <FormInput
+              name="zipCode"
+              label="Kod Pocztowy*"
+              validator={validateZipCode}
+            />
+            <FormInput name="city" label="Miasto*" validator={validateName} />
+          </Grid>
+          <Button
+            type="submit"
+            mt="2"
+            colorScheme="blue"
+            // colorScheme={anyFormikError ? "red" : "blue"}
+          >
+            Zarejestruj
+          </Button>
+        </Form>
+        <Text color={isLightMode ? "red.400" : "red.600"}>{error}</Text>
+      </>
     </Formik>
   );
 };

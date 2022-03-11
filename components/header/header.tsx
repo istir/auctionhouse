@@ -10,9 +10,9 @@ interface HeaderProps {
   token?: string;
   refresh?: () => void;
   drawerWidth?: string;
-  isDrawerOpen?: boolean;
-  onDrawerOpen?: () => void;
-  onDrawerClose?: () => void;
+  // isDrawerOpen?: boolean;
+  // onDrawerOpen?: () => void;
+  // onDrawerClose?: () => void;
 }
 //TODO: Change logic so that user is axios'd
 export const Header: React.FC<HeaderProps> = ({
@@ -38,9 +38,6 @@ export const Header: React.FC<HeaderProps> = ({
           <HamburgerMenu
             user={user}
             drawerWidth={drawerWidth}
-            isDrawerOpen={props.isDrawerOpen}
-            onDrawerOpen={props.onDrawerOpen}
-            onDrawerClose={props.onDrawerClose}
             refresh={props.refresh}
           />
         );
@@ -49,12 +46,19 @@ export const Header: React.FC<HeaderProps> = ({
           <HamburgerMenu
             user={user}
             drawerWidth={drawerWidth}
-            isDrawerOpen={props.isDrawerOpen}
-            onDrawerOpen={props.onDrawerOpen}
-            onDrawerClose={props.onDrawerClose}
             refresh={props.refresh}
           />
         );
+      case "md":
+        return (
+          <HamburgerMenu
+            user={user}
+            drawerWidth={drawerWidth}
+            refresh={props.refresh}
+          />
+        );
+      case "lg":
+        return <HeaderBar refresh={props.refresh} user={user} />;
 
       default:
         return <HeaderBar refresh={props.refresh} user={user} />;

@@ -17,9 +17,9 @@ import AuctionImages from "./AuctionImages";
 import ReactMarkdown from "react-markdown";
 import { Image } from "@chakra-ui/image";
 import { useBreakpoint } from "@chakra-ui/media-query";
-import { useDisclosure } from "@chakra-ui/hooks";
+// import { useDisclosure } from "@chakra-ui/hooks";
 import AuctionAddToCart from "./AuctionAddToCart";
-import Header from "../../header/header";
+import Header from "../../header/Header";
 interface AuctionProps {
   user?: User & {
     cart: Cart & {
@@ -40,14 +40,14 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
     (props.user?.cart?.items.filter((item) => item.id === props.auction.id)
       .length as number) > 0
   );
-  console.log(inCart);
+  // console.log(inCart);
   // const colorScheme = React.useContext(useColorSchemeContext);
   // const [breakpointSize, setBreakpointSize] = React.useState<string>(
   //   getSize(useBreakpoint())
   // );
   // const [drawerBreakpointSize, setDrawerBreakpointSize] =
   //   React.useState<string>(getSize(useBreakpoint()));
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // const { isOpen, onOpen, onClose } = useDisclosure();
 
   function getSize(currentBreakpoint: string | undefined): string {
     // max-width: var(--chakra-sizes-xs);
@@ -68,22 +68,22 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
         return "lg";
     }
   }
-  function getDrawerBreakpointMargin(breakpoint: string | undefined) {
-    // const breakpoint = getSize(useBreakpoint());
-    console.log(`var(--chakra-sizes-${getSize(breakpoint)})`);
-    if (isOpen) {
-      return `var(--chakra-sizes-${getSize(breakpoint)})`;
-    }
-    return "0";
-  }
+  // function getDrawerBreakpointMargin(breakpoint: string | undefined) {
+  //   // const breakpoint = getSize(useBreakpoint());
+  //   // console.log(`var(--chakra-sizes-${getSize(breakpoint)})`);
+  //   if (isOpen) {
+  //     return `var(--chakra-sizes-${getSize(breakpoint)})`;
+  //   }
+  //   return "0";
+  // }
   return (
     <Box>
       {/* <style>{`ul {margin-left:2rem}`}</style> */}
       <Header
         drawerWidth={getSize(useBreakpoint())}
-        isDrawerOpen={isOpen}
-        onDrawerOpen={onOpen}
-        onDrawerClose={onClose}
+        // isDrawerOpen={isOpen}
+        // onDrawerOpen={onOpen}
+        // onDrawerClose={onClose}
         user={props.user}
         refresh={props.refresh}
       />

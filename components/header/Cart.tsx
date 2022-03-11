@@ -1,14 +1,16 @@
 import { Box, Button, Flex, Grid, Image, Text } from "@chakra-ui/react";
-import { Auction } from "@prisma/client";
+import { Auction, User } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/router";
 import React from "react";
 import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
-import Header from "./header";
+import Header from "./Header";
 
 interface CartComponentProps {
   cartItems?: Auction[];
   token?: string;
+  user?: User;
+  refresh: () => void;
 }
 
 export default function CartComponent(props: CartComponentProps): JSX.Element {
@@ -127,87 +129,118 @@ export default function CartComponent(props: CartComponentProps): JSX.Element {
   // }
   return (
     <>
-      <Header />
+      <Header user={props.user} refresh={props.refresh} />
       <Box>
-        {itemsInCart.map((item) => (
-          <Grid
-            key={item.id}
-            templateColumns="1fr 3fr 1fr 1fr"
-            gap="5"
-            margin="3"
-            borderRadius={"lg"}
-            backgroundColor={isLightMode ? `white` : `gray.800`}
-            shadow={"lg"}
-            overflow="hidden"
-            cursor={"pointer"}
-            onClick={() => {
-              item.url && router.push(`/auction/${item.url}`);
-            }}
-            transition="all 0.2s ease-in-out"
-            justifyContent={"center"}
+        {itemsInCart.length > 0 ? (
+          itemsInCart.map((item) => (
+            <Grid
+              key={item.id}
+              templateColumns={{ lg: "1fr 4fr", sm: "1fr 4fr" }}
+              // templateRows={{ sm: "1fr", lg: "1fr" }}
+              gap="5"
+              margin="3"
+              padding={{ base: "3", sm: "0" }}
+              borderRadius={"lg"}
+              backgroundColor={isLightMode ? `white` : `gray.800`}
+              shadow={"lg"}
+              overflow="hidden"
+              cursor={"pointer"}
+              onClick={() => {
+                item.url && router.push(`/auction/${item.url}`);
+              }}
+              transition="all 0.2s ease-in-out"
+              justifyContent={"center"}
+              alignItems={"center"}
+            >
+              <Flex justifyContent={"center"}>
+                <Image
+                  maxH="60"
+                  src={item.image?.[0]}
+                  alt={item.name}
+                  borderRadius={{ lg: "0px", base: "lg" }}
+                  shadow={{ lg: "0px", base: "lg" }}
+                ></Image>
+              </Flex>
+              <Grid
+                templateColumns={{ lg: "3fr 1fr", sm: "1fr" }}
+                templateRows={{ sm: "1fr 1fr", lg: "1fr" }}
+                justifyContent={"center"}
+                alignItems={"center"}
+              >
+                <Grid
+                  justifyContent={"space-between"}
+                  alignItems={"center"}
+                  templateColumns="1fr max-content"
+                  mr="5"
+                  gap="5"
+                >
+                  <Text>{item.name}</Text>
+                  {renderPrice(item.originalPrice, item.price)}
+                </Grid>
+                <Flex>
+                  <Button
+                    colorScheme={"red"}
+                    mr="3"
+                    borderRadius="full"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      axios({
+                        method: "POST",
+                        url: "/api/removeItemFromCart",
+                        data: { auctionId: item.id },
+                      })
+                        .then((res) => {
+                          console.log(res);
+                          if (res.status === 200) {
+                            setItemsInCart((prevItems) => {
+                              return prevItems.filter((i) => i.id !== item.id);
+                            });
+                          }
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                        });
+                    }}
+                  >
+                    Usuń
+                  </Button>
+                </Flex>
+              </Grid>
+            </Grid>
+          ))
+        ) : (
+          <Flex
+            flexDir={"column"}
+            justifyContent="center"
             alignItems={"center"}
           >
-            <Image src={item.image?.[0]} alt={item.name}></Image>
-            <Text>{item.name}</Text>
-            {/* <Text>{item.price}zł</Text> */}
-            {renderPrice(item.originalPrice, item.price)}
+            <Text>Brak przedmiotów w koszyku.</Text>
             <Button
-              colorScheme={"red"}
-              mr="3"
-              borderRadius="full"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                axios({
-                  method: "POST",
-                  url: "/api/removeItemFromCart",
-                  data: { auctionId: item.id },
-                })
-                  .then((res) => {
-                    console.log(res);
-                    if (res.status === 200) {
-                      setItemsInCart((prevItems) => {
-                        return prevItems.filter((i) => i.id !== item.id);
-                      });
-                    }
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
+              m="3"
+              onClick={() => {
+                router.push("/");
               }}
             >
-              Usuń
+              Wróć
             </Button>
-          </Grid>
-        ))}
-
-        {/* <Box
-          margin="3"
-          borderRadius={"lg"}
-          backgroundColor={isLightMode ? `white` : `gray.800`}
-          shadow={"lg"}
-          overflow="hidden"
-          width={"min-content"}
-          // noOfLines="1"
-          padding="2"
-        >
-          <Box wordBreak="keep-all" whiteSpace="nowrap" display={"flex"}>
-            <Text mr="1">Suma: </Text>
-            {renderPrice(getPrice(false), getPrice(true))}
-          </Box>
-        </Box> */}
-        <Button
-          colorScheme={"green"}
-          margin="3"
-          shadow={"lg"}
-          borderRadius="full"
-        >
-          <Flex alignItems={"center"}>
-            <Text>Zamów i zapłać | </Text>
-
-            {renderPrice(getPrice(true), getPrice(false))}
           </Flex>
-        </Button>
+        )}
+
+        {itemsInCart.length > 0 ? (
+          <Button
+            colorScheme={"green"}
+            margin="3"
+            shadow={"lg"}
+            borderRadius="full"
+          >
+            <Flex alignItems={"center"}>
+              <Text>Zamów i zapłać | </Text>
+
+              {renderPrice(getPrice(true), getPrice(false))}
+            </Flex>
+          </Button>
+        ) : null}
       </Box>
     </>
   );

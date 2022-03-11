@@ -65,7 +65,7 @@ export default function IconMenu(): JSX.Element {
       /> */}
       <IconButton
         icon={<FaShoppingCart />}
-        aria-label="Zakładki"
+        aria-label="Koszyk"
         as="a"
         href="/cart"
         onClick={() => {

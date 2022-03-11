@@ -1,11 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import argon2 from "argon2-browser";
-import randomSalt from "../../libs/randomSalt";
+// import randomSalt from "../../libs/randomSalt";
 import prisma from "../../prisma/prisma";
 import withSession from "../../libs/ironSession";
 import { Session } from "next-iron-session";
 import handleSessionToken from "../../libs/handleSessionToken";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
+import generateToken from "../../libs/generateToken";
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
     // > ------------------------- how it should work --------------------------- //
@@ -24,36 +25,6 @@ export default withSession(
     // > 1. try searching for it in a DB
     // > 1.5.  if already exists generate agane
     // > 2. insert token into db
-    async function generateToken(userId: number, shouldRemember?: boolean) {
-      let generatedToken = randomSalt(24);
-      let goAgane = true;
-      while (goAgane === true) {
-        goAgane = false;
-        const create = await prisma.token
-          .create({
-            data: {
-              token: generatedToken,
-              userId: userId,
-              timeGenerated: new Date(),
-              validTime: shouldRemember ? 2592000000 : 900000,
-            },
-          })
-          .catch((err) => {
-            // goAgane = false;
-            // console.log(err);
-            if (err.code === "P2002") {
-              goAgane = true;
-              generatedToken = randomSalt(24);
-            }
-          });
-        // console.log(create);
-        // const userToken = create;
-      }
-      // req.session.set("user", userToken);
-      return generatedToken;
-      // await req.session.save();
-      // console.log(getUser);
-    }
 
     //? -1 if session contains token, check if possible to authenticate with it
     const isValidToken = await checkIfTokenValidAndRefresh(req.session);

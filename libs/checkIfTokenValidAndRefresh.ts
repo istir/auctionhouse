@@ -45,7 +45,7 @@ export default async function checkIfTokenValidAndRefresh(
   } else if (session?.get("user") && session?.get("user")?.token) {
     sessionToken = session.get("user").token;
 
-    printStackTrace("Token found in session");
+    printStackTrace("Token found in session " + sessionToken);
   } else {
     printStackTrace("No token found");
 
@@ -58,10 +58,20 @@ export default async function checkIfTokenValidAndRefresh(
     });
     if (foundToken) {
       if (
-        foundToken.timeGenerated.valueOf() + foundToken.validTime <
+        foundToken.timeGenerated.valueOf() + parseInt(foundToken.validTime) <
         Date.now()
       ) {
         //* token too old
+        // printStackTrace(
+        //   `Token generated time: ${foundToken.timeGenerated.valueOf()}`
+        // );
+        // printStackTrace(`Token valid time: ${foundToken.validTime}`);
+        // printStackTrace(
+        //   `TokenTime: ${
+        //     foundToken.timeGenerated.valueOf() + foundToken.validTime
+        //   }`
+        // );
+        // printStackTrace(`CurrentTime: ${Date.now()}`);
         printStackTrace("Token too old");
         await prisma.token
           .delete({ where: { id: foundToken.id } })

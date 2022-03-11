@@ -6,9 +6,11 @@ import {
   ModalCloseButton,
   ModalOverlay,
 } from "@chakra-ui/modal";
-import { ModalContent, useBreakpoint } from "@chakra-ui/react";
+import { Flex, ModalContent, Text, useBreakpoint } from "@chakra-ui/react";
 import React from "react";
+import { FaSignInAlt } from "react-icons/fa";
 import Login from "./login";
+import Register from "./register";
 
 interface PopupLoginProps {
   refresh?: () => void;
@@ -17,6 +19,7 @@ interface PopupLoginProps {
 }
 
 export default function PopupLogin(props: PopupLoginProps): JSX.Element {
+  const [type, setType] = React.useState<"login" | "register">("login");
   const { isOpen, onOpen, onClose } = useDisclosure();
   function getSize(currentBreakpoint: string | undefined) {
     // console.log(currentBreakpoint);
@@ -34,7 +37,12 @@ export default function PopupLogin(props: PopupLoginProps): JSX.Element {
   }
   return (
     <>
-      <Button onClick={onOpen}>Zaloguj</Button>
+      <Button onClick={onOpen}>
+        <Flex flexDir={"row"} justifyContent="center" alignItems={"center"}>
+          <FaSignInAlt />
+          <Text ml="2">Zaloguj się</Text>
+        </Flex>
+      </Button>
       <Modal
         isOpen={isOpen}
         onClose={onClose}
@@ -44,14 +52,43 @@ export default function PopupLogin(props: PopupLoginProps): JSX.Element {
         <ModalOverlay />
         {/* <ModalHeader>Modal Title</ModalHeader> */}
         <ModalContent>
-          <ModalCloseButton />
+          <ModalCloseButton zIndex={"999"} position="fixed" />
           <ModalBody
             display="flex"
             w="full"
+            // overflow={"hidden"}
+            // maxH={"90vh"}
+            // mt="20"
             justifyItems="center"
             alignItems="center"
+            justifyContent={"center"}
+            flexDir="column"
           >
-            <Login refresh={props.refresh} closePopup={onClose} />
+            {type === "login" ? (
+              <Login refresh={props.refresh} closePopup={onClose} />
+            ) : (
+              <Register refresh={props.refresh} closePopup={onClose} />
+            )}
+            <Flex
+              justifyContent={"center"}
+              alignItems="center"
+              flexDir={"column"}
+              mt="10"
+            >
+              <Text>
+                {type === "login" ? "Nie masz konta?" : "Masz już konto?"}
+              </Text>
+              <Button
+                colorScheme={"green"}
+                onClick={() => {
+                  setType((prevType) => {
+                    return prevType === "login" ? "register" : "login";
+                  });
+                }}
+              >
+                {type === "login" ? "Zarejestruj się!" : "Zaloguj się!"}
+              </Button>
+            </Flex>
           </ModalBody>
         </ModalContent>
       </Modal>

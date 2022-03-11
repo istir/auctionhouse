@@ -1,53 +1,59 @@
-import { IconButton } from "@chakra-ui/button";
+// import { IconButton } from "@chakra-ui/button";
 import { Box, Flex } from "@chakra-ui/layout";
 import React, { useRef } from "react";
 import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
-import { Spin as Hamburger } from "hamburger-react";
+// import { Spin as Hamburger } from "hamburger-react";
 import { Drawer, DrawerBody, DrawerContent } from "@chakra-ui/modal";
 import HamburgerOptions from "./HamburgerOptions";
 import { User } from ".prisma/client";
 import { Image } from "@chakra-ui/image";
 import { FaUser } from "react-icons/fa";
 import { useRouter } from "next/router";
+import { useDisclosure } from "@chakra-ui/react";
 interface HamburgerMenuProps {
   user?: User;
   drawerWidth?: string;
-  isDrawerOpen?: boolean;
-  onDrawerOpen?: () => void;
-  onDrawerClose?: () => void;
+  // isDrawerOpen?: boolean;
+  // onDrawerOpen?: () => void;
+  // onDrawerClose?: () => void;
   refresh?: () => void;
 }
 
 export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const headerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const isLightMode = useLightModeCheck();
   function drawDrawer() {
-    if (props.isDrawerOpen && props.onDrawerClose) {
-      return (
-        <Drawer
-          isOpen={props.isDrawerOpen}
-          placement="top"
-          onClose={props.onDrawerClose}
-          // size={props.drawerWidth}
+    // if (props.isDrawerOpen && props.onDrawerClose) {
+    return (
+      <Drawer
+        isOpen={isOpen}
+        placement="top"
+        onClose={onClose}
+        closeOnOverlayClick
+        closeOnEsc
+        // size={props.drawerWidth}
+      >
+        <DrawerContent
+          mt={`${
+            headerRef?.current?.clientHeight
+              ? headerRef?.current?.clientHeight - 3
+              : 0
+          }px`}
         >
-          <DrawerContent
-            mt={`${
-              headerRef?.current?.clientHeight
-                ? headerRef?.current?.clientHeight - 3
-                : 0
-            }px`}
-          >
-            <DrawerBody onClick={props.onDrawerClose}>
-              <HamburgerOptions
-                refresh={props.refresh}
-                loggedIn={props.user ? true : false}
-              />
-            </DrawerBody>
-          </DrawerContent>
-        </Drawer>
-      );
-    }
+          <DrawerBody onClick={onClose}>
+            <HamburgerOptions
+              currentUser={props.user}
+              refresh={props.refresh}
+              loggedIn={props.user ? true : false}
+            />
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+    );
+    // }
   }
   function drawName() {
     // if (!props.user) return;
@@ -58,7 +64,7 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
           <Flex
             // src={props.user.avatar}
             // alt={`${props.user.firstName} ${props.user.lastName}`}
-            bg="black"
+            bg={`${isLightMode ? "black" : "white"}`}
             justifyContent={"center"}
             alignItems="center"
             w={["24px", "32px"]}
@@ -68,7 +74,7 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
             shadow="md"
             overflow={"hidden"}
           >
-            <FaUser />
+            <FaUser color={isLightMode ? "white" : "black"} />
           </Flex>
         );
       }
@@ -96,13 +102,14 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
       <Flex
         alignItems={"center"}
         justifyContent="center"
-        onClick={() => {
-          console.log("Open user menu");
-        }}
+        // onClick={() => {
+        //   console.log("Open user menu");
+        // }}
+        onClick={onOpen}
       >
         <Box
           border="3px solid transparent"
-          boxShadow={"0 0 0 2px #fff"}
+          boxShadow={`0 0 0 2px ${isLightMode ? "black" : "white"}`}
           borderRadius="full"
           h="fit-content"
           w="fit-content"
@@ -118,6 +125,7 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
       <Flex
         alignItems={"center"}
         justifyItems="center"
+        mx="2"
         onClick={() => {
           router.push("/");
         }}
@@ -137,26 +145,29 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
       justifyContent={"space-between"}
       h="14"
       alignContent={"center"}
+      position="sticky"
+      top="0"
     >
-      <IconButton
+      {/* <IconButton
         zIndex="5"
         icon={
           <Hamburger
             direction="left"
             size={20}
-            toggled={props.isDrawerOpen}
+            toggled={isOpen}
             // toggled={drawerPercentage > 0}
           />
         }
         aria-label="Menu"
         variant="transparent"
         pointerEvents="all"
-        onClick={props.onDrawerOpen}
+        onClick={onOpen}
         // onClick={() => {
         //   console.log();
         // }}
         m="2"
-      />
+      /> */}
+      {/* <Box></Box> */}
       {drawDrawer()}
       {drawLogo()}
       {drawName()}

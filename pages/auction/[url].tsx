@@ -100,6 +100,8 @@ export const getServerSideProps: GetServerSideProps = withSession(
 
 export default function AuctionPage(props: AuctionPageProps): JSX.Element {
   const router = useRouter();
+  console.log(props.token?.user);
+
   if (!props.auction) return <Box>404</Box>;
   return (
     <AuctionCom
