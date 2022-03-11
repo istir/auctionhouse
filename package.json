@@ -33,7 +33,6 @@
     "react-icons": "^4.2.0",
     "react-markdown": "^7.0.1",
     "react-responsive-carousel": "^3.2.23",
-    "stack-trace": "^1.0.0-pre1",
     "swiper": "^8.0.7",
     "swr": "^1.0.1"
   },

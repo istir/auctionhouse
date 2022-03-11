@@ -1,4 +1,4 @@
-import { get } from "stack-trace";
+// import { get } from "stack-trace";
 import chalk from "chalk";
 import { ifDev } from "./ifDev";
 export function printStackTrace(message: string) {
@@ -14,6 +14,7 @@ export function printDevErrorStackTrace(message: string) {
   ifDev && console.log(chalk.red(getError(message)));
 }
 function getError(message: string) {
-  const trace = get();
-  return `${message} at function ${trace[2].getFunctionName()}()`;
+  // const trace = get();
+  // return `${message} at function ${trace[2].getFunctionName()}()`;
+  return message;
 }
