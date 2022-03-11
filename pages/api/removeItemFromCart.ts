@@ -48,7 +48,7 @@ export default withSession(
         res.status(400).end("No items in cart");
         return;
       }
-      res.status(201).end(JSON.stringify(updatedCart));
+      res.status(200).end(JSON.stringify(updatedCart));
       return;
     } else {
       res.status(401).end("Wrong auction id");

@@ -1,5 +1,5 @@
 import { Auction } from ".prisma/client";
-import { Box, Flex, Grid } from "@chakra-ui/layout";
+import { Box, Grid, Text } from "@chakra-ui/layout";
 import { Image } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
@@ -34,9 +34,45 @@ export default function AuctionThumbnail(
       />
     );
   }
+  function renderPrice(originalPrice: number | null, price: number) {
+    if (originalPrice && originalPrice > price) {
+      return (
+        <Grid templateColumns="min-content auto" gap="2" alignItems={"center"}>
+          <Text
+            fontSize="sm"
+            textDecoration="line-through"
+            color={isLightMode ? "gray.600" : "gray.400"}
+          >
+            {(originalPrice.toFixed(2) + "")
+              .replace(".", ",")
+              .replace(",00", "")}
+            zł
+          </Text>
+          <Text
+            color={isLightMode ? "red.400" : "red.600"}
+            fontSize="lg"
+            fontWeight={"bold"}
+          >
+            {(price.toFixed(2) + "").replace(".", ",").replace(",00", "")} zł
+          </Text>
+        </Grid>
+      );
+    } else {
+      return (
+        <Text
+          // fontSize="lg"
+          fontWeight={"bold"}
+          color={isLightMode ? "gray.600" : "gray.400"}
+        >
+          {(price.toFixed(2) + "").replace(".", ",").replace(",00", "")} zł
+        </Text>
+      );
+    }
+  }
+  /*
   function renderCorrectPrice(
-    currentPrice: number,
-    originalPrice: number | null
+    originalPrice: number | null,
+    currentPrice: number
   ) {
     function renderOldPrice(oldPrice: number) {
       return (
@@ -77,6 +113,7 @@ export default function AuctionThumbnail(
       return renderCurrentPrice(currentPrice, false);
     }
   }
+  */
   return (
     <Grid
       width={props.width || "64"}
@@ -87,6 +124,8 @@ export default function AuctionThumbnail(
       margin="3"
       overflow={"hidden"}
       cursor={"pointer"}
+      as={"a"}
+      href={`/auction/${props.auction.url}`}
       onClick={() => {
         props.auction.url && router.push(`/auction/${props.auction.url}`);
       }}
@@ -99,7 +138,8 @@ export default function AuctionThumbnail(
         <Box fontWeight={"bold"} noOfLines={1}>
           {props.auction.name}
         </Box>
-        {renderCorrectPrice(props.auction.price, props.auction.originalPrice)}
+        {renderPrice(props.auction.originalPrice, props.auction.price)}
+
         <AuctionTimer dateToEnd={props.auction.dateEnd} />
       </Grid>
     </Grid>

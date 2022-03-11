@@ -1,10 +1,10 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Flex, Image } from "@chakra-ui/react";
 import React from "react";
-import Image from "next/image";
+// import Image from "next/image";
 import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
 import IconMenu from "./IconMenu";
 import NameMenu from "./NameMenu";
-import vercel from "../../public/vercel.svg";
+// import vercel from "../../public/vercel.svg";
 import { User } from ".prisma/client";
 import { useRouter } from "next/router";
 interface HeaderBarProps {
@@ -15,28 +15,36 @@ interface HeaderBarProps {
 export default function HeaderBar(props: HeaderBarProps): JSX.Element {
   const lightMode = useLightModeCheck();
   const router = useRouter();
-  function drawLogo(imgName?: string): JSX.Element {
-    if (imgName)
-      return (
-        <Box
-          cursor="pointer"
-          onClick={() => {
-            router.replace("/");
-          }}
-        >
-          <Image src="/public/imgName" alt="Image" />
-        </Box>
-      );
+  function drawLogo(): JSX.Element {
+    // if ()
     return (
-      <Box
+      <Flex
         cursor="pointer"
+        alignItems={"center"}
+        justifyItems="center"
+        h="inherit"
         onClick={() => {
-          router.replace("/");
+          router.push("/");
         }}
       >
-        <Image width="100px" height="30px" src={vercel} alt="Image" />
-      </Box>
+        <Image
+          src={lightMode ? "/Logo.png" : "/Logo-light.png"}
+          height="50%"
+          objectFit={"contain"}
+          alt="Image"
+        />
+      </Flex>
     );
+    // return (
+    //   <Box
+    //     cursor="pointer"
+    //     onClick={() => {
+    //       router.push("/");
+    //     }}
+    //   >
+    //     <Image width="100px" height="30px" src={vercel} alt="Image" />
+    //   </Box>
+    // );
   }
   return (
     <Flex

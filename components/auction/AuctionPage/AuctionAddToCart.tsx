@@ -1,15 +1,20 @@
-import { Auction } from ".prisma/client";
+import { Auction, User } from ".prisma/client";
 import { Button } from "@chakra-ui/button";
 import { Flex, Grid, Text } from "@chakra-ui/react";
 import axios from "axios";
+import { useRouter } from "next/router";
 import React from "react";
 import useLightModeCheck from "../../../libs/hooks/useLightModeCheck";
 import AuctionBuyModal from "../AuctionBuyWindow.tsx/AuctionBuyModal";
 
 interface AuctionAddToCartProps {
   auction: Auction;
+
   size?: "md" | "lg";
+  seller?: User;
   full?: boolean;
+  setInCart: (boolean: boolean) => void;
+  inCart: boolean;
 }
 
 export default function AuctionAddToCart({
@@ -17,13 +22,19 @@ export default function AuctionAddToCart({
   ...props
 }: AuctionAddToCartProps): JSX.Element {
   const lightMode = useLightModeCheck();
+  const router = useRouter();
   function sendAjaxRequest() {
-    console.log("ZAAAMN");
-    axios({
-      method: "POST",
-      url: "/api/addItemToCart",
-      data: { auctionId: auction.id },
-    });
+    // console.log("ZAAAMN");
+    props.setInCart(true);
+    if (props.inCart) {
+      router.push("/cart");
+    } else {
+      axios({
+        method: "POST",
+        url: "/api/addItemToCart",
+        data: { auctionId: auction.id },
+      });
+    }
   }
   function renderPrice() {
     if (auction.originalPrice && auction.originalPrice > auction.price) {
@@ -43,7 +54,12 @@ export default function AuctionAddToCart({
   }
 
   return (
-    <AuctionBuyModal auction={auction} onPress={sendAjaxRequest}>
+    <AuctionBuyModal
+      seller={props.seller}
+      auction={auction}
+      inCart={props.inCart}
+      onPress={sendAjaxRequest}
+    >
       <Button
         variant="pill"
         // @ts-ignore
@@ -59,9 +75,13 @@ export default function AuctionAddToCart({
         // css={{ WebkitTapHighlightColor: "transparent" }}
         // __css={{ WebkitTapHighlightColor: "transparent" }}
       >
-        <Flex alignItems="center">
-          <Text>Dodaj do koszyka |</Text> {renderPrice()}
-        </Flex>
+        {props.inCart ? (
+          <Flex alignItems="center">W koszyku</Flex>
+        ) : (
+          <Flex alignItems="center">
+            <Text>Dodaj do koszyka |</Text> {renderPrice()}
+          </Flex>
+        )}
       </Button>
     </AuctionBuyModal>
   );

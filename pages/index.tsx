@@ -21,6 +21,25 @@ export const getServerSideProps: GetServerSideProps = withSession(
     // console.log(auctions);
     const token = await checkIfTokenValidAndRefresh(req.session);
     if (token) {
+      const user = await prisma.user.findUnique({
+        where: { id: token.user.id },
+        select: {
+          avatar: true,
+          firstName: true,
+          lastName: true,
+          cart: { include: { items: true } },
+          id: true,
+        },
+      });
+      if (user) {
+        return {
+          props: {
+            token: token.token,
+            user: user,
+            auctions: auctions ? auctions : [],
+          },
+        };
+      }
       return {
         props: {
           token: token.token,
@@ -39,7 +58,7 @@ export default function Home(
 ) {
   const router = useRouter();
   const refreshData = () => {
-    router.replace(router.asPath);
+    router.push(router.asPath);
   };
 
   if (props.user && props.token)

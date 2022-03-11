@@ -1,4 +1,4 @@
-import { Auction } from ".prisma/client";
+import { Auction, User } from ".prisma/client";
 import { Button } from "@chakra-ui/button";
 import { Flex, Grid, Text } from "@chakra-ui/react";
 import React from "react";
@@ -7,6 +7,7 @@ import AuctionBuyModal from "../AuctionBuyWindow.tsx/AuctionBuyModal";
 
 interface AuctionBuyNowProps {
   auction: Auction;
+  seller?: User;
   size?: "md" | "lg";
   full?: boolean;
 }
@@ -35,7 +36,7 @@ export default function AuctionBuyNow({
   }
 
   return (
-    <AuctionBuyModal auction={auction} onPress={() => {}}>
+    <AuctionBuyModal seller={props.seller} auction={auction} onPress={() => {}}>
       <Button
         variant="pill"
         // @ts-ignore

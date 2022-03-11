@@ -60,6 +60,7 @@ const components = {
         promo: "true" | "false";
         bg: string;
         transparent?: "true" | "false";
+        colorScheme?: string;
       }) => ({
         borderRadius: "full",
         WebkitTapHighlightColor: "transparent",
@@ -67,8 +68,14 @@ const components = {
         bg: props.bg
           ? props.bg
           : mode(
-              props.promo === "true" ? "red.100" : "gray.50",
-              props.promo === "true" ? "red.900" : "gray.700"
+              props.promo === "true"
+                ? "red.100"
+                : `${
+                    props.colorScheme ? `${props.colorScheme}.200` : "gray.50"
+                  }`,
+              props.promo === "true"
+                ? "red.900"
+                : `${props.colorScheme ? props.colorScheme : "gray"}.700`
             )(props),
         shadow: "md",
         my: "2",

@@ -7,6 +7,9 @@ import AuctionAddToCart from "./AuctionAddToCart";
 import AuctionSeller from "./AuctionSeller";
 
 interface AuctionHeaderProps {
+  user?: User;
+  setInCart: (boolean: boolean) => void;
+  inCart: boolean;
   auction: Auction & {
     category: Category;
     seller: User;
@@ -40,7 +43,12 @@ export default function AuctionHeader({
         </Text>
         <Flex justifyContent="space-between" gridGap="2">
           <AuctionSeller auction={auction} />
-          <AuctionAddToCart auction={auction} />
+
+          <AuctionAddToCart
+            auction={auction}
+            setInCart={props.setInCart}
+            inCart={props.inCart}
+          />
         </Flex>
       </Box>
     </Box>

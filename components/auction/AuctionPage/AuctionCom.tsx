@@ -1,4 +1,4 @@
-import { Auction, Category, User } from ".prisma/client";
+import { Auction, Cart, Category, User } from ".prisma/client";
 import {
   Box,
   Flex,
@@ -11,16 +11,21 @@ import React from "react";
 // import useColorSchemeContext from "../../../libs/hooks/useColorSchemeContext";
 import useLightModeCheck from "../../../libs/hooks/useLightModeCheck";
 // import ColorModeSwitcher from "../../ColorModeSwitcher";
-import Header from "../../header/header";
+// import Header from "../../header/Header";
 import AuctionHeader from "./AuctionHeader";
 import AuctionImages from "./AuctionImages";
 import ReactMarkdown from "react-markdown";
-import AuctionBuyNow from "./AuctionBuyNow";
 import { Image } from "@chakra-ui/image";
 import { useBreakpoint } from "@chakra-ui/media-query";
 import { useDisclosure } from "@chakra-ui/hooks";
+import AuctionAddToCart from "./AuctionAddToCart";
+import Header from "../../header/header";
 interface AuctionProps {
-  user?: User;
+  user?: User & {
+    cart: Cart & {
+      items: Auction[];
+    };
+  };
   refresh?: () => void;
   auction: Auction & {
     category: Category;
@@ -31,6 +36,11 @@ interface AuctionProps {
 
 export default function AuctionCom(props: AuctionProps): JSX.Element {
   const isLightMode = useLightModeCheck();
+  const [inCart, setInCart] = React.useState<boolean>(
+    (props.user?.cart?.items.filter((item) => item.id === props.auction.id)
+      .length as number) > 0
+  );
+  console.log(inCart);
   // const colorScheme = React.useContext(useColorSchemeContext);
   // const [breakpointSize, setBreakpointSize] = React.useState<string>(
   //   getSize(useBreakpoint())
@@ -106,7 +116,12 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
 
             // mt="-6"
           >
-            <AuctionHeader auction={props.auction} />
+            <AuctionHeader
+              auction={props.auction}
+              user={props.user}
+              setInCart={setInCart}
+              inCart={inCart}
+            />
             <Box zIndex="2" pos="relative" mt="5">
               {props.auction.markdown ? (
                 <ReactMarkdown
@@ -154,7 +169,14 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
               ) : null}
             </Box>
             <Flex justifyContent="center" my="4">
-              <AuctionBuyNow auction={props.auction} size="lg" full />
+              <AuctionAddToCart
+                inCart={inCart}
+                setInCart={setInCart}
+                auction={props.auction}
+                seller={props.auction.seller}
+                size="lg"
+                full
+              />
             </Flex>
           </Box>
         </Box>

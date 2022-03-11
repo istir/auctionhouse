@@ -66,10 +66,12 @@ export default function IconMenu(): JSX.Element {
       <IconButton
         icon={<FaShoppingCart />}
         aria-label="Zakładki"
+        as="a"
+        href="/cart"
         onClick={() => {
           // universalClick("Cart");
           //TODO: open cart modal or popover
-          router.replace("/cart");
+          router.push("/cart");
         }}
       />
     </Flex>

@@ -57,8 +57,8 @@ export const Header: React.FC<HeaderProps> = ({
         );
 
       default:
+        return <HeaderBar refresh={props.refresh} user={user} />;
     }
-    return <HeaderBar refresh={props.refresh} user={user} />;
   }
   return renderCorrectMenu(useBreakpoint());
   // return (

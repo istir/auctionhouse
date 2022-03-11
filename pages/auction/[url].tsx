@@ -1,4 +1,4 @@
-import { Auction, Category, Token, User } from ".prisma/client";
+import { Auction, Cart, Category, Token, User } from ".prisma/client";
 import { Box } from "@chakra-ui/react";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
@@ -9,8 +9,19 @@ import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh"
 import withSession from "../../libs/ironSession";
 import prisma from "../../prisma/prisma";
 interface AuctionPageProps {
-  token?: Token & { user: User };
-  user?: User;
+  token?: Token & {
+    user: User & {
+      cart: Cart & {
+        items: Auction[];
+      };
+    };
+  };
+  user?: User & {
+    cart: Cart & {
+      items: Auction[];
+    };
+  };
+
   auction?: Auction & {
     category: Category;
     seller: User;
@@ -57,8 +68,14 @@ export const getServerSideProps: GetServerSideProps = withSession(
 
     if (token) {
       const user = await prisma.user.findUnique({
-        where: { email: token.user.email },
-        select: { avatar: true, firstName: true, lastName: true },
+        where: { id: token.user.id },
+        select: {
+          avatar: true,
+          firstName: true,
+          lastName: true,
+          cart: { include: { items: true } },
+          id: true,
+        },
       });
       return { props: { auction, user } };
     }
@@ -89,7 +106,7 @@ export default function AuctionPage(props: AuctionPageProps): JSX.Element {
       auction={props.auction}
       user={props.token?.user || props.user}
       refresh={() => {
-        router.replace(router.asPath);
+        router.push(router.asPath);
       }}
     />
   );
