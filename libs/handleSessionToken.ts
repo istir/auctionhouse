@@ -5,7 +5,7 @@ import prisma from "../prisma/prisma";
 export default async function handleSessionToken(
   session: Session,
   token?: string,
-  user?: Omit<User, "id" | "birthDate" | "password" | "username" | "avatar">,
+  user?: Omit<User, "birthDate" | "password" | "username" | "avatar">,
   //   tokenToSave?: string,
   onlySaveOrDestroy?: "save" | "destroy"
 ) {

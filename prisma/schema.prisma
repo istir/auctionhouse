@@ -22,6 +22,7 @@ model User {
   cart       Cart? @relation()
   auctionsAsSeller Auction[] @relation(name:"seller")
   auctionsAsBuyer Auction[] @relation(name:"buyer")
+  bids Bid[] 
 }
 model Cart {
   id          Int        @default(autoincrement()) @id
@@ -63,8 +64,19 @@ model Auction {
   buyer         User?    @relation(name:"buyer",fields:[buyerId],references: [id])
   buyerId       Int?
   inUserCart    Cart[]   
+  bidding       Boolean @default(false)
+  bids           Bid[]
   url           String? @unique
   markdown      String?
+}
+
+model Bid {
+  id            Int   @default(autoincrement()) @id
+  auction       Auction @relation(fields:[auctionId],references: [id])
+  auctionId    Int
+  user          User    @relation(fields:[userId],references: [id])
+  userId        Int
+    offer     Float
 }
 
 model Category {
@@ -74,7 +86,7 @@ model Category {
   parent      Category? @relation("CategoryChildren",fields:[parentId],references: [id])
   children    Category[] @relation("CategoryChildren")
   auctions    Auction[] 
-  
+   
 }
 
 

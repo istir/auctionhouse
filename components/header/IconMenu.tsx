@@ -6,10 +6,11 @@ import { Flex } from "@chakra-ui/layout";
 import useColorSchemeContext from "../../libs/hooks/useColorSchemeContext";
 import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
 import ColorModeSwitcher from "../ColorModeSwitcher";
+import { useRouter } from "next/router";
 
 export default function IconMenu(): JSX.Element {
   const buttonClass = "hover:text-blue-700 cursor-pointer duration-150 ";
-
+  const router = useRouter();
   const { color } = useContext(useColorSchemeContext);
   const lightMode = useLightModeCheck();
   function universalClick(name?: string) {
@@ -66,7 +67,9 @@ export default function IconMenu(): JSX.Element {
         icon={<FaShoppingCart />}
         aria-label="Zakładki"
         onClick={() => {
-          universalClick("Cart");
+          // universalClick("Cart");
+          //TODO: open cart modal or popover
+          router.replace("/cart");
         }}
       />
     </Flex>

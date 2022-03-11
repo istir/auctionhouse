@@ -1,6 +1,7 @@
 import { Session } from "next-iron-session";
 import prisma from "../prisma/prisma";
-
+import { ifDev } from "./ifDev";
+import { printErrorStackTrace, printStackTrace } from "./stackTrace";
 /**
  * function checks if token is valid
  * if it is, it gets refreshed
@@ -18,6 +19,7 @@ export default async function checkIfTokenValidAndRefresh(
   | {
       token: string;
       user: {
+        id: number;
         firstName: string;
         lastName: string;
         email: string;
@@ -25,15 +27,28 @@ export default async function checkIfTokenValidAndRefresh(
       };
     }
 > {
+  // const trace = get();
+
+  // console.log(trace[0].getFunctionName());
+  printStackTrace("Checking if token is valid...");
+
   if (!session) {
-    console.error("NO SESSION FOUND. MAKE SURE TO USE withSession HOOK!!!");
+    printErrorStackTrace(
+      "NO SESSION FOUND. MAKE SURE TO USE withSession HOOK!!!"
+    );
   }
   let sessionToken;
   if (token) {
     sessionToken = token;
+
+    printStackTrace("Token provided");
   } else if (session?.get("user") && session?.get("user")?.token) {
     sessionToken = session.get("user").token;
+
+    printStackTrace("Token found in session");
   } else {
+    printStackTrace("No token found");
+
     return false;
   }
   // const sessionToken = token ? token : session.get("user").token;
@@ -47,6 +62,7 @@ export default async function checkIfTokenValidAndRefresh(
         Date.now()
       ) {
         //* token too old
+        printStackTrace("Token too old");
         await prisma.token
           .delete({ where: { id: foundToken.id } })
           .catch((err) => {
@@ -57,15 +73,21 @@ export default async function checkIfTokenValidAndRefresh(
         return false;
       } else {
         //* token refresh
+
         await prisma.token.update({
           include: { user: true },
           where: { id: foundToken.id },
           data: { timeGenerated: new Date() },
         });
-        return session.get("user");
+        printStackTrace("Token refreshed");
+        const user = session.get("user");
+        ifDev && console.log("User found:", user);
+        return user;
       }
     }
+    printStackTrace("Token not found");
     return false;
   }
+  printStackTrace("Token not found");
   return false;
 }
