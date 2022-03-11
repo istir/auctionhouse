@@ -4,7 +4,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import React from "react";
 import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
-import Header from "./Header";
+import Header from "./header";
 
 interface CartComponentProps {
   cartItems?: Auction[];

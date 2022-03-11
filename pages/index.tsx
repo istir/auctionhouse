@@ -1,7 +1,7 @@
 import { Token, User } from ".prisma/client";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
-import Header from "../components/header/Header";
+import Header from "../components/header/header";
 import checkIfTokenValidAndRefresh from "../libs/checkIfTokenValidAndRefresh";
 import withSession from "../libs/ironSession";
 import { useRouter } from "next/router";

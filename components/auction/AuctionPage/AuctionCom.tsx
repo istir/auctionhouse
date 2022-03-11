@@ -19,7 +19,7 @@ import { Image } from "@chakra-ui/image";
 import { useBreakpoint } from "@chakra-ui/media-query";
 // import { useDisclosure } from "@chakra-ui/hooks";
 import AuctionAddToCart from "./AuctionAddToCart";
-import Header from "../../header/Header";
+import Header from "../../header/header";
 interface AuctionProps {
   user?: User & {
     cart: Cart & {
