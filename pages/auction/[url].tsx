@@ -1,4 +1,4 @@
-import { Auction, Cart, Category, Token, User } from ".prisma/client";
+import { Auction, Bid, Cart, Category, Token, User } from ".prisma/client";
 import { Box } from "@chakra-ui/react";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
@@ -26,6 +26,7 @@ interface AuctionPageProps {
     category: Category;
     seller: User;
     buyer: User | null;
+    bids: Bid[];
   };
 }
 // test
@@ -62,6 +63,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
         category: true,
         seller: { select: { firstName: true, lastName: true, avatar: true } },
         buyer: { select: { firstName: true, lastName: true, avatar: true } },
+        bids: { select: { userId: true, offer: true } },
       },
     });
     // console.log(auction);

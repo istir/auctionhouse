@@ -1,4 +1,4 @@
-import { Auction, Cart, Category, User } from ".prisma/client";
+import { Auction, Bid, Cart, Category, User } from ".prisma/client";
 import {
   Box,
   Flex,
@@ -31,6 +31,7 @@ interface AuctionProps {
     category: Category;
     seller: User;
     buyer: User | null;
+    bids: Bid[];
   };
 }
 
@@ -169,14 +170,16 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
               ) : null}
             </Box>
             <Flex justifyContent="center" my="4">
-              <AuctionAddToCart
-                inCart={inCart}
-                setInCart={setInCart}
-                auction={props.auction}
-                seller={props.auction.seller}
-                size="lg"
-                full
-              />
+              {props.auction.bidding || (
+                <AuctionAddToCart
+                  inCart={inCart}
+                  setInCart={setInCart}
+                  auction={props.auction}
+                  seller={props.auction.seller}
+                  size="lg"
+                  full
+                />
+              )}
             </Flex>
           </Box>
         </Box>
