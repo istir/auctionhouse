@@ -2,6 +2,8 @@ import {
   Box,
   Button,
   Input,
+  InputGroup,
+  InputRightAddon,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -15,8 +17,10 @@ import {
 import { Auction, Bid, Category, User } from "@prisma/client";
 import axios from "axios";
 import React from "react";
+import AuctionTimer from "../AuctionTimer";
 
 interface AuctionBidProps {
+  user?: User;
   auction: Auction & {
     category: Category;
     seller: User;
@@ -33,6 +37,10 @@ export default function AuctionBid(props: AuctionBidProps): JSX.Element {
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [sending, setSending] = React.useState<boolean>(false);
+  const [auctionended, setAuctionended] = React.useState<boolean>(
+    isAuctionEnded()
+  );
+
   function getCurrentPrice() {
     if (
       props.auction.bids.length > 0 &&
@@ -42,9 +50,17 @@ export default function AuctionBid(props: AuctionBidProps): JSX.Element {
       return props.auction.bids[props.auction.bids.length - 1].offer;
     return props.auction.price;
   }
-
+  function isAuctionEnded() {
+    if (
+      props.auction.dateEnd < Date.now().toString() ||
+      props.auction.buyerId !== null
+    )
+      return true;
+    return false;
+  }
   async function sendBid() {
     if (price < currentPrice) return onClose();
+    if (isAuctionEnded()) return onClose();
     setSending(true);
     // const test = { auctionId: props.auction.id, offer: price };
     // console.log(test);
@@ -61,48 +77,76 @@ export default function AuctionBid(props: AuctionBidProps): JSX.Element {
 
   return (
     <Box>
-      <Modal isOpen={isOpen} onClose={onClose} size="2xl">
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Zalicytować?</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            Anulowanie oferty jest niemożliwe. Czy na pewno chcesz potwierdzić
-            ofertę {price} zł za {props.auction.name}?
-          </ModalBody>
-          <ModalFooter display={"flex"} justifyContent="space-between">
-            <Button colorScheme={"blue"} onClick={onClose}>
-              Nie, zmieniłem zdanie
+      {isAuctionEnded() ? (
+        <Box>Aukcja zakończona</Box>
+      ) : (
+        <Box>
+          <Modal isOpen={isOpen} onClose={onClose} size="2xl">
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Zalicytować?</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                Anulowanie oferty jest niemożliwe. Czy na pewno chcesz
+                potwierdzić ofertę {price} zł za {props.auction.name}?
+              </ModalBody>
+              <ModalFooter display={"flex"} justifyContent="space-between">
+                <Button colorScheme={"blue"} onClick={onClose}>
+                  Nie, zmieniłem zdanie
+                </Button>
+                <Button
+                  colorScheme={"red"}
+                  isLoading={sending}
+                  onClick={sendBid}
+                >
+                  Tak, potwierdzam ofertę
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+          {/* <Box>Czas do końca: {timeToEnd}</Box> */}
+          <AuctionTimer
+            dateToEnd={props.auction.dateEnd}
+            onEnd={() => {
+              setAuctionended(true);
+            }}
+          />
+          <Box>
+            Aktualna cena: {currentPrice}
+            zł
+          </Box>
+          <Box>
+            <Text>Aktualna liczba ofert: {props.auction.bids.length}</Text>
+            <Text>Twoja oferta:</Text>
+            <InputGroup>
+              <Input
+                defaultValue={currentPrice + 10}
+                onChange={(e) => {
+                  setPrice(parseInt(e.target.value));
+                }}
+              />
+              <InputRightAddon>zł</InputRightAddon>
+            </InputGroup>
+            <Button
+              disabled={
+                props.user === undefined ||
+                props.user.id === props.auction.sellerId ||
+                props.user.id ===
+                  props.auction.bids[props.auction.bids.length - 1].userId
+              }
+              onClick={() => {
+                setError("");
+                if (price < currentPrice) return setError("Zbyt niska oferta.");
+                if (isAuctionEnded()) return setError("Aukcja zakończona.");
+                onOpen();
+              }}
+            >
+              Licytuj
             </Button>
-            <Button colorScheme={"red"} isLoading={sending} onClick={sendBid}>
-              Tak, potwierdzam ofertę
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-      <Box>
-        Aktualna cena: {currentPrice}
-        zł
-      </Box>
-      <Box>
-        Oferta:
-        <Input
-          defaultValue={currentPrice + 10}
-          onChange={(e) => {
-            setPrice(parseInt(e.target.value));
-          }}
-        />
-        <Button
-          onClick={() => {
-            setError("");
-            if (price < currentPrice) return setError("Zbyt niska oferta.");
-            onOpen();
-          }}
-        >
-          Licytuj
-        </Button>
-        <Text color="red.200">{error}</Text>
-      </Box>
+            <Text color="red.200">{error}</Text>
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 }

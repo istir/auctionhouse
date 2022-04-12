@@ -1,5 +1,6 @@
 import { Session } from "next-iron-session";
 import prisma from "../prisma/prisma";
+import checkForEndingAuctions from "./checkForEndingAuctions";
 import { ifDev } from "./ifDev";
 import { printErrorStackTrace, printStackTrace } from "./stackTrace";
 /**
@@ -31,6 +32,8 @@ export default async function checkIfTokenValidAndRefresh(
 
   // console.log(trace[0].getFunctionName());
   printStackTrace("Checking if token is valid...");
+
+  checkForEndingAuctions();
 
   if (!session) {
     printErrorStackTrace(

@@ -50,7 +50,13 @@ export default function HamburgerOptions(
           </Flex>
         </Button>
 
-        <Button>
+        <Button
+          as="a"
+          href="/my-auctions"
+          onClick={() => {
+            router.push("/cart");
+          }}
+        >
           <Flex flexDir={"row"} justifyContent="center" alignItems={"center"}>
             <FaBookmark />
             <Text ml="2">Moje licytacje</Text>

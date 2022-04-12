@@ -46,7 +46,7 @@ export default function AuctionHeader({
         <Flex justifyContent="space-between" gridGap="2">
           <AuctionSeller auction={auction} />
           {auction.bidding ? (
-            <AuctionBid auction={auction} />
+            <AuctionBid auction={auction} user={props.user} />
           ) : (
             <AuctionAddToCart
               auction={auction}

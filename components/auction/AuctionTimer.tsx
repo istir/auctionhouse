@@ -4,6 +4,7 @@ import { convertMillisecondsToTime, formatTime } from "../../libs/time";
 
 interface AuctionTimerProps {
   dateToEnd: string;
+  onEnd?: () => void;
 }
 
 export default function AuctionTimer(props: AuctionTimerProps): JSX.Element {
@@ -26,9 +27,10 @@ export default function AuctionTimer(props: AuctionTimerProps): JSX.Element {
 
     const difference = deadline - Date.now();
 
-    if (timeToEnd !== "Aukcja zakończona" && difference >= 0) {
+    if (difference >= 0) {
       return `${formatTime(convertMillisecondsToTime(difference))} do końca`;
     } else {
+      props.onEnd?.();
       return "Aukcja zakończona";
     }
   }
