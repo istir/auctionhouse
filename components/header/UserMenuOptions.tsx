@@ -66,27 +66,6 @@ export default function UserMenuOptions(
     },
   ];
 
-  function renderFlex(icon, name, onClick?) {
-    return (
-      <Flex
-      // as={"a"}
-      // width="full"
-      // justify={"center"}
-      // align="center"
-      // onClick={onClick}
-      // textDecoration="none"
-      // // textDecorationLine={"none"}
-      // // textDecorationStyle={"none"}
-      // py={2}
-      >
-        <Flex align={"center"}>
-          <Box mr="2">{icon}</Box>
-          {name}
-        </Flex>
-      </Flex>
-    );
-  }
-
   return (
     <MenuList zIndex={100}>
       {items.map((item) =>
@@ -98,7 +77,10 @@ export default function UserMenuOptions(
             as={"a"}
             //   href={item.href}
           >
-            {renderFlex(item.icon, item.name)}
+            <Flex align={"center"}>
+              <Box mr="2">{item.icon}</Box>
+              {item.name}
+            </Flex>
           </MenuItem>
         ) : (
           <MenuItem
@@ -108,7 +90,10 @@ export default function UserMenuOptions(
             //   as={"a"}
             //   href={item.href}
           >
-            {renderFlex(item.icon, item.name)}
+            <Flex align={"center"}>
+              <Box mr="2">{item.icon}</Box>
+              {item.name}
+            </Flex>
           </MenuItem>
         )
       )}

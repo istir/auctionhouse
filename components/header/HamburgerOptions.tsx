@@ -3,11 +3,7 @@ import { useColorMode, useColorModeValue } from "@chakra-ui/react";
 import { User } from "@prisma/client";
 import { useRouter } from "next/router";
 import React from "react";
-import {
-  FaMoon,
-  FaShoppingCart,
-  FaSun,
-} from "react-icons/fa";
+import { FaMoon, FaShoppingCart, FaSun } from "react-icons/fa";
 // import ColorModeSwitcher from "../ColorModeSwitcher";
 import NextLink from "next/link";
 interface HamburgerOptionsProps {
@@ -39,7 +35,7 @@ export default function HamburgerOptions(
       icon: <SwitchIcon />,
     },
   ];
-  function renderFlex(icon, name, onClick?) {
+  function renderFlex(icon: JSX.Element, name: string, onClick?: () => void) {
     return (
       <Flex
         as={Link}
