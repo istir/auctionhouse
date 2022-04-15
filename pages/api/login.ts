@@ -7,6 +7,7 @@ import { Session } from "next-iron-session";
 import handleSessionToken from "../../libs/handleSessionToken";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
 import generateToken from "../../libs/generateToken";
+import { printDevStackTrace } from "../../libs/stackTrace";
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
     // > ------------------------- how it should work --------------------------- //
@@ -48,7 +49,7 @@ export default withSession(
     // }
 
     //? 2 get user by email
-
+    printDevStackTrace(`RememberMe: ${rememberMe}`);
     const user = await prisma.user.findUnique({
       where: { email },
     });

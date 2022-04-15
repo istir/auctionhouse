@@ -1,9 +1,10 @@
 import { Button } from "@chakra-ui/button";
-import { Text } from "@chakra-ui/layout";
+import { Stack, Text } from "@chakra-ui/layout";
 import axios from "axios";
 import { Form, Formik } from "formik";
 import React from "react";
 import { localizeErrors } from "../../libs/localizeStrings";
+import FormCheckbox from "../form/FormCheckbox";
 import FormInput from "../form/FormInput";
 
 interface LoginProps {
@@ -71,31 +72,34 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
   return (
     <Formik initialValues={initialFormikValues} onSubmit={HandleOnSubmit}>
       <Form style={{ width: "inherit" }}>
-        <FormInput
-          // validator={validateEmail}
-          label="Adres e-mail"
-          name="email"
-          // isError={setAnyFormikError}
-        />
+        <Stack>
+          <FormInput
+            // validator={validateEmail}
+            label="Adres e-mail"
+            name="email"
+            // isError={setAnyFormikError}
+          />
 
-        <FormInput
-          // validator={validatePassword}
-          label="Hasło"
-          name="password"
-          isPassword
-          // isError={setAnyFormikError}
-        />
-        <Text color="red.500" fontWeight="bold" mt="2">
-          {localizeErrors(error)}
-        </Text>
-        <Button
-          type="submit"
-          mt="2"
-          colorScheme="blue"
-          // colorScheme={anyFormikError ? "red" : "blue"}
-        >
-          Zaloguj
-        </Button>
+          <FormInput
+            // validator={validatePassword}
+            label="Hasło"
+            name="password"
+            isPassword
+            // isError={setAnyFormikError}
+          />
+          <FormCheckbox label="Zapamiętaj mnie" name="rememberMe" />
+          <Text color="red.500" fontWeight="bold" mt="2">
+            {localizeErrors(error)}
+          </Text>
+          <Button
+            type="submit"
+            mt="2"
+            colorScheme="blue"
+            // colorScheme={anyFormikError ? "red" : "blue"}
+          >
+            Zaloguj
+          </Button>
+        </Stack>
       </Form>
     </Formik>
     //       {/* <label htmlFor="email" className="font-semibold ">

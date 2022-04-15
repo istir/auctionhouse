@@ -1,20 +1,15 @@
-import { Box, Flex, Text, VStack } from "@chakra-ui/layout";
-import { Button, useColorMode, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, Link, Text, VStack } from "@chakra-ui/layout";
+import { useColorMode, useColorModeValue } from "@chakra-ui/react";
 import { User } from "@prisma/client";
 import { useRouter } from "next/router";
 import React from "react";
 import {
-  FaBookmark,
-  FaCog,
   FaMoon,
-  FaPlus,
   FaShoppingCart,
   FaSun,
 } from "react-icons/fa";
 // import ColorModeSwitcher from "../ColorModeSwitcher";
-import LogoutButton from "../login/LogoutButton";
-import PopupLogin from "../login/PopupLogin";
-
+import NextLink from "next/link";
 interface HamburgerOptionsProps {
   refresh?: () => void;
   loggedIn: boolean;
@@ -28,6 +23,42 @@ export default function HamburgerOptions(
   const { toggleColorMode } = useColorMode();
   const SwitchIcon = useColorModeValue(FaMoon, FaSun);
   const text = useColorModeValue("Ciemny motyw", "Jasny motyw");
+  const items = [
+    {
+      name: "Kategorie",
+      onClick: () => {
+        // router.push("/cart");
+      },
+      href: "",
+      icon: <FaShoppingCart />,
+    },
+    {
+      name: "Zmień motyw",
+      onClick: toggleColorMode,
+      href: "",
+      icon: <SwitchIcon />,
+    },
+  ];
+  function renderFlex(icon, name, onClick?) {
+    return (
+      <Flex
+        as={Link}
+        width="full"
+        justify={"center"}
+        align="center"
+        onClick={onClick}
+        textDecoration="none"
+        // textDecorationLine={"none"}
+        // textDecorationStyle={"none"}
+        py={2}
+      >
+        <Box mr="2">{icon}</Box>
+        <Text fontSize={"large"} fontWeight="semibold">
+          {name}
+        </Text>
+      </Flex>
+    );
+  }
   return (
     <Box
       onClick={(e) => {
@@ -35,9 +66,19 @@ export default function HamburgerOptions(
       }}
     >
       <VStack justifyContent="center" alignItems="center">
-        <Text>Witaj, {props.currentUser?.firstName}!</Text>
-
-        <Button
+        {/* <Text>Witaj, {props.currentUser?.firstName}!</Text> */}
+        <VStack display={"flex"} width="full">
+          {items.map((item) =>
+            item.href ? (
+              <NextLink key={item.name} href={item.href} passHref>
+                {renderFlex(item.icon, item.name)}
+              </NextLink>
+            ) : (
+              <Box>{renderFlex(item.icon, item.name, item.onClick)}</Box>
+            )
+          )}
+        </VStack>
+        {/* <Button
           as="a"
           href="/cart"
           onClick={() => {
@@ -82,7 +123,7 @@ export default function HamburgerOptions(
           <LogoutButton refresh={props.refresh} />
         ) : (
           <PopupLogin refresh={props.refresh} />
-        )}
+        )} */}
       </VStack>
     </Box>
   );

@@ -14,6 +14,27 @@ import Register from "./register";
 
 interface PopupLoginProps {
   refresh?: () => void;
+  dontRenderIcon?: boolean;
+  buttonSize?: "sm" | "lg" | "md" | "xs";
+  buttonColorScheme?:
+    | "teal"
+    | "whiteAlpha"
+    | "blackAlpha"
+    | "gray"
+    | "red"
+    | "orange"
+    | "yellow"
+    | "green"
+    | "blue"
+    | "cyan"
+    | "purple"
+    | "pink"
+    | "linkedin"
+    | "facebook"
+    | "messenger"
+    | "whatsapp"
+    | "twitter"
+    | "telegram";
   // closePopup: () => void;
   // isModalOpen: boolean;
 }
@@ -37,10 +58,14 @@ export default function PopupLogin(props: PopupLoginProps): JSX.Element {
   }
   return (
     <>
-      <Button onClick={onOpen}>
+      <Button
+        onClick={onOpen}
+        size={props.buttonSize || "md"}
+        colorScheme={props.buttonColorScheme}
+      >
         <Flex flexDir={"row"} justifyContent="center" alignItems={"center"}>
-          <FaSignInAlt />
-          <Text ml="2">Zaloguj się</Text>
+          {props.dontRenderIcon || <FaSignInAlt />}
+          <Text ml={props.dontRenderIcon ? "0" : "2"}>Zaloguj się</Text>
         </Flex>
       </Button>
       <Modal
