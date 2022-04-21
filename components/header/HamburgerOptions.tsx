@@ -1,15 +1,25 @@
-import { Box, Flex, Link, Text, VStack } from "@chakra-ui/layout";
-import { useColorMode, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, HStack, Link, Text, VStack } from "@chakra-ui/layout";
+import {
+  IconButton,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+  useColorMode,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import { User } from "@prisma/client";
 import { useRouter } from "next/router";
 import React from "react";
-import { FaMoon, FaShoppingCart, FaSun } from "react-icons/fa";
+import { FaMoon, FaSun, FaThLarge } from "react-icons/fa";
 // import ColorModeSwitcher from "../ColorModeSwitcher";
 import NextLink from "next/link";
 interface HamburgerOptionsProps {
   refresh?: () => void;
   loggedIn: boolean;
   currentUser?: User;
+  renderAsButtons?: boolean;
 }
 
 export default function HamburgerOptions(
@@ -26,7 +36,7 @@ export default function HamburgerOptions(
         // router.push("/cart");
       },
       href: "",
-      icon: <FaShoppingCart />,
+      icon: <FaThLarge />,
     },
     {
       name: "Zmień motyw",
@@ -44,6 +54,7 @@ export default function HamburgerOptions(
         align="center"
         onClick={onClick}
         textDecoration="none"
+        cursor={"pointer"}
         // textDecorationLine={"none"}
         // textDecorationStyle={"none"}
         py={2}
@@ -55,6 +66,57 @@ export default function HamburgerOptions(
       </Flex>
     );
   }
+
+  if (props.renderAsButtons)
+    return (
+      <HStack>
+        {items.map((item) =>
+          item.href ? (
+            <Flex>
+              <Popover trigger="hover">
+                <PopoverTrigger>
+                  <NextLink key={item.name} href={item.href} passHref>
+                    <IconButton
+                      // href={item.href}
+                      as={Link}
+                      size="sm"
+                      aria-label={item.name}
+                      icon={item.icon}
+                      borderRadius="full"
+                      // onClick={item.onClick}
+                    ></IconButton>
+                  </NextLink>
+                </PopoverTrigger>
+                <PopoverContent width={"max-content"}>
+                  <PopoverArrow />
+                  <PopoverBody>{item.name}</PopoverBody>
+                </PopoverContent>
+              </Popover>
+
+              {/* <Button>{item.name}</Button> */}
+            </Flex>
+          ) : (
+            <Flex>
+              <Popover trigger="hover">
+                <PopoverTrigger>
+                  <IconButton
+                    size="sm"
+                    aria-label={item.name}
+                    icon={item.icon}
+                    borderRadius="full"
+                    onClick={item.onClick}
+                  ></IconButton>
+                </PopoverTrigger>
+                <PopoverContent width={"max-content"}>
+                  <PopoverArrow />
+                  <PopoverBody>{item.name}</PopoverBody>
+                </PopoverContent>
+              </Popover>
+            </Flex>
+          )
+        )}
+      </HStack>
+    );
   return (
     <Box
       onClick={(e) => {

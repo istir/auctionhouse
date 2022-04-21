@@ -1,5 +1,5 @@
 // import { IconButton } from "@chakra-ui/button";
-import { Box, Flex, Stack, Text } from "@chakra-ui/layout";
+import { Box, Flex,  Stack, Text } from "@chakra-ui/layout";
 import React, { useRef } from "react";
 import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
 // import { Spin as Hamburger } from "hamburger-react";
@@ -23,6 +23,8 @@ import {
 import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import PopupLogin from "../login/PopupLogin";
 import UserMenuOptions from "./UserMenuOptions";
+import SearchComponent from "./SearchComponent";
+import { FaChevronDown } from "react-icons/fa";
 interface HamburgerMenuProps {
   user?: User;
   drawerWidth?: string;
@@ -204,27 +206,52 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
           direction={"row"}
           spacing={6}
         >
-          {!props.user ? (
-            <PopupLogin
-              dontRenderIcon
-              refresh={props.refresh}
-              buttonSize="sm"
-              buttonColorScheme="teal"
-            />
-          ) : (
-            <Menu>
-              <MenuButton
-                as={Button}
-                rounded={"full"}
-                variant={"link"}
-                cursor={"pointer"}
-                minW={0}
-              >
-                <Avatar size={"sm"} src={props.user.avatar || "undefined"} />
-              </MenuButton>
-              <UserMenuOptions refresh={props.refresh} />
-            </Menu>
-          )}
+          <Flex>
+            <SearchComponent paddingX="2" />
+            <Flex paddingRight={"2"} display={{ base: "none", md: "flex" }}>
+              <HamburgerOptions
+                currentUser={props.user}
+                refresh={props.refresh}
+                loggedIn={props.user ? true : false}
+                renderAsButtons
+              />
+            </Flex>
+            {!props.user ? (
+              <PopupLogin
+                dontRenderIcon
+                refresh={props.refresh}
+                buttonSize="sm"
+                buttonColorScheme="teal"
+              />
+            ) : (
+              <Menu>
+                <MenuButton
+                  as={Button}
+                  rounded={"full"}
+                  variant={"link"}
+                  cursor={"pointer"}
+                  minW={0}
+                >
+                  <Flex
+                    placeItems={"center"}
+                    bg="whiteAlpha.300"
+                    borderRadius={"full"}
+                    pr="2"
+                    border="2px"
+                    borderColor={"whiteAlpha.500"}
+                  >
+                    <Avatar
+                      size={"sm"}
+                      src={props.user.avatar || "undefined"}
+                      mr="1"
+                    />
+                    <FaChevronDown />
+                  </Flex>
+                </MenuButton>
+                <UserMenuOptions refresh={props.refresh} />
+              </Menu>
+            )}
+          </Flex>
         </Stack>
       </Flex>
       <Collapse in={isOpen} animateOpacity>

@@ -1,103 +1,169 @@
-// import { faSearch } from "@fortawesome/free-solid-svg-icons";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  Box,
+  Button,
+  IconButton,
+  Input,
+  InputGroup,
+  InputRightAddon,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+} from "@chakra-ui/react";
+import React from "react";
 import { FaSearch } from "react-icons/fa";
 
-import React from "react";
-import { IconButton } from "@chakra-ui/react";
-
 interface SearchComponentProps {
-  renderSearchIcon?: boolean;
-  searchIconClass?: string;
-}
-interface SearchComponentState {
-  searchOpen: boolean;
+  paddingX?: string;
 }
 
-export default class SearchComponent extends React.Component<
-  SearchComponentProps,
-  SearchComponentState
-> {
-  constructor(props: SearchComponentProps) {
-    super(props);
-    this.state = { searchOpen: !this.props.renderSearchIcon }; //? open search box by default when not rendering search icon
+export default function SearchComponent(
+  props: SearchComponentProps
+): JSX.Element {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [search, setSearch] = React.useState<string>("");
+  //on mobile open modal with search bar
+  //on desktop use inputgroup to search
+
+  function sendSearch() {
+    console.log(search);
   }
-  /* -------------------------------------------------------------------------- */
-  /*                                 SEARCH ICON                                */
-  /* -------------------------------------------------------------------------- */
-  renderSearchIcon() {
-    if (this.props.renderSearchIcon)
-      return (
+
+  return (
+    <>
+      <Box display={{ base: "flex", md: "none" }} paddingX={props.paddingX}>
         <IconButton
-          icon={<FaSearch />}
+          m="0"
+          p="0"
           aria-label="Szukaj"
-          onClick={() => {
-            this.changeSearchBoxState();
-            //   universalClick("Search");
-          }}
+          borderRadius={"full"}
+          icon={<FaSearch />}
+          size="sm"
+          // onClick={() => {
+          //   isOpen ? onOpen() : onClose();
+          // }}
+          onClick={onOpen}
         />
-        // <FontAwesomeIcon
-        //   className={this.props.searchIconClass}
-        //   icon={faSearch}
-        //   onClick={() => {
-        //     this.changeSearchBoxState();
-        //     //   universalClick("Search");
-        //   }}
-        // />
-      );
-  }
+        <Modal
+          isOpen={isOpen}
+          onClose={() => {
+            setSearch("");
+            onClose();
+          }}
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Szukaj</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Box>
+                <Input
+                  value={search}
+                  placeholder="Czego szukasz?"
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                  }}
+                  type="search"
+                  // on
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      sendSearch();
+                    }
+                  }}
+                  onSubmit={sendSearch}
+                ></Input>
+                <Button
+                  mt="2"
+                  width={"full"}
+                  colorScheme="green"
+                  onClick={sendSearch}
+                >
+                  Szukaj
+                </Button>
+              </Box>
+            </ModalBody>
 
-  /* -------------------------------------------------------------------------- */
-  /*                                 SEARCH BOX                                 */
-  /* -------------------------------------------------------------------------- */
-  /* ---------------------------- toggle search box --------------------------- */
-  /**
-   *
-   * Method to toggle search box visibility
-   * @param state - "open"|"close" - open or close, or toggle if not specified
-   
-   */
-  changeSearchBoxState(state?: "open" | "close"): void {
-    //TODO make so that it has an animation on open
+            {/* <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button variant='ghost'>Secondary Action</Button>
+          </ModalFooter> */}
+          </ModalContent>
+        </Modal>
+      </Box>
+      {/* desktop */}
+      <Box display={{ base: "none", md: "flex" }} paddingX={props.paddingX}>
+        <InputGroup
+          size="sm"
+          // border={open ? "1px" : "0px"}
+          border="2px"
+          borderRadius={"full"}
+          borderColor={"whiteAlpha.500"}
+          overflow="hidden"
+          // minW="0"
+          _focusWithin={{
+            boxShadow: "0 0 0 3px var(--chakra-colors-gray-200);",
+          }}
+          transition={"0.3s"}
 
-    if (state) {
-      this.setState({ searchOpen: state === "open" ? true : false });
+          // width={open ? "48" : "40px"}
+        >
+          <Input
+            size="sm"
+            // transition={"0.3s"}
+            border="0"
+            // width={isOpen ? "48" : "0"}
+            // minWidth={"30vw"}
+            // maxWidth={"80vw"}
+            width={"40vw"}
+            // minW="0"
+            // padding={0}
+            placeholder="Czego szukasz?"
+            _focus={{
+              border: "0px",
+              // backgroundColor: "var(--chakra-colors-whiteAlpha-300)",
+            }}
+            value={search}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                sendSearch();
+              }
+            }}
+            onSubmit={sendSearch}
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+          ></Input>
 
-      return;
-    } else {
-      this.setState((prevState) => ({ searchOpen: !prevState.searchOpen }));
-    }
-  }
-
-  /* --------------------------------- render --------------------------------- */
-  renderSearchBox() {
-    // if (!this.state.searchOpen) return;
-    return (
-      //TODO modify tailwind css later
-
-      <input
-        // onBlur={() => {
-        //   this.changeSearchBoxState("close"); //? close search box when not selected
-        // }}
-        style={
-          this.state.searchOpen
-            ? { opacity: "1", visibility: "visible" }
-            : { width: "0", opacity: "0", visibility: "hidden" }
-        }
-        className="w-204 duration-150 p-1 sm:p-2 text-lg sm:text-sm rounded-md focus:outline-none focus:ring-2"
-      ></input>
-    );
-  }
-
-  /* -------------------------------------------------------------------------- */
-  /*                           FINAL COMPONENT RENDER                           */
-  /* -------------------------------------------------------------------------- */
-  render() {
-    return (
-      <div className="flex items-center gap-2">
-        {this.renderSearchBox()}
-        {this.renderSearchIcon()}
-      </div>
-    );
-    // return <div>Hello World</div>;
-  }
+          <InputRightAddon
+            m="0"
+            p="0"
+            border="0"
+            // borderRadius={"md"}
+            background="transparent"
+          >
+            <IconButton
+              m="0"
+              p="0"
+              size="sm"
+              aria-label="Szukaj"
+              icon={<FaSearch />}
+              borderLeftRadius="full"
+              onClick={() => {
+                // setSearch("");
+                // setOpen((prev) => {
+                //   return !prev;
+                // });
+                sendSearch();
+              }}
+            />
+          </InputRightAddon>
+        </InputGroup>
+      </Box>
+    </>
+  );
 }

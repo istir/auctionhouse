@@ -71,6 +71,7 @@ export default function UserMenuOptions(
       {items.map((item) =>
         item.href ? (
           <MenuItem
+            cursor={"pointer"}
             key={item.name}
             // onClick={item.onClick}
             //   as={item.href ? "a" : "button"}
@@ -84,6 +85,7 @@ export default function UserMenuOptions(
           </MenuItem>
         ) : (
           <MenuItem
+            cursor={"pointer"}
             key={item.name}
             onClick={item.onClick}
             //   as={item.href ? "a" : "button"}
