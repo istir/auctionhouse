@@ -44,16 +44,16 @@ export default function AuctionBid(props: AuctionBidProps): JSX.Element {
   function getCurrentPrice() {
     if (
       props.auction.bids.length > 0 &&
-      props.auction.bids[props.auction.bids.length - 1].offer >
+      props.auction?.bids[props.auction.bids.length - 1]?.offer >
         props.auction.price
     )
-      return props.auction.bids[props.auction.bids.length - 1].offer;
+      return props.auction?.bids[props.auction.bids.length - 1]?.offer;
     return props.auction.price;
   }
   function isAuctionEnded() {
     if (
-      props.auction.dateEnd < Date.now().toString() ||
-      props.auction.buyerId !== null
+      props.auction?.dateEnd < Date.now().toString() ||
+      props.auction?.buyerId !== null
     )
       return true;
     return false;
@@ -130,9 +130,9 @@ export default function AuctionBid(props: AuctionBidProps): JSX.Element {
             <Button
               disabled={
                 props.user === undefined ||
-                props.user.id === props.auction.sellerId ||
+                props.user.id === props.auction?.sellerId ||
                 props.user.id ===
-                  props.auction.bids[props.auction.bids.length - 1].userId
+                  props.auction?.bids[props.auction?.bids?.length - 1]?.userId
               }
               onClick={() => {
                 setError("");
