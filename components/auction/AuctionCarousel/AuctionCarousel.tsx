@@ -1,5 +1,5 @@
 import { Box, useBreakpointValue } from "@chakra-ui/react";
-import { Auction } from "@prisma/client";
+import { Auction, Bid } from "@prisma/client";
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper";
@@ -8,7 +8,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import AuctionThumbnail from "../AuctionThumbnail";
 interface AuctionCarouselProps {
-  auctions: Auction[];
+  auctions: (Auction & { bids: Bid[] })[];
   // width?: number;
   size?: number;
   smaller?: boolean;

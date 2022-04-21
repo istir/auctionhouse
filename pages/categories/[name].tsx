@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { Auction, Token, User } from "@prisma/client";
+import { Auction, Bid, Token, User } from "@prisma/client";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
 import { useRouter } from "next/router";
@@ -13,7 +13,7 @@ import prisma from "../../prisma/prisma";
 
 interface CategoriesByNameProps {
   user?: User;
-  auctions: Auction[];
+  auctions: (Auction & { bids: Bid[] })[];
   token: Token;
 }
 export const getServerSideProps: GetServerSideProps = withSession(
@@ -35,6 +35,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
         where: {
           category: { name: { search: params.name.split(" ").join(" & ") } },
         },
+        include: { bids: true },
       });
     } else {
       auctions = await prisma.auction.findMany({
@@ -48,6 +49,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
             { name: { search: query.q.split(" ").join(" & ") } },
           ],
         },
+        include: { bids: true },
       });
     }
 

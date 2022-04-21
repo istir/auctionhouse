@@ -1,6 +1,6 @@
-import { Auction } from ".prisma/client";
+import { Auction, Bid } from ".prisma/client";
 import { Box, Grid, Text } from "@chakra-ui/layout";
-import { Image } from "@chakra-ui/react";
+import { Image, useColorModeValue } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
 import React, { useContext } from "react";
@@ -9,63 +9,113 @@ import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
 import AuctionTimer from "./AuctionTimer";
 
 interface AuctionThumbnailProps {
-  auction: Auction;
+  auction: Auction & { bids: Bid[] };
   width?: string | number;
 }
-
+//TODO: auction should have bid, and thumbnail should show latest bid price.
 export default function AuctionThumbnail(
   props: AuctionThumbnailProps
 ): JSX.Element {
   const isLightMode = useLightModeCheck();
   const { color } = useContext(useColorSchemeContext);
   const router = useRouter();
+  const auctionColor = useColorModeValue(
+    props.auction.bidding ? "red.400" : "green.400",
+    props.auction.bidding ? "red.700" : "green.700"
+  );
   function renderImage(image: string) {
-    if (!image) return <Box></Box>;
+    // if (!image) return <Box></Box>;
     return (
-      <Image
-        width="full"
-        height="full"
-        objectFit="contain"
-        src={image}
-        alt={props.auction.name}
-        backgroundColor="white"
-        borderBottomRadius={"lg"}
-        shadow="md"
-      />
+      <Box>
+        <Text
+          fontSize={"sm"}
+          pos="absolute"
+          backgroundColor={"blackAlpha.500"}
+          p="2"
+          borderTopLeftRadius={"lg"}
+          borderBottomRightRadius={"md"}
+          fontWeight="bold"
+          color={auctionColor}
+        >
+          {props.auction.bidding ? "Licytacja" : "Kup Teraz"}
+        </Text>
+
+        {image ? (
+          <Image
+            width="full"
+            height="full"
+            objectFit="contain"
+            src={image}
+            alt={props.auction.name}
+            backgroundColor="white"
+            borderBottomRadius={"lg"}
+            shadow="md"
+          />
+        ) : (
+          <Box>Brak zdjęcia</Box>
+        )}
+      </Box>
     );
   }
   function renderPrice(originalPrice: number | null, price: number) {
     if (originalPrice && originalPrice > price) {
       return (
-        <Grid templateColumns="min-content auto" gap="2" alignItems={"center"}>
+        <Grid templateColumns={"max-content auto"} gap="2" alignItems="center">
+          <Grid templateColumns="max-content auto" alignItems={"center"}>
+            <Text
+              fontSize="sm"
+              textDecoration="line-through"
+              color={isLightMode ? "gray.600" : "gray.400"}
+            >
+              {(originalPrice.toFixed(2) + "")
+                .replace(".", ",")
+                .replace(",00", "")}
+              zł
+            </Text>
+            <Text
+              color={isLightMode ? "red.400" : "red.600"}
+              fontSize="lg"
+              fontWeight={"bold"}
+            >
+              {(price.toFixed(2) + "").replace(".", ",").replace(",00", "")} zł
+            </Text>
+          </Grid>
+        </Grid>
+      );
+    } else if (
+      props.auction.bids &&
+      props.auction.bids?.length > 0 &&
+      props.auction?.bids[props.auction?.bids?.length - 1]?.offer
+    ) {
+      return (
+        <Grid templateColumns={"max-content auto"} gap="2" alignItems="center">
           <Text
-            fontSize="sm"
-            textDecoration="line-through"
+            // fontSize="lg"
+            fontWeight={"bold"}
             color={isLightMode ? "gray.600" : "gray.400"}
           >
-            {(originalPrice.toFixed(2) + "")
+            {(
+              props.auction?.bids[
+                props.auction?.bids?.length - 1
+              ]?.offer.toFixed(2) + ""
+            )
               .replace(".", ",")
-              .replace(",00", "")}
+              .replace(",00", "")}{" "}
             zł
-          </Text>
-          <Text
-            color={isLightMode ? "red.400" : "red.600"}
-            fontSize="lg"
-            fontWeight={"bold"}
-          >
-            {(price.toFixed(2) + "").replace(".", ",").replace(",00", "")} zł
           </Text>
         </Grid>
       );
     } else {
       return (
-        <Text
-          // fontSize="lg"
-          fontWeight={"bold"}
-          color={isLightMode ? "gray.600" : "gray.400"}
-        >
-          {(price.toFixed(2) + "").replace(".", ",").replace(",00", "")} zł
-        </Text>
+        <Grid templateColumns={"max-content auto"} gap="2" alignItems="center">
+          <Text
+            // fontSize="lg"
+            fontWeight={"bold"}
+            color={isLightMode ? "gray.600" : "gray.400"}
+          >
+            {(price.toFixed(2) + "").replace(".", ",").replace(",00", "")} zł
+          </Text>
+        </Grid>
       );
     }
   }
@@ -117,7 +167,8 @@ export default function AuctionThumbnail(
   return (
     <Grid
       width={props.width || "64"}
-      height="80"
+      minH="80"
+      // maxH=""
       backgroundColor={isLightMode ? `white` : `gray.800`}
       borderRadius="lg"
       shadow={"lg"}
@@ -131,7 +182,7 @@ export default function AuctionThumbnail(
       }}
       transition="all 0.2s ease-in-out"
       _hover={{ transform: "scale(1.05)" }}
-      templateRows="65% auto"
+      templateRows="auto max-content"
     >
       {renderImage(props.auction.image[0])}
       <Grid templateRows={"3"} padding="2">

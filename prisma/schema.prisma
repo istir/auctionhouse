@@ -69,7 +69,7 @@ model Auction {
   bids          Bid[]
 
   url      String? @unique
-  markdown String?
+  markdown String? //TODO: this should be string[] or at the very least when adding auction, add \n for each line
 }
 
 model Bid {

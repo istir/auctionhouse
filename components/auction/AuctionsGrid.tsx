@@ -1,10 +1,10 @@
 import { Grid } from "@chakra-ui/react";
-import { Auction } from "@prisma/client";
+import { Auction, Bid } from "@prisma/client";
 import React from "react";
 import AuctionThumbnail from "./AuctionThumbnail";
 
 interface AuctionsGridProps {
-  auctions: Auction[];
+  auctions: (Auction & { bids: Bid[] })[];
 }
 
 export default function AuctionsGrid(props: AuctionsGridProps): JSX.Element {
