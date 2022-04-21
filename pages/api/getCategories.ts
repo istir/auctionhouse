@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../prisma/prisma";
 
-
 import { Session } from "next-iron-session";
 // export default withSession(
 export default async function getCategories(
@@ -22,7 +21,7 @@ export default async function getCategories(
 
   const category = await prisma.category.findUnique({
     where: { id: categoryId },
-    include: { children: true },
+    // include: { children: true },
   });
   if (!category) {
     res.end("Wrong id");
