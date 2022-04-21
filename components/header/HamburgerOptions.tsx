@@ -76,25 +76,27 @@ export default function HamburgerOptions(
             <Flex key={item.name}>
               <Popover trigger="hover">
                 <PopoverTrigger>
-                  <NextLink key={item.name} href={item.href} passHref>
-                    <IconButton
-                      // href={item.href}
-                      as={Link}
-                      size="sm"
-                      aria-label={item.name}
-                      icon={item.icon}
-                      borderRadius="full"
-                      border={"2px"}
-                      // borderColor="whiteAlpha.500"
-                      borderColor={
-                        colorMode === "dark"
-                          ? "whiteAlpha.500"
-                          : "blackAlpha.500"
-                      }
+                  <Box>
+                    <NextLink key={item.name} href={item.href} passHref>
+                      <IconButton
+                        // href={item.href}
+                        as={Link}
+                        size="sm"
+                        aria-label={item.name}
+                        icon={item.icon}
+                        borderRadius="full"
+                        border={"2px"}
+                        // borderColor="whiteAlpha.500"
+                        borderColor={
+                          colorMode === "dark"
+                            ? "whiteAlpha.500"
+                            : "blackAlpha.500"
+                        }
 
-                      // onClick={item.onClick}
-                    ></IconButton>
-                  </NextLink>
+                        // onClick={item.onClick}
+                      ></IconButton>
+                    </NextLink>
+                  </Box>
                 </PopoverTrigger>
                 <PopoverContent width={"max-content"}>
                   <PopoverArrow />

@@ -1,4 +1,4 @@
-import { Box, VStack } from "@chakra-ui/react";
+import { Box, Button, Link, VStack } from "@chakra-ui/react";
 import { Category, Token, User } from "@prisma/client";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
@@ -9,7 +9,7 @@ import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh"
 import withSession from "../../libs/ironSession";
 import prisma from "../../prisma/prisma";
 
-// import NextLink from "next/link";
+import NextLink from "next/link";
 
 interface CategoriesProps {
   user?: User;
@@ -74,7 +74,13 @@ export default function Categories(props: CategoriesProps): JSX.Element {
       <VStack>
         {props.categories.map((category) => (
           // <NextLink>{category.name}</NextLink>
-          <Box key={category.id}>{category.name}</Box>
+          <NextLink
+            key={category.id}
+            href={`/categories/${category.name.toLowerCase()}`}
+            passHref
+          >
+            <Button as={Link}>{category.name}</Button>
+          </NextLink>
         ))}
       </VStack>
     </Box>
