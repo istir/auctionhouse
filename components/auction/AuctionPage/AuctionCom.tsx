@@ -36,6 +36,7 @@ interface AuctionProps {
 }
 
 export default function AuctionCom(props: AuctionProps): JSX.Element {
+  // console.log(props.auction.markdown);
   const isLightMode = useLightModeCheck();
   const [inCart, setInCart] = React.useState<boolean>(
     (props.user?.cart?.items.filter((item) => item.id === props.auction.id)
@@ -124,50 +125,54 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
               inCart={inCart}
             />
             <Box zIndex="2" pos="relative" mt="5">
-              {props.auction.markdown ? (
-                <ReactMarkdown
-                  components={{
-                    h1: ({ node, ...props }) => (
-                      <Text
-                        my="2"
-                        fontSize="x-large"
-                        fontWeight="semibold"
-                        {...props}
-                      ></Text>
-                    ),
-                    img: ({ node, ...props }) => (
-                      <Image my="2" alt={props.alt} {...props}></Image>
-                    ),
-                    h2: ({ node, ...props }) => (
-                      <Text
-                        my="2"
-                        fontSize="xl"
-                        fontWeight="semibold"
-                        {...props}
-                      ></Text>
-                    ),
-                    ul: ({ node, ...props }) => (
-                      <UnorderedList
-                        // style={{ background: "#000" }}
-                        // children={node.children}
-                        ml="8"
-                        {...props}
-                        // @ts-ignore
-                        ordered={props.ordered.toString()}
-                      ></UnorderedList>
-                    ),
-                    li: ({ node, ...props }) => (
-                      <ListItem
-                        {...props}
-                        // @ts-ignore
-                        ordered={props.ordered + ""}
-                      ></ListItem>
-                    ),
-                  }}
-                >
-                  {props.auction.markdown}
-                </ReactMarkdown>
-              ) : null}
+              {props.auction.markdown
+                ? props.auction.markdown.split("\\n").map((item) => (
+                    <ReactMarkdown
+                      key={item}
+                      components={{
+                        h1: ({ node, ...props }) => (
+                          <Text
+                            my="2"
+                            fontSize="x-large"
+                            fontWeight="semibold"
+                            {...props}
+                          ></Text>
+                        ),
+                        img: ({ node, ...props }) => (
+                          <Image my="2" alt={props.alt} {...props}></Image>
+                        ),
+                        h2: ({ node, ...props }) => (
+                          <Text
+                            my="2"
+                            fontSize="xl"
+                            fontWeight="semibold"
+                            {...props}
+                          ></Text>
+                        ),
+                        ul: ({ node, ...props }) => (
+                          <UnorderedList
+                            // style={{ background: "#000" }}
+                            // children={node.children}
+                            ml="8"
+                            {...props}
+                            // @ts-ignore
+                            ordered={props.ordered.toString()}
+                          ></UnorderedList>
+                        ),
+                        li: ({ node, ...props }) => (
+                          <ListItem
+                            {...props}
+                            // @ts-ignore
+                            ordered={props.ordered + ""}
+                          ></ListItem>
+                        ),
+                      }}
+                    >
+                      {item}
+                      {/* {props.auction.markdown.split("\n").join("\n\n\n")} */}
+                    </ReactMarkdown>
+                  ))
+                : null}
             </Box>
             <Flex justifyContent="center" my="4">
               {props.auction.bidding || (
