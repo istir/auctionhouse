@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 
 import useColorSchemeContext from "../../libs/hooks/useColorSchemeContext";
 import HamburgerMenu from "./HamburgerMenu";
-import HeaderBar from "./HeaderBar";
+// import HeaderBar from "./HeaderBar";
 import { User } from ".prisma/client";
 interface HeaderProps {
   user?: User;
@@ -30,39 +30,39 @@ export const Header: React.FC<HeaderProps> = ({
   //   console.log("refreshing...", user);
   //   setRefresh(refresh + 1);
   // }
-  function renderCorrectMenu(currentSize: string | undefined) {
-    switch (currentSize) {
-      case "base":
-        return (
-          <HamburgerMenu
-            user={user}
-            drawerWidth={drawerWidth}
-            refresh={props.refresh}
-          />
-        );
-      case "sm":
-        return (
-          <HamburgerMenu
-            user={user}
-            drawerWidth={drawerWidth}
-            refresh={props.refresh}
-          />
-        );
-      case "md":
-        return (
-          <HamburgerMenu
-            user={user}
-            drawerWidth={drawerWidth}
-            refresh={props.refresh}
-          />
-        );
-      case "lg":
-        return <HeaderBar refresh={props.refresh} user={user} />;
+  // function renderCorrectMenu(currentSize: string | undefined) {
+  //   switch (currentSize) {
+  //     case "base":
+  //       return (
+  //         <HamburgerMenu
+  //           user={user}
+  //           drawerWidth={drawerWidth}
+  //           refresh={props.refresh}
+  //         />
+  //       );
+  //     case "sm":
+  //       return (
+  //         <HamburgerMenu
+  //           user={user}
+  //           drawerWidth={drawerWidth}
+  //           refresh={props.refresh}
+  //         />
+  //       );
+  //     case "md":
+  //       return (
+  //         <HamburgerMenu
+  //           user={user}
+  //           drawerWidth={drawerWidth}
+  //           refresh={props.refresh}
+  //         />
+  //       );
+  //     case "lg":
+  //       return <HeaderBar refresh={props.refresh} user={user} />;
 
-      default:
-        return <HeaderBar refresh={props.refresh} user={user} />;
-    }
-  }
+  //     default:
+  //       return <HeaderBar refresh={props.refresh} user={user} />;
+  //   }
+  // }
   // return renderCorrectMenu(useBreakpoint());
   return <HamburgerMenu user={user} refresh={props.refresh} />;
   // return (

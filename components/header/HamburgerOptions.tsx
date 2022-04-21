@@ -83,6 +83,8 @@ export default function HamburgerOptions(
                       aria-label={item.name}
                       icon={item.icon}
                       borderRadius="full"
+                      border={"2px"}
+                      borderColor="whiteAlpha.500"
                       // onClick={item.onClick}
                     ></IconButton>
                   </NextLink>
@@ -105,6 +107,8 @@ export default function HamburgerOptions(
                     icon={item.icon}
                     borderRadius="full"
                     onClick={item.onClick}
+                    border={"2px"}
+                    borderColor="whiteAlpha.500"
                   ></IconButton>
                 </PopoverTrigger>
                 <PopoverContent width={"max-content"}>

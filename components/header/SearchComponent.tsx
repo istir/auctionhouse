@@ -108,8 +108,8 @@ export default function SearchComponent(
           _focusWithin={{
             boxShadow: "0 0 0 3px var(--chakra-colors-gray-200);",
           }}
-          transition={"0.3s"}
-
+          // transition={"0.3s"}
+          transitionDuration="normal"
           // width={open ? "48" : "40px"}
         >
           <Input
