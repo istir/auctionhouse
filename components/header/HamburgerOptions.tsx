@@ -28,6 +28,7 @@ export default function HamburgerOptions(
   const router = useRouter();
   const { toggleColorMode } = useColorMode();
   const SwitchIcon = useColorModeValue(FaMoon, FaSun);
+  const { colorMode } = useColorMode();
   const text = useColorModeValue("Ciemny motyw", "Jasny motyw");
   const items = [
     {
@@ -35,7 +36,7 @@ export default function HamburgerOptions(
       onClick: () => {
         // router.push("/cart");
       },
-      href: "",
+      href: "/categories",
       icon: <FaThLarge />,
     },
     {
@@ -72,7 +73,7 @@ export default function HamburgerOptions(
       <HStack>
         {items.map((item) =>
           item.href ? (
-            <Flex>
+            <Flex key={item.name}>
               <Popover trigger="hover">
                 <PopoverTrigger>
                   <NextLink key={item.name} href={item.href} passHref>
@@ -84,7 +85,13 @@ export default function HamburgerOptions(
                       icon={item.icon}
                       borderRadius="full"
                       border={"2px"}
-                      borderColor="whiteAlpha.500"
+                      // borderColor="whiteAlpha.500"
+                      borderColor={
+                        colorMode === "dark"
+                          ? "whiteAlpha.500"
+                          : "blackAlpha.500"
+                      }
+
                       // onClick={item.onClick}
                     ></IconButton>
                   </NextLink>
@@ -98,7 +105,7 @@ export default function HamburgerOptions(
               {/* <Button>{item.name}</Button> */}
             </Flex>
           ) : (
-            <Flex>
+            <Flex key={item.name}>
               <Popover trigger="hover">
                 <PopoverTrigger>
                   <IconButton
@@ -108,7 +115,9 @@ export default function HamburgerOptions(
                     borderRadius="full"
                     onClick={item.onClick}
                     border={"2px"}
-                    borderColor="whiteAlpha.500"
+                    borderColor={
+                      colorMode === "dark" ? "whiteAlpha.500" : "blackAlpha.500"
+                    }
                   ></IconButton>
                 </PopoverTrigger>
                 <PopoverContent width={"max-content"}>
@@ -136,7 +145,9 @@ export default function HamburgerOptions(
                 {renderFlex(item.icon, item.name)}
               </NextLink>
             ) : (
-              <Box>{renderFlex(item.icon, item.name, item.onClick)}</Box>
+              <Box key={item.name}>
+                {renderFlex(item.icon, item.name, item.onClick)}
+              </Box>
             )
           )}
         </VStack>

@@ -11,8 +11,10 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React from "react";
 import { FaSearch } from "react-icons/fa";
 
@@ -25,10 +27,27 @@ export default function SearchComponent(
 ): JSX.Element {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [search, setSearch] = React.useState<string>("");
+  const router = useRouter();
   //on mobile open modal with search bar
   //on desktop use inputgroup to search
 
   function sendSearch() {
+    // axios({
+    //   url: "/api/search",
+    //   method: "POST",
+    //   data: { query: search, desc: true },
+    // }).then(
+    //   (ful) => {
+    //     console.log(ful);
+    //     // setSending(false);
+    //     // onClose();
+    //     // setCurrentPrice(price);
+    //   },
+    //   (rej) => {
+    //     console.log(rej);
+    //   }
+    // );
+    router.push("/search?q=" + search);
     console.log(search);
   }
 
@@ -102,7 +121,7 @@ export default function SearchComponent(
           // border={open ? "1px" : "0px"}
           border="2px"
           borderRadius={"full"}
-          borderColor={"whiteAlpha.500"}
+          borderColor={useColorModeValue("blackAlpha.500", "whiteAlpha.500")}
           overflow="hidden"
           // minW="0"
           _focusWithin={{

@@ -1,5 +1,5 @@
 // import { IconButton } from "@chakra-ui/button";
-import { Box, Flex,  Stack, Text } from "@chakra-ui/layout";
+import { Box, Flex, Stack, Text } from "@chakra-ui/layout";
 import React, { useRef } from "react";
 import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
 // import { Spin as Hamburger } from "hamburger-react";
@@ -238,7 +238,9 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
                     borderRadius={"full"}
                     pr="2"
                     border="2px"
-                    borderColor={"whiteAlpha.500"}
+                    borderColor={
+                      lightMode ? "blackAlpha.500" : "whiteAlpha.500"
+                    }
                   >
                     <Avatar
                       size={"sm"}

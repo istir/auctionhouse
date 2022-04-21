@@ -84,13 +84,14 @@ model Bid {
 model Category {
   id       Int        @id @default(autoincrement())
   name     String
-  parentId Int?
-  parent   Category?  @relation("CategoryChildren", fields: [parentId], references: [id])
-  children Category[] @relation("CategoryChildren")
+  // parentId Int?
+  // parent   Category?  @relation("CategoryChildren", fields: [parentId], references: [id])
+  // children Category[] @relation("CategoryChildren")
   auctions Auction[]
 
 }
 
 generator client {
   provider = "prisma-client-js"
+   previewFeatures = ["fullTextSearch"]
 }
