@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { Auction, Token, User } from "@prisma/client";
+import { Auction, Bid, Token, User } from "@prisma/client";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
 import { useRouter } from "next/router";
@@ -13,7 +13,7 @@ import prisma from "../prisma/prisma";
 
 interface SearchProps {
   user?: User;
-  auctions: Auction[];
+  auctions: (Auction & { bids: Bid[] })[];
   token: Token;
 }
 export const getServerSideProps: GetServerSideProps = withSession(
@@ -76,6 +76,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
 );
 
 export default function Search(props: SearchProps): JSX.Element {
+  // const [user, setUser] = useState<User | undefined>(props.user);
   const router = useRouter();
   const refreshData = () => {
     router.push(router.asPath);

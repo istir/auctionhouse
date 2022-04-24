@@ -13,6 +13,7 @@ import { Box } from "@chakra-ui/layout";
 // import AuctionMoreFromUser from "../components/auction/AuctionBuyWindow.tsx/AuctionMoreFromUser";
 import AuctionGetRandomAuctions from "../components/auction/AuctionBuyWindow.tsx/AuctionGetRandomAuctions";
 import getRandomAuctions from "../libs/getRandomAuctionsLib";
+import { useState } from "react";
 // import { useDisclosure } from "@chakra-ui/react";
 
 export const getServerSideProps: GetServerSideProps = withSession(
@@ -63,6 +64,8 @@ export const getServerSideProps: GetServerSideProps = withSession(
 export default function Home(
   props: Token & { user?: User } & { auctions: (Auction & { bids: Bid[] })[] }
 ) {
+  const [user, setUser] = useState<User | undefined>(props.user);
+
   const router = useRouter();
   const refreshData = () => {
     router.push(router.asPath);
@@ -71,7 +74,8 @@ export default function Home(
   return (
     <Box>
       <Header
-        user={props.user}
+        user={user}
+        setUser={setUser}
         token={props.token}
         refresh={refreshData}
         // isDrawerOpen={isOpen}

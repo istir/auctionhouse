@@ -3,8 +3,9 @@ import { Auction, User } from "@prisma/client";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import CartComponent from "../components/header/Cart";
+import Header from "../components/header/header";
 import checkIfTokenValidAndRefresh from "../libs/checkIfTokenValidAndRefresh";
 // import getItemsInCart from "../libs/getItemsInCart";
 // import { get } from "stack-trace";
@@ -44,14 +45,26 @@ export const getServerSideProps: GetServerSideProps = withSession(
 );
 
 export default function CartPage(props: CartPageProps): JSX.Element {
+  const [user, setUser] = useState<User | undefined>(props.user);
+
   const router = useRouter();
   return (
-    <CartComponent
-      cartItems={props.auctions}
-      user={props.user}
-      refresh={() => {
-        router.push(router.asPath);
-      }}
-    />
+    <>
+      <Header
+        user={props.user}
+        // setUser={setUser}
+        refresh={() => {
+          router.push(router.asPath);
+        }}
+      />
+      <CartComponent
+        cartItems={props.auctions}
+
+        // setUser=
+        // refresh={() => {
+        //   router.push(router.asPath);
+        // }}
+      />
+    </>
   );
 }

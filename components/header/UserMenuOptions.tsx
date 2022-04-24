@@ -1,4 +1,5 @@
 import { Box, Flex, MenuItem, MenuList } from "@chakra-ui/react";
+import { User } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/router";
 import React from "react";
@@ -12,6 +13,8 @@ import {
 
 interface UserMenuOptionsProps {
   refresh?: () => void;
+  setUser?: (user: User | undefined) => void;
+  setLoading?: (loading: boolean) => void;
 }
 
 export default function UserMenuOptions(
@@ -55,9 +58,13 @@ export default function UserMenuOptions(
     {
       name: "Wyloguj się",
       onClick: () => {
+        props.setLoading?.(true);
         axios.post("/api/logout").then(() => {
+          props.setLoading?.(false);
           // router.reload();
-          props.refresh?.();
+
+          props.setUser ? props.setUser(undefined) : props.refresh?.();
+          // props.refresh?.();
         });
       },
       // href: "/my-auctions",

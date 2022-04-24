@@ -28,6 +28,7 @@ import { FaChevronDown } from "react-icons/fa";
 interface HamburgerMenuProps {
   user?: User;
   drawerWidth?: string;
+  setUser?: (user: User | undefined) => void;
   // isDrawerOpen?: boolean;
   // onDrawerOpen?: () => void;
   // onDrawerClose?: () => void;
@@ -37,7 +38,8 @@ interface HamburgerMenuProps {
 export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
   // const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen, onToggle } = useDisclosure();
-
+  const [loading, setLoading] = React.useState<boolean>(false);
+  // console.log("props.user", props.user);
   const headerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const isLightMode = useLightModeCheck();
@@ -211,6 +213,7 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
             <Flex paddingRight={"2"} display={{ base: "none", md: "flex" }}>
               <HamburgerOptions
                 currentUser={props.user}
+                // setUser={props.setUser}
                 refresh={props.refresh}
                 loggedIn={props.user ? true : false}
                 renderAsButtons
@@ -218,7 +221,8 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
             </Flex>
             {!props.user ? (
               <PopupLogin
-                dontRenderIcon
+                // dontRenderIcon
+                setUser={props.setUser}
                 refresh={props.refresh}
                 buttonSize="sm"
                 buttonColorScheme="teal"
@@ -231,6 +235,7 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
                   variant={"link"}
                   cursor={"pointer"}
                   minW={0}
+                  isLoading={loading}
                 >
                   <Flex
                     placeItems={"center"}
@@ -250,7 +255,11 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
                     <FaChevronDown />
                   </Flex>
                 </MenuButton>
-                <UserMenuOptions refresh={props.refresh} />
+                <UserMenuOptions
+                  refresh={props.refresh}
+                  setUser={props.setUser}
+                  setLoading={setLoading}
+                />
               </Menu>
             )}
           </Flex>
@@ -258,6 +267,7 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
       </Flex>
       <Collapse in={isOpen} animateOpacity>
         <HamburgerOptions
+          // setUser={props.setUser}
           currentUser={props.user}
           refresh={props.refresh}
           loggedIn={props.user ? true : false}

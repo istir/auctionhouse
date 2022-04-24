@@ -41,5 +41,6 @@ export const getServerSideProps: GetServerSideProps = withSession(
 export default function AddAuctionPage(
   props: AddAuctionPageProps
 ): JSX.Element {
+  // const [user, setUser] = useState<User | undefined>(props.user);
   return <AddAuction user={props.user} />;
 }

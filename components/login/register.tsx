@@ -1,5 +1,6 @@
 import { Button } from "@chakra-ui/button";
 import { Grid, Text } from "@chakra-ui/layout";
+import { User } from "@prisma/client";
 import axios from "axios";
 import { Form, Formik } from "formik";
 import React from "react";
@@ -19,6 +20,8 @@ import FormInput from "../form/FormInput";
 interface RegisterProps {
   refresh?: () => void;
   closePopup?: () => void;
+  setLoading?: (isLoading: boolean) => void;
+  setUser?: (user: User | undefined) => void;
 }
 
 export const Register: React.FC<RegisterProps> = (props) => {
@@ -83,14 +86,16 @@ export const Register: React.FC<RegisterProps> = (props) => {
   function HandleOnSubmit(values: FormikValues) {
     // try {
     setError("");
-
+    props.setLoading?.(true);
     axios({ url: "/api/register", method: "post", data: values }).then(
       // axios.post("/api/register", values).then(
       (ful) => {
         // console.log(ful);
+        // props.setLoading?.(false);
         console.log(ful.data);
         if (ful.status === 200) {
           if (ful.data === "OK" || ful.data === "OK + Address") {
+            props?.setUser?.(ful.data as User);
             props?.refresh?.();
             props?.closePopup?.();
             return;
@@ -107,6 +112,7 @@ export const Register: React.FC<RegisterProps> = (props) => {
         }
       },
       (rej) => {
+        props.setLoading?.(false);
         console.error(rej);
         // console.log("reject", rej.status, rej.data);
 

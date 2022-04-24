@@ -9,6 +9,7 @@ interface HeaderProps {
   token?: string;
   refresh?: () => void;
   drawerWidth?: string;
+  setUser?: (user: User | undefined) => void;
   // isDrawerOpen?: boolean;
   // onDrawerOpen?: () => void;
   // onDrawerClose?: () => void;
@@ -64,7 +65,13 @@ export const Header: React.FC<HeaderProps> = ({
   //   }
   // }
   // return renderCorrectMenu(useBreakpoint());
-  return <HamburgerMenu user={user} refresh={props.refresh} />;
+  return (
+    <HamburgerMenu
+      user={user}
+      refresh={props.refresh}
+      setUser={props.setUser}
+    />
+  );
   // return (
   //   // <header className=" pl-3 pr-3 md:pl-10 md:pr-10 flex justify-between sticky bg-gray-200 dark:bg-gray-700 min-w-full min-h-full p-1 h-12 md:h-16 items-center shadow-md">
   //   //   {drawLogo()}

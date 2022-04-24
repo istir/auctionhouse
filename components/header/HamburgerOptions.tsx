@@ -20,6 +20,7 @@ interface HamburgerOptionsProps {
   loggedIn: boolean;
   currentUser?: User;
   renderAsButtons?: boolean;
+  setUser?: (user: User | undefined) => void;
 }
 
 export default function HamburgerOptions(

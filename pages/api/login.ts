@@ -30,7 +30,11 @@ export default withSession(
     //? -1 if session contains token, check if possible to authenticate with it
     const isValidToken = await checkIfTokenValidAndRefresh(req.session);
     if (isValidToken) {
-      res.status(200).end("OK");
+      res.status(200).end(
+        JSON.stringify({
+          status: "refresh",
+        })
+      );
       return;
     }
     //? 0 if using GET throw an error
@@ -52,6 +56,7 @@ export default withSession(
     printDevStackTrace(`RememberMe: ${rememberMe}`);
     const user = await prisma.user.findUnique({
       where: { email },
+      include: { cart: true },
     });
     // ? 2.5. if user doesn't exist throw a generic error
     if (!user) {
@@ -76,7 +81,25 @@ export default withSession(
           email: user.email,
           phoneNumber: user.phoneNumber,
         });
-        res.status(200).end("OK");
+
+        // avatar: true,
+        // firstName: true,
+        // lastName: true,
+        // cart: { include: { items: true } },
+        // id: true,
+        res.status(200).end(
+          JSON.stringify({
+            status: "OK",
+            user: {
+              firstName: user.firstName,
+              lastName: user.lastName,
+              id: user.id,
+
+              avatar: user.avatar,
+              cart: user.cart,
+            },
+          })
+        );
         return;
       })
       .catch((e) => {

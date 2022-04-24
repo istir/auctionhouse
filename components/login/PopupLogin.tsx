@@ -7,6 +7,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/modal";
 import { Flex, ModalContent, Text, useBreakpoint } from "@chakra-ui/react";
+import { User } from "@prisma/client";
 import React from "react";
 import { FaSignInAlt } from "react-icons/fa";
 import Login from "./login";
@@ -14,8 +15,10 @@ import Register from "./register";
 
 interface PopupLoginProps {
   refresh?: () => void;
+  setUser?: (user: User | undefined) => void;
   dontRenderIcon?: boolean;
   buttonSize?: "sm" | "lg" | "md" | "xs";
+
   buttonColorScheme?:
     | "teal"
     | "whiteAlpha"
@@ -42,6 +45,7 @@ interface PopupLoginProps {
 export default function PopupLogin(props: PopupLoginProps): JSX.Element {
   const [type, setType] = React.useState<"login" | "register">("login");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [loading, setLoading] = React.useState<boolean>(false);
   function getSize(currentBreakpoint: string | undefined) {
     // console.log(currentBreakpoint);
     if (undefined) return "md";
@@ -62,6 +66,7 @@ export default function PopupLogin(props: PopupLoginProps): JSX.Element {
         onClick={onOpen}
         size={props.buttonSize || "md"}
         colorScheme={props.buttonColorScheme}
+        isLoading={loading}
       >
         <Flex flexDir={"row"} justifyContent="center" alignItems={"center"}>
           {props.dontRenderIcon || <FaSignInAlt />}
@@ -90,9 +95,19 @@ export default function PopupLogin(props: PopupLoginProps): JSX.Element {
             flexDir="column"
           >
             {type === "login" ? (
-              <Login refresh={props.refresh} closePopup={onClose} />
+              <Login
+                refresh={props.refresh}
+                closePopup={onClose}
+                setLoading={setLoading}
+                setUser={props.setUser}
+              />
             ) : (
-              <Register refresh={props.refresh} closePopup={onClose} />
+              <Register
+                refresh={props.refresh}
+                closePopup={onClose}
+                setLoading={setLoading}
+                setUser={props.setUser}
+              />
             )}
             <Flex
               justifyContent={"center"}

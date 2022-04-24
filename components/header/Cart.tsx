@@ -1,16 +1,14 @@
 import { Box, Button, Flex, Grid, Image, Text } from "@chakra-ui/react";
-import { Auction, User } from "@prisma/client";
+import { Auction } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/router";
 import React from "react";
 import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
-import Header from "./header";
+// import Header from "./header";
 
 interface CartComponentProps {
   cartItems?: Auction[];
   token?: string;
-  user?: User;
-  refresh: () => void;
 }
 
 export default function CartComponent(props: CartComponentProps): JSX.Element {
@@ -129,7 +127,6 @@ export default function CartComponent(props: CartComponentProps): JSX.Element {
   // }
   return (
     <>
-      <Header user={props.user} refresh={props.refresh} />
       <Box>
         {itemsInCart.length > 0 ? (
           itemsInCart.map((item) => (
