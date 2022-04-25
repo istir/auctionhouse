@@ -12,7 +12,7 @@ export default function AuctionsGrid(props: AuctionsGridProps): JSX.Element {
     <Grid
       gridTemplateColumns={"repeat(auto-fill,minmax(240px,1fr))"}
       // gridTemplateRows={"repeat(auto-fit,minmax(500px,1fr))"}
-      margin="4"
+      margin={{ md: "4" }}
     >
       {props.auctions.map((auction) => (
         <AuctionThumbnail auction={auction} key={auction.id} />

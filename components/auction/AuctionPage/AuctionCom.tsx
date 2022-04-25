@@ -91,8 +91,8 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
       />
 
       <Box
-        bg={isLightMode ? "white" : "gray.800"}
-        m={["0", "10", "20"]}
+        bg={isLightMode ? "light.primary1" : "dark.primary1"}
+        m={["0", "5", "10"]}
         // mr={["0","10","20"]}
         shadow={["none", "md"]}
         // px={["3", "10"]}
@@ -112,7 +112,7 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
           {/*//TODO: somehow fix so that gradient won't affect <ImageCarousel/> */}
           <Box
             // bg={isLightMode ? "gray.50" : "gray.900"}
-            bg={isLightMode ? "white" : "gray.800"}
+            bg={isLightMode ? "light.primary1" : "dark.primary1"}
             px={["3", "10"]}
             // borderBottomRadius="2xl"
 

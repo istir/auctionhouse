@@ -193,13 +193,12 @@ export default function AuctionThumbnail(
       onMouseLeave={(e) => {
         setHover(false);
       }}
-      // width={props.width || "64"}
       minH="80"
-      // maxH=""
       backgroundColor={isLightMode ? `light.primary3` : `dark.primary3`}
       borderRadius="lg"
       shadow={"lg"}
-      margin="3"
+      marginX="3"
+      marginY={{ base: "1.5", md: "3" }}
       overflow={"hidden"}
       cursor={"pointer"}
       as={"a"}
@@ -218,7 +217,6 @@ export default function AuctionThumbnail(
           transitionDuration="0.2s"
           fontWeight={"bold"}
           maxH={hover ? "calc( 1.5rem * 5)" : "calc( 1.5rem * 1)"}
-          // lineHeight={"base"}
           overflow="hidden"
         >
           {props.auction.name}

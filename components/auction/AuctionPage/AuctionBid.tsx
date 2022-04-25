@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Flex,
   Input,
   InputGroup,
   InputRightAddon,
@@ -12,6 +13,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { Auction, Bid, Category, User } from "@prisma/client";
@@ -40,7 +42,10 @@ export default function AuctionBid(props: AuctionBidProps): JSX.Element {
   const [auctionended, setAuctionended] = React.useState<boolean>(
     isAuctionEnded()
   );
-
+  const buttonColor = useColorModeValue(
+    "light.primaryContainer",
+    "dark.primaryContainer"
+  );
   function getCurrentPrice() {
     if (
       props.auction.bids.length > 0 &&
@@ -76,7 +81,12 @@ export default function AuctionBid(props: AuctionBidProps): JSX.Element {
   }
 
   return (
-    <Box>
+    <Box
+      backgroundColor={useColorModeValue("light.primary2", "dark.primary2")}
+      borderRadius="xl"
+      boxShadow={"md"}
+      padding="4"
+    >
       {isAuctionEnded() ? (
         <Box>Aukcja zakończona</Box>
       ) : (
@@ -111,12 +121,15 @@ export default function AuctionBid(props: AuctionBidProps): JSX.Element {
               setAuctionended(true);
             }}
           />
+          <Flex gap="1">
+            <Text>Aktualna cena: </Text>
+            <Text fontWeight={"semibold"}>{currentPrice} zł</Text>
+          </Flex>
           <Box>
-            Aktualna cena: {currentPrice}
-            zł
-          </Box>
-          <Box>
-            <Text>Aktualna liczba ofert: {props.auction.bids.length}</Text>
+            <Flex gap="1">
+              <Text>Aktualna liczba ofert: </Text>
+              <Text fontWeight={"semibold"}>{props.auction.bids.length}</Text>
+            </Flex>
             <Text>Twoja oferta:</Text>
             <InputGroup>
               <Input
@@ -128,6 +141,10 @@ export default function AuctionBid(props: AuctionBidProps): JSX.Element {
               <InputRightAddon>zł</InputRightAddon>
             </InputGroup>
             <Button
+              mt="2"
+              w={"full"}
+              backgroundColor={buttonColor}
+              // _hover={{}}
               disabled={
                 props.user === undefined ||
                 props.user.id === props.auction?.sellerId ||

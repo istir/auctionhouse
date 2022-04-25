@@ -10,6 +10,7 @@ import {
   ModalOverlay,
   Text,
   useBreakpoint,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { Auction, User } from "@prisma/client";
@@ -68,7 +69,12 @@ export default function AuctionBuyModal(
         <ModalContent>
           <ModalHeader>{props.auction.name}</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody
+            backgroundColor={useColorModeValue(
+              "light.primary1",
+              "dark.primary1"
+            )}
+          >
             <Box>
               <Text fontWeight={"bold"}>Dodano do koszyka.</Text>
               <Flex my="5" justifyContent={"space-between"}>

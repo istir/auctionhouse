@@ -21,8 +21,8 @@ export default function AuctionImages(props: AuctionImagesProps): JSX.Element {
       // w={`calc(100% - 2 * var(--chakra-space-${["0", "10", "20"]}))`}
       w={[
         "full",
+        "calc(100% - 2 * var(--chakra-space-5))",
         "calc(100% - 2 * var(--chakra-space-10))",
-        "calc(100% - 2 * var(--chakra-space-20))",
       ]}
     >
       <ImageCarousel images={props.images} />
