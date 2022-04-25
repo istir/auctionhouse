@@ -11,9 +11,10 @@ import { Auction } from "@prisma/client";
 import { Box } from "@chakra-ui/layout";
 // import { Button } from "@chakra-ui/button";
 // import AuctionMoreFromUser from "../components/auction/AuctionBuyWindow.tsx/AuctionMoreFromUser";
-import AuctionGetRandomAuctions from "../components/auction/AuctionBuyWindow.tsx/AuctionGetRandomAuctions";
+// import AuctionGetRandomAuctions from "../components/auction/AuctionBuyWindow.tsx/AuctionGetRandomAuctions";
 import getRandomAuctions from "../libs/getRandomAuctionsLib";
 import { useState } from "react";
+import AuctionsGrid from "../components/auction/AuctionsGrid";
 // import { useDisclosure } from "@chakra-ui/react";
 
 export const getServerSideProps: GetServerSideProps = withSession(
@@ -89,7 +90,8 @@ export default function Home(
       >
         Testowa aukcja
       </Button> */}
-      <AuctionGetRandomAuctions auctions={props.auctions} />
+      <AuctionsGrid auctions={props.auctions} />
+      {/* <AuctionGetRandomAuctions auctions={props.auctions} /> */}
       {/* <PickedForYou width="100%" auctionsToShow={props.auctions} /> */}
       {/* <Categories position="center" /> */}
     </Box>

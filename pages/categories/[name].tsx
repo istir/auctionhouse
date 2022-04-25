@@ -34,6 +34,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
       auctions = await prisma.auction.findMany({
         where: {
           category: { name: { search: params.name.split(" ").join(" & ") } },
+          dateEnd: { gt: Date.now().toString() },
         },
         include: { bids: true },
       });
@@ -47,6 +48,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
               },
             },
             { name: { search: query.q.split(" ").join(" & ") } },
+            { dateEnd: { gt: Date.now().toString() } },
           ],
         },
         include: { bids: true },

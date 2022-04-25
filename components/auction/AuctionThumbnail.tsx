@@ -45,7 +45,21 @@ export default function AuctionThumbnail(
             mt="2"
           />
         ) : (
-          <Box>Brak zdjęcia</Box>
+          <Flex
+            width="calc(100% - 2 * var(--chakra-space-2))"
+            backgroundColor="white"
+            borderRadius="lg"
+            shadow="md"
+            margin="auto"
+            mt="2"
+            height={"full"}
+            color={"gray.500"}
+            justifyContent="center"
+            alignItems={"center"}
+            fontWeight="bold"
+          >
+            Brak zdjęcia
+          </Flex>
         )}
         <Text
           fontSize={"sm"}
@@ -203,7 +217,7 @@ export default function AuctionThumbnail(
           transition={"all"}
           transitionDuration="0.2s"
           fontWeight={"bold"}
-          maxH={hover ? "calc( 1.5rem * 3)" : "calc( 1.5rem * 1)"}
+          maxH={hover ? "calc( 1.5rem * 5)" : "calc( 1.5rem * 1)"}
           // lineHeight={"base"}
           overflow="hidden"
         >
