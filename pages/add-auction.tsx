@@ -1,9 +1,11 @@
+import { Box } from "@chakra-ui/react";
 import { User } from "@prisma/client";
 // import { trace } from "console";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
 import React from "react";
 import AddAuction from "../components/auction/AddAuction";
+import Header from "../components/header/header";
 import checkIfTokenValidAndRefresh from "../libs/checkIfTokenValidAndRefresh";
 // import getItemsInCart from "../libs/getItemsInCart";
 // import { get } from "stack-trace";
@@ -42,5 +44,11 @@ export default function AddAuctionPage(
   props: AddAuctionPageProps
 ): JSX.Element {
   // const [user, setUser] = useState<User | undefined>(props.user);
-  return <AddAuction user={props.user} />;
+
+  return (
+    <Box>
+      <Header user={props.user} />
+      <AddAuction user={props.user} />
+    </Box>
+  );
 }

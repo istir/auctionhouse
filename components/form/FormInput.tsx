@@ -13,6 +13,7 @@ interface FormFieldProps {
   name: string;
   label: string;
   isPassword?: boolean;
+  isNumeric?: boolean;
   // isError?: (arg: boolean) => void;
 }
 
@@ -32,7 +33,9 @@ export default function FormInput(props: FormFieldProps): JSX.Element {
         // {...props}
         id={props.name}
         placeholder={props.label}
-        type={props.isPassword ? "password" : "text"}
+        type={
+          props.isPassword ? "password" : props.isNumeric ? "number" : "text"
+        }
       />
       <FormErrorMessage>{meta.error}</FormErrorMessage>
     </FormControl>
