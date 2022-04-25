@@ -43,6 +43,7 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
   const headerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const isLightMode = useLightModeCheck();
+
   // function drawDrawer() {
   //   // if (props.isDrawerOpen && props.onDrawerClose) {
   //   return (
@@ -160,14 +161,14 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
   return (
     <Box zIndex={100}>
       <Flex
-        bg={useColorModeValue("white", "gray.700")}
+        bg={useColorModeValue(`light.primary1`, "dark.primary1")}
         color={useColorModeValue("gray.600", "white")}
         minH="60px"
         py={{ base: 2 }}
         px={{ base: 4 }}
         borderBottom={1}
         borderStyle="solid"
-        borderColor={useColorModeValue("gray.200", "gray.800")}
+        borderColor={useColorModeValue("light.primary5", "dark.primary5")}
         align="center"
       >
         <Flex
@@ -225,7 +226,7 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
                 setUser={props.setUser}
                 refresh={props.refresh}
                 buttonSize="sm"
-                buttonColorScheme="teal"
+                // buttonColorScheme="teal"
               />
             ) : (
               <Menu>

@@ -1,5 +1,6 @@
 import { Button } from "@chakra-ui/button";
 import { Stack, Text } from "@chakra-ui/layout";
+import { useColorModeValue } from "@chakra-ui/react";
 import { User } from "@prisma/client";
 import axios from "axios";
 import { Form, Formik } from "formik";
@@ -115,7 +116,17 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
           <Button
             type="submit"
             mt="2"
-            colorScheme="blue"
+            // colorScheme="blue"
+            bg={useColorModeValue(
+              "light.primaryContainer",
+              "dark.primaryContainer"
+            )}
+            _hover={{
+              backgroundColor: useColorModeValue(
+                "light.tertiaryContainer",
+                "dark.tertiaryContainer"
+              ),
+            }}
             // colorScheme={anyFormikError ? "red" : "blue"}
           >
             Zaloguj

@@ -1,5 +1,5 @@
 import { Auction, Bid } from ".prisma/client";
-import { Box, Grid, Text } from "@chakra-ui/layout";
+import { Box, Flex, Grid, Text } from "@chakra-ui/layout";
 import { Image, useColorModeValue } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
@@ -19,42 +19,49 @@ export default function AuctionThumbnail(
   const isLightMode = useLightModeCheck();
   const { color } = useContext(useColorSchemeContext);
   const router = useRouter();
-  const auctionColor = useColorModeValue(
-    props.auction.bidding ? "red.400" : "green.400",
-    props.auction.bidding ? "red.700" : "green.700"
-  );
+  const auctionColor = useColorModeValue("blackAlpha.500", "whiteAlpha.500");
+  const [hover, setHover] = React.useState<boolean>(false);
+  // const auctionColor = useColorModeValue(
+  //   props.auction.bidding ? "red.400" : "green.400",
+  //   props.auction.bidding ? "red.700" : "green.700"
+  // );
   function renderImage(image: string) {
     // if (!image) return <Box></Box>;
     return (
-      <Box>
-        <Text
-          fontSize={"sm"}
-          pos="absolute"
-          backgroundColor={"blackAlpha.500"}
-          p="2"
-          borderTopLeftRadius={"lg"}
-          borderBottomRightRadius={"md"}
-          fontWeight="bold"
-          color={auctionColor}
-        >
-          {props.auction.bidding ? "Licytacja" : "Kup Teraz"}
-        </Text>
-
+      <Flex flexDir="column">
         {image ? (
           <Image
-            width="full"
+            width="calc(100% - 2 * var(--chakra-space-2))"
+            // mx="2"
             height="full"
             objectFit="contain"
             src={image}
             alt={props.auction.name}
             backgroundColor="white"
-            borderBottomRadius={"lg"}
+            // borderBottomRadius={"lg"}
+            borderRadius="lg"
             shadow="md"
+            margin="auto"
+            mt="2"
           />
         ) : (
           <Box>Brak zdjęcia</Box>
         )}
-      </Box>
+        <Text
+          fontSize={"sm"}
+          color={auctionColor}
+          // pos="absolute"
+          // backgroundColor={"blackAlpha.500"}
+          // p="2"
+          // borderTopLeftRadius={"lg"}
+          // borderBottomRightRadius={"md"}
+          // fontWeight="bold"
+          // color={auctionColor}
+          mx="2"
+        >
+          {props.auction.bidding ? "Licytacja" : "Kup Teraz"}
+        </Text>
+      </Flex>
     );
   }
   function renderPrice(originalPrice: number | null, price: number) {
@@ -166,10 +173,16 @@ export default function AuctionThumbnail(
   */
   return (
     <Grid
+      onMouseEnter={(e) => {
+        setHover(true);
+      }}
+      onMouseLeave={(e) => {
+        setHover(false);
+      }}
       width={props.width || "64"}
       minH="80"
       // maxH=""
-      backgroundColor={isLightMode ? `white` : `gray.800`}
+      backgroundColor={isLightMode ? `light.primary3` : `dark.primary3`}
       borderRadius="lg"
       shadow={"lg"}
       margin="3"
@@ -185,8 +198,15 @@ export default function AuctionThumbnail(
       templateRows="auto max-content"
     >
       {renderImage(props.auction.image[0])}
-      <Grid templateRows={"3"} padding="2">
-        <Box fontWeight={"bold"} noOfLines={1}>
+      <Grid templateRows={"3"} padding="2" pt="0">
+        <Box
+          transition={"all"}
+          transitionDuration="0.2s"
+          fontWeight={"bold"}
+          maxH={hover ? "calc( 1.5rem * 3)" : "calc( 1.5rem * 1)"}
+          // lineHeight={"base"}
+          overflow="hidden"
+        >
           {props.auction.name}
         </Box>
         {renderPrice(props.auction.originalPrice, props.auction.price)}

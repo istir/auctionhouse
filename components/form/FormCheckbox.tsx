@@ -24,6 +24,7 @@ export default function FormCheckbox(props: FormCheckboxProps): JSX.Element {
     <FormControl isInvalid={meta.error && meta.touched ? true : false}>
       <HStack>
         <Checkbox
+          colorScheme={"red"}
           id={props.name}
           name={props.name}
           onChange={field.onChange}

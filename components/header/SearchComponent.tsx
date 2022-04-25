@@ -74,7 +74,9 @@ export default function SearchComponent(
           }}
         >
           <ModalOverlay />
-          <ModalContent>
+          <ModalContent
+            bg={useColorModeValue("light.primary3", "dark.primary3")}
+          >
             <ModalHeader>Szukaj</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
@@ -82,6 +84,7 @@ export default function SearchComponent(
                 <Input
                   value={search}
                   placeholder="Czego szukasz?"
+                  variant={"outline"}
                   onChange={(e) => {
                     setSearch(e.target.value);
                   }}
@@ -97,7 +100,16 @@ export default function SearchComponent(
                 <Button
                   mt="2"
                   width={"full"}
-                  colorScheme="green"
+                  // colorScheme="green"
+                  // _focus={useColorModeValue("")}
+                  bg={useColorModeValue(
+                    "light.primaryContainer",
+                    "dark.primaryContainer"
+                  )}
+                  color={useColorModeValue(
+                    "light.onPrimaryContainer",
+                    "dark.onPrimaryContainer"
+                  )}
                   onClick={sendSearch}
                 >
                   Szukaj

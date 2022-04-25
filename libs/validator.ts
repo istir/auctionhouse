@@ -24,7 +24,15 @@ export function validateName(value: string): void | string {
   if (!value) {
     return "Pole nie może być puste";
   }
-  
+
+  // if(value.search(/\W/)) return ""
+}
+export function validatePrice(value: string | number): void | string {
+  if (!value) return "Pole nie może być puste";
+
+  if (value < 0) return "Cena nie może być ujemna";
+  // if(value.search(/\W/)) return ""
+
   // if(value.search(/\W/)) return ""
 }
 

@@ -4,9 +4,16 @@ import {
   Modal,
   ModalBody,
   ModalCloseButton,
+  ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/modal";
-import { Flex, ModalContent, Text, useBreakpoint } from "@chakra-ui/react";
+import {
+  Flex,
+  ModalContent,
+  Text,
+  useBreakpoint,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import { User } from "@prisma/client";
 import React from "react";
 import { FaSignInAlt } from "react-icons/fa";
@@ -65,7 +72,17 @@ export default function PopupLogin(props: PopupLoginProps): JSX.Element {
       <Button
         onClick={onOpen}
         size={props.buttonSize || "md"}
-        colorScheme={props.buttonColorScheme}
+        // colorScheme={props.buttonColorScheme}
+        bg={useColorModeValue(
+          "light.primaryContainer",
+          "dark.primaryContainer"
+        )}
+        _hover={{
+          backgroundColor: useColorModeValue(
+            "light.tertiaryContainer",
+            "dark.tertiaryContainer"
+          ),
+        }}
         isLoading={loading}
       >
         <Flex flexDir={"row"} justifyContent="center" alignItems={"center"}>
@@ -80,9 +97,12 @@ export default function PopupLogin(props: PopupLoginProps): JSX.Element {
         size={getSize(useBreakpoint())}
       >
         <ModalOverlay />
-        {/* <ModalHeader>Modal Title</ModalHeader> */}
+
         <ModalContent>
-          <ModalCloseButton zIndex={"999"} position="fixed" />
+          <ModalCloseButton zIndex={"999"} />
+          <ModalHeader>
+            {type === "login" ? "Logowanie" : "Rejestracja"}
+          </ModalHeader>
           <ModalBody
             display="flex"
             w="full"
@@ -119,7 +139,17 @@ export default function PopupLogin(props: PopupLoginProps): JSX.Element {
                 {type === "login" ? "Nie masz konta?" : "Masz już konto?"}
               </Text>
               <Button
-                colorScheme={"green"}
+                // bg={useColorModeValue(
+                //   "light.secondaryContainer",
+                //   "dark.secondaryContainer"
+                // )}
+                // _hover={{
+                //   backgroundColor: useColorModeValue(
+                //     "light.tertiaryContainer",
+                //     "dark.tertiaryContainer"
+                //   ),
+                // }}
+                variant={"ghost"}
                 onClick={() => {
                   setType((prevType) => {
                     return prevType === "login" ? "register" : "login";

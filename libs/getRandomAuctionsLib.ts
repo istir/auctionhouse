@@ -2,12 +2,28 @@ import { Auction } from "@prisma/client";
 import prisma from "../prisma/prisma";
 
 export default async function getRandomAuctions(limit: number, count: number) {
-  const results: Auction[] = [];
+  const results: Omit<
+    Auction,
+    "categoryId" | "sellerId" | "markdown" | "buyerId"
+  >[] = [];
 
   for (let i = 0; i < limit; i += 1) {
     const result = await prisma.auction.findFirst({
       where: { dateEnd: { gt: Date.now().toString() } },
-      include: { bids: true },
+      select: {
+        id: true,
+        bids: true,
+        name: true,
+        dateEnd: true,
+        price: true,
+        originalPrice: true,
+        image: true,
+        url: true,
+        timesBought: true,
+        usersBought: true,
+        bidding: true,
+      },
+      // include: { bids: true, },
       take: 1,
       skip: Math.floor(Math.random() * count),
     });

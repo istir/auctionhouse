@@ -6,7 +6,11 @@ import {
   ModalCloseButton,
   ModalOverlay,
 } from "@chakra-ui/modal";
-import { ModalContent, useBreakpoint } from "@chakra-ui/react";
+import {
+  ModalContent,
+  useBreakpoint,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import React from "react";
 import Register from "./register";
 
@@ -36,7 +40,21 @@ export default function PopupRegister(props: PopupRegisterProps): JSX.Element {
 
   return (
     <>
-      <Button onClick={onOpen}>Zarejestruj</Button>
+      <Button
+        onClick={onOpen}
+        bg={useColorModeValue(
+          "light.primaryContainer",
+          "dark.primaryContainer"
+        )}
+        _hover={{
+          backgroundColor: useColorModeValue(
+            "light.tertiaryContainer",
+            "dark.tertiaryContainer"
+          ),
+        }}
+      >
+        Zarejestruj
+      </Button>
       <Modal
         isOpen={isOpen}
         onClose={onClose}

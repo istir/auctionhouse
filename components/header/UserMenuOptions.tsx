@@ -1,4 +1,10 @@
-import { Box, Flex, MenuItem, MenuList } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  MenuItem,
+  MenuList,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import { User } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -10,6 +16,7 @@ import {
   FaShoppingCart,
   FaSignOutAlt,
 } from "react-icons/fa";
+import NextLink from "next/link";
 
 interface UserMenuOptionsProps {
   refresh?: () => void;
@@ -74,35 +81,58 @@ export default function UserMenuOptions(
   ];
 
   return (
-    <MenuList zIndex={100}>
+    <MenuList
+      zIndex={100}
+      bg={useColorModeValue("light.primary4", "dark.primary4")}
+    >
       {items.map((item) =>
         item.href ? (
           <MenuItem
-            cursor={"pointer"}
+            // cursor={"pointer"}
             key={item.name}
+            margin={"0"}
+            padding="0"
             // onClick={item.onClick}
             //   as={item.href ? "a" : "button"}
-            as={"a"}
+
             //   href={item.href}
           >
-            <Flex align={"center"}>
-              <Box mr="2">{item.icon}</Box>
-              {item.name}
-            </Flex>
+            <NextLink href={item.href} passHref>
+              <Button
+                w="full"
+                m="0"
+                p="0"
+                paddingInlineEnd={"0"}
+                paddingInlineStart="0"
+                variant={"ghost"}
+              >
+                <Box mr="2">{item.icon}</Box>
+                {item.name}
+              </Button>
+            </NextLink>
           </MenuItem>
         ) : (
           <MenuItem
-            cursor={"pointer"}
+            // cursor={"pointer"}
             key={item.name}
-            onClick={item.onClick}
+            margin={"0"}
+            padding="0"
             //   as={item.href ? "a" : "button"}
             //   as={"a"}
             //   href={item.href}
           >
-            <Flex align={"center"}>
+            <Button
+              w="full"
+              m="0"
+              p="0"
+              paddingInlineEnd={"0"}
+              paddingInlineStart="0"
+              variant={"ghost"}
+              onClick={item.onClick}
+            >
               <Box mr="2">{item.icon}</Box>
               {item.name}
-            </Flex>
+            </Button>
           </MenuItem>
         )
       )}
