@@ -97,7 +97,9 @@ export default withSession(
     //     url:generateUrl(name)
     //   },
     // });
-    return res.status(200).end("OK");
+    return res
+      .status(200)
+      .end(JSON.stringify({ status: "OK", url: generatedUrl }));
     // console.log(generateUrl(name));
     // return res.status(200).end("Error");
   }

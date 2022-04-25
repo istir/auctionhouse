@@ -13,6 +13,7 @@ import "@uiw/react-markdown-preview/markdown.css";
 import FormDate from "../form/FormDate";
 import axios from "axios";
 import FormImages from "../form/FormImages";
+import { useRouter } from "next/router";
 const MDEditor = dynamic<MDEditorProps>(() => import("@uiw/react-md-editor"), {
   ssr: false,
 });
@@ -22,8 +23,15 @@ interface AddAuctionProps {
 }
 
 export default function AddAuction(props: AddAuctionProps): JSX.Element {
+  const maxImages = 10;
+  const router = useRouter();
   const [error, setError] = React.useState<string>("");
-
+  const [sending, setSending] = React.useState<boolean[]>(
+    new Array(maxImages).fill(false)
+  );
+  const [imagesUri, setImagesUri] = React.useState<string[]>(
+    new Array(maxImages).fill("")
+  );
   const [md, setMd] = React.useState<string>("**Podaj opis**");
   type FormikValues = Omit<Auction, "id" | "buyerId">;
   const initialValues: FormikValues = {
@@ -37,7 +45,8 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
         new Date().getHours(),
         new Date().getMinutes()
       ).getTime() -
-        new Date().getTimezoneOffset() * 60000
+        new Date().getTimezoneOffset() * 60000 +
+        600000
     )
       .toISOString()
       .replace(/:[0-9]{0,2}\..+$/, ""),
@@ -55,12 +64,15 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
     // console.log("suuubmit");
     // console.log({ ...initialValues, markdown: md });
     // console.log(md);
-
+    console.log(imagesUri);
+    const imgs = imagesUri.filter((i) => i !== "");
+    // return;
     axios({
       url: "/api/addAuction",
       method: "post",
-      data: { ...values, markdown: md },
+      data: { ...values, markdown: md, image: imgs },
     }).then((ful) => {
+      router.push(`/auction/${ful.data.url}`);
       console.log(ful.data);
     });
   }
@@ -80,8 +92,16 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
             label={"Cena"}
             isNumeric
           />
-          <Box>obrazki...</Box>
-          <FormImages name="images" label="Obrazki" />
+          <FormImages
+            name="images"
+            label="Zdjęcia"
+            setImagesUri={setImagesUri}
+            imagesUri={imagesUri}
+            maxImages={maxImages}
+            setSending={setSending}
+            sending={sending}
+          />
+          <Box>Kategoria!!!!</Box>
           {/* <FormInput validator={} name={} label={}/> */}
           <Text fontWeight={"semibold"} py="2">
             Opis
@@ -97,6 +117,7 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
           <Button
             type="submit"
             mt="2"
+            isLoading={sending.some((s) => s)}
             // colorScheme="blue"
             bg={useColorModeValue(
               "light.primaryContainer",

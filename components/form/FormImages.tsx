@@ -9,24 +9,38 @@ import {
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
+  Spinner,
+  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import axios from "axios";
 
 import React from "react";
 import { FaTimesCircle } from "react-icons/fa";
 import ReactImageUploading, { ImageListType } from "react-images-uploading";
-
+import getConfig from "next/config";
 interface FormImagesProps {
   name: string;
   label: string;
+  imagesUri: string[];
+  maxImages: number;
+  setImagesUri: (imagesUri: string[]) => void;
+  setSending: (prevSending: boolean[]) => void;
+  sending: boolean[];
 }
 
 export default function FormImages(props: FormImagesProps): JSX.Element {
   const [images, setImages] = React.useState<ImageListType>([]);
+  const [positionWithImages, setPositionWithImages] = React.useState<boolean[]>(
+    new Array(props.maxImages).fill(false)
+  );
   const bgColor = useColorModeValue("light.primary1", "dark.primary1");
-
+  // console.log(getConfig().publicRuntimeConfig.IBB_UPLOAD_URL);
   return (
     <Box>
+      <Text fontWeight={"semibold"} py="2">
+        {props.label}
+      </Text>
       <ReactImageUploading
         multiple
         value={images}
@@ -37,27 +51,61 @@ export default function FormImages(props: FormImagesProps): JSX.Element {
         ) => {
           console.log(value, addUpdatedIndex);
           setImages(value);
+          if (!addUpdatedIndex) return;
+          const dataUri = value[addUpdatedIndex?.[0]].dataURL;
+          if (!dataUri) return;
+          const formData = new FormData();
+
+          formData.append("image", dataUri.replace(/^.+base64,/, ""));
+          // @ts-ignore because prevSending gave errors when it shouldn't
+          props.setSending((prevSending: boolean[]) => {
+            prevSending[addUpdatedIndex?.[0]] = true;
+            return [...prevSending];
+          });
+          axios({
+            url: getConfig().publicRuntimeConfig.IBB_UPLOAD_URL,
+            method: "POST",
+            data: formData,
+          }).then(
+            (ful) => {
+              if (ful.status === 200 && ful.data.success === true) {
+                // @ts-ignore because prevSending gave errors when it shouldn't
+                props.setSending((prevSending: boolean[]) => {
+                  prevSending[addUpdatedIndex?.[0]] = false;
+                  return [...prevSending];
+                });
+
+                //@ts-ignore
+                props.setImagesUri((prev) => {
+                  prev[addUpdatedIndex?.[0]] = ful.data.data.display_url;
+                  return [...prev];
+                });
+              }
+            },
+            (rej) => {
+              console.log(rej, rej.data);
+            }
+          );
         }}
-        maxNumber={5}
+        maxNumber={props.maxImages}
       >
         {({
           imageList,
           onImageUpload,
-          onImageRemoveAll,
-          onImageUpdate,
           onImageRemove,
           isDragging,
           dragProps,
         }) => (
           <Box>
             <Button
-              style={isDragging ? { color: "red" } : undefined}
+              // style={isDragging ? { color: "red" } : undefined}
+              colorScheme={isDragging ? "red" : "blue"}
               onClick={onImageUpload}
               {...dragProps}
             >
-              Click or Drop here
+              Dodaj lub upuść zdjęcie
             </Button>
-            <Button onClick={onImageRemoveAll}>Usuń wszystkie</Button>
+
             <Grid
               templateColumns={
                 "repeat(auto-fill,minmax(var(--chakra-sizes-48),1fr))"
@@ -77,6 +125,15 @@ export default function FormImages(props: FormImagesProps): JSX.Element {
                     <PopoverTrigger>
                       <Box
                         onClick={() => {
+                          // setPositionWithImages((prev) => {
+                          //   prev[index] = false;
+                          //   return [...prev];
+                          // });
+                          //@ts-ignore
+                          props.setImagesUri((prev) => {
+                            prev[index] = "";
+                            return [...prev];
+                          });
                           onImageRemove(index);
                         }}
                         pos="absolute"
@@ -101,7 +158,20 @@ export default function FormImages(props: FormImagesProps): JSX.Element {
                       <PopoverArrow /> <PopoverBody>Usuń</PopoverBody>
                     </PopoverContent>
                   </Popover>
-
+                  {props.sending[index] && (
+                    <Flex
+                      pos="absolute"
+                      left="0"
+                      top="0"
+                      bottom="0"
+                      right="0"
+                      justifyContent={"center"}
+                      alignItems="center"
+                      bg="blackAlpha.600"
+                    >
+                      <Spinner size={"xl"} />
+                    </Flex>
+                  )}
                   <Image src={image["dataURL"]} alt="" objectFit={"contain"} />
                 </Flex>
               ))}

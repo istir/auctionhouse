@@ -4,6 +4,9 @@ const removeImports = require("next-remove-imports")({});
 // module.exports = removeImports({});
 module.exports = removeImports({
   reactStrictMode: true,
+  publicRuntimeConfig: {
+    IBB_UPLOAD_URL: process.env.IBB_UPLOAD_URL,
+  },
   images: {
     domains: ["www.e3officefurniture.ca", "a.allegroimg.com"],
   },
