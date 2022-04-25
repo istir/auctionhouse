@@ -193,7 +193,7 @@ export default function AuctionThumbnail(
       onMouseLeave={(e) => {
         setHover(false);
       }}
-      width={props.width || "64"}
+      // width={props.width || "64"}
       minH="80"
       // maxH=""
       backgroundColor={isLightMode ? `light.primary3` : `dark.primary3`}
