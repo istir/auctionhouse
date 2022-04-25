@@ -11,8 +11,7 @@
     "sync-db": "npx prisma db push",
     "open-client": "npx prisma studio",
     "generate-client": "npx prisma generate",
-    "gen:theme-typings": "chakra-cli tokens .\\theme.ts",
-    "postinstall": "npm run gen:theme-typings"
+    "gen:theme-typings": "chakra-cli tokens .\\theme.ts"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.7",
