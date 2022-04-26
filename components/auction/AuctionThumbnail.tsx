@@ -207,7 +207,7 @@ export default function AuctionThumbnail(
         props.auction.url && router.push(`/auction/${props.auction.url}`);
       }}
       transition="all 0.2s ease-in-out"
-      _hover={{ transform: "scale(1.05)" }}
+      _hover={{ md: { transform: "scale(1.05)" } }}
       templateRows="auto max-content"
     >
       {renderImage(props.auction.image[0])}
