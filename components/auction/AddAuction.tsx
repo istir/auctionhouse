@@ -101,7 +101,7 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
             setSending={setSending}
             sending={sending}
           />
-          <Box>Kategoria!!!!</Box>
+          <Box>Kategoria!!!</Box>
           {/* <FormInput validator={} name={} label={}/> */}
           <Text fontWeight={"semibold"} py="2">
             Opis
