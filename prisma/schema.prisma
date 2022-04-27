@@ -6,6 +6,24 @@ datasource db {
   url      = env("DATABASE_URI")
 }
 
+model Admin {
+  id         Int          @id @default(autoincrement())
+  email      String @unique
+  password   String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @default(now()) @updatedAt
+  AdminToken AdminToken[]
+}
+
+model AdminToken {
+  id            Int      @id @default(autoincrement())
+  token         String   @unique
+  validTime     String
+  timeGenerated DateTime
+  user          Admin    @relation(fields: [userId], references: [id])
+  userId        Int
+}
+
 model User {
   id               Int       @id @default(autoincrement())
   firstName        String
@@ -90,7 +108,7 @@ model CategoryParent {
 model Category {
   id       Int       @id @default(autoincrement())
   name     String
-  url      String?   @default(dbgenerated("name"))
+  url      String?   
   // parentId Int?
   // parent   Category?  @relation("CategoryChildren", fields: [parentId], references: [id])
   // children Category[] @relation("CategoryChildren")
