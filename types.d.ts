@@ -7,20 +7,20 @@ export interface simplifiedUser {
 }
 
 export interface RemainingTime {
-  months?: number;
-  days?: number;
-  hours?: number;
-  minutes?: number;
-  seconds?: number;
+  months?: number | string;
+  days?: number | string;
+  hours?: number | string;
+  minutes?: number | string;
+  seconds?: number | string;
 }
 export type Color =
-  | 'gray'
-  | 'red'
-  | 'orange'
-  | 'yellow'
-  | 'green'
-  | 'teal'
-  | 'blue'
-  | 'cyan'
-  | 'purple'
-  | 'pink';
+  | "gray"
+  | "red"
+  | "orange"
+  | "yellow"
+  | "green"
+  | "teal"
+  | "blue"
+  | "cyan"
+  | "purple"
+  | "pink";

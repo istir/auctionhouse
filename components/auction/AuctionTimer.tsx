@@ -26,8 +26,9 @@ export default function AuctionTimer(props: AuctionTimerProps): JSX.Element {
     const deadline = parseInt(dateEnd);
 
     const difference = deadline - Date.now();
-
-    if (difference >= 0) {
+    if (difference >= 2629800000) {
+      return "Więcej niż miesiąc do końca";
+    } else if (difference >= 0) {
       return `${formatTime(convertMillisecondsToTime(difference))} do końca`;
     } else {
       props.onEnd?.();
@@ -54,5 +55,9 @@ export default function AuctionTimer(props: AuctionTimerProps): JSX.Element {
     if (deadline - Date.now() < 3600000) return "red.400";
     return "gray.400";
   }
-  return <Box color={timeColor(props.dateToEnd)}>{timeToEnd}</Box>;
+  return (
+    <Box noOfLines={1} color={timeColor(props.dateToEnd)}>
+      {timeToEnd}
+    </Box>
+  );
 }

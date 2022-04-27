@@ -23,7 +23,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
     query,
   }: {
     req: NextApiRequest & { session: Session };
-    params: { name: string };
+    params: { url: string };
     query: { q: string };
   }) {
     printDevStackTrace(`Query: ${query.q}`);
@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
     if (!query.q || removedSpaces.length < 3 || query.q.length > 50) {
       auctions = await prisma.auction.findMany({
         where: {
-          category: { name: { search: params.name.split(" ").join(" & ") } },
+          category: { url: params.url },
           dateEnd: { gt: Date.now().toString() },
         },
         include: { bids: true },
@@ -44,7 +44,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
           AND: [
             {
               category: {
-                name: { search: params.name.split(" ").join(" & ") },
+                url: params.url,
               },
             },
             { name: { search: query.q.split(" ").join(" & ") } },

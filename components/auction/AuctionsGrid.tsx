@@ -8,6 +8,7 @@ interface AuctionsGridProps {
 }
 
 export default function AuctionsGrid(props: AuctionsGridProps): JSX.Element {
+  // const columns = useBreakpointValue({base:"repe"})
   return (
     <Grid
       gridTemplateColumns={"repeat(auto-fill,minmax(240px,1fr))"}

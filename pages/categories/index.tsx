@@ -1,5 +1,5 @@
-import { Box, Button, Link, VStack } from "@chakra-ui/react";
-import { Category, Token, User } from "@prisma/client";
+import { Box, Flex, Grid, Text, useColorModeValue } from "@chakra-ui/react";
+import { Category, CategoryParent, Token, User } from "@prisma/client";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
 import { useRouter } from "next/router";
@@ -9,11 +9,13 @@ import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh"
 import withSession from "../../libs/ironSession";
 import prisma from "../../prisma/prisma";
 
-import NextLink from "next/link";
+import NextButton from "../../components/NextButton";
 
 interface CategoriesProps {
   user?: User;
-  categories: Category[];
+  parentCategories: (CategoryParent & {
+    categories: Category[];
+  })[];
   token: Token;
 }
 
@@ -22,7 +24,12 @@ export const getServerSideProps: GetServerSideProps = withSession(
     // return await getUserFromSession(req);
 
     //   const auctions = await prisma.auction.findMany();
-    const categories = await prisma.category.findMany();
+    const parentCategories = await prisma.categoryParent.findMany({
+      include: {
+        categories: { include: { auctions: { select: { _count: true } } } },
+      },
+    });
+    // const categories = await prisma.category.findMany();
     // console.log(auctions);
     const token = await checkIfTokenValidAndRefresh(req.session);
     if (token) {
@@ -41,7 +48,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
           props: {
             token: token.token,
             user: user,
-            categories: categories || [],
+            parentCategories: parentCategories || [],
           },
         };
       }
@@ -49,17 +56,20 @@ export const getServerSideProps: GetServerSideProps = withSession(
         props: {
           token: token.token,
           user: token.user,
-          categories: categories || [],
+          parentCategories: parentCategories || [],
         },
       };
     } else {
-      return { props: { token: "", categories: categories || [] } };
+      return { props: { token: "", parentCategories: parentCategories || [] } };
     }
   }
 );
 
 export default function Categories(props: CategoriesProps): JSX.Element {
   const router = useRouter();
+  const colors = useColorModeValue("light.primary1", "dark.primary1");
+  const buttonColors = useColorModeValue("light.primary4", "dark.primary4");
+
   const refreshData = () => {
     router.push(router.asPath);
   };
@@ -71,18 +81,40 @@ export default function Categories(props: CategoriesProps): JSX.Element {
         token={props.token.token}
       />
 
-      <VStack>
-        {props.categories.map((category) => (
-          // <NextLink>{category.name}</NextLink>
-          <NextLink
-            key={category.id}
-            href={`/categories/${category.name.toLowerCase()}`}
-            passHref
-          >
-            <Button as={Link}>{category.name}</Button>
-          </NextLink>
-        ))}
-      </VStack>
+      <Grid pb="5" gap={{ base: "3", md: "6" }} m="3">
+        <Text fontSize={{ base: "2xl", md: "3xl" }} mb={{ base: "2", md: "6" }}>
+          Wszystkie kategorie
+        </Text>
+        {props.parentCategories?.map(
+          (parentCategory) =>
+            parentCategory?.categories?.length > 0 && (
+              <Box
+                key={parentCategory.id}
+                backgroundColor={colors}
+                padding={4}
+                borderRadius="lg"
+                boxShadow={"lg"}
+              >
+                <Text fontSize={{ base: "xl", md: "2xl" }} mb="2">
+                  {parentCategory.name}
+                </Text>
+                <Flex flexDirection={{ base: "column", md: "row" }} gap="2">
+                  {parentCategory.categories?.map((category) => (
+                    <NextButton
+                      key={category.id}
+                      href={`/categories/${category.url || "#"}`}
+                      borderRadius={"lg"}
+                      boxShadow="sm"
+                      backgroundColor={buttonColors}
+                    >
+                      <Text>{category.name}</Text>
+                    </NextButton>
+                  ))}
+                </Flex>
+              </Box>
+            )
+        )}
+      </Grid>
     </Box>
   );
 }

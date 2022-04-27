@@ -16,7 +16,7 @@ import {
   FaShoppingCart,
   FaSignOutAlt,
 } from "react-icons/fa";
-import NextLink from "next/link";
+import NextButton from "../NextButton";
 
 interface UserMenuOptionsProps {
   refresh?: () => void;
@@ -97,7 +97,19 @@ export default function UserMenuOptions(
 
             //   href={item.href}
           >
-            <NextLink href={item.href} passHref>
+            <NextButton
+              href={item.href}
+              w="full"
+              m="0"
+              p="0"
+              paddingInlineEnd={"0"}
+              paddingInlineStart="0"
+              variant={"ghost"}
+            >
+              <Box mr="2">{item.icon}</Box>
+              {item.name}
+            </NextButton>
+            {/* <NextLink href={item.href} passHref>
               <Button
                 w="full"
                 m="0"
@@ -109,7 +121,7 @@ export default function UserMenuOptions(
                 <Box mr="2">{item.icon}</Box>
                 {item.name}
               </Button>
-            </NextLink>
+            </NextLink> */}
           </MenuItem>
         ) : (
           <MenuItem

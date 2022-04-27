@@ -81,17 +81,26 @@ model Bid {
   offer     Float
 }
 
+model CategoryParent {
+  id         Int        @id @default(autoincrement())
+  name       String
+  categories Category[]
+}
+
 model Category {
-  id       Int        @id @default(autoincrement())
+  id       Int       @id @default(autoincrement())
   name     String
+  url      String?   @default(dbgenerated("name"))
   // parentId Int?
   // parent   Category?  @relation("CategoryChildren", fields: [parentId], references: [id])
   // children Category[] @relation("CategoryChildren")
   auctions Auction[]
 
+  CategoryParent   CategoryParent? @relation(fields: [categoryParentId], references: [id])
+  categoryParentId Int?
 }
 
 generator client {
-  provider = "prisma-client-js"
-   previewFeatures = ["fullTextSearch"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
