@@ -7,7 +7,8 @@ import NextButton from "../../components/NextButton";
 import withAdminSession from "../../libs/admin/adminIronSession";
 import checkIfAdminTokenValidAndRefresh from "../../libs/admin/checkIfAdminTokenValidAndRefresh";
 import prisma from "../../prisma/prisma";
-import AdminHeader from "./Header";
+import AdminHeader from "../../components/AdminHeader";
+import { useRouter } from "next/router";
 
 interface RemoveAdminPageProps {
   admins: Admin[];
@@ -32,6 +33,8 @@ export const getServerSideProps: GetServerSideProps = withAdminSession(
 export default function RemoveAdminPage(
   props: RemoveAdminPageProps
 ): JSX.Element {
+  const router = useRouter();
+  if (!props.admin) router.push("/admin");
   return (
     <Box>
       <AdminHeader admin={props.admin} />
@@ -44,7 +47,7 @@ export default function RemoveAdminPage(
           </Tr>
         </Thead>
         <Tbody>
-          {props.admins.map((admin) => (
+          {props.admins?.map((admin) => (
             <Tr key={admin.id}>
               <Td>{admin.id}</Td>
               <Td>{admin.email}</Td>

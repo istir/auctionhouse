@@ -6,7 +6,7 @@ import React from "react";
 import NextButton from "../../components/NextButton";
 import withAdminSession from "../../libs/admin/adminIronSession";
 import checkIfAdminTokenValidAndRefresh from "../../libs/admin/checkIfAdminTokenValidAndRefresh";
-import AdminHeader from "./Header";
+import AdminHeader from "../../components/AdminHeader";
 
 interface AdminIndexPageProps {
   token: string;

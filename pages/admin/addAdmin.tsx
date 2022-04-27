@@ -10,7 +10,7 @@ import FormInput from "../../components/form/FormInput";
 import withAdminSession from "../../libs/admin/adminIronSession";
 import checkIfAdminTokenValidAndRefresh from "../../libs/admin/checkIfAdminTokenValidAndRefresh";
 import { localizeErrors } from "../../libs/localizeStrings";
-import AdminHeader from "./Header";
+import AdminHeader from "../../components/AdminHeader";
 
 interface AdminAddAdminPageProps {
   token: string;
@@ -28,6 +28,7 @@ export const getServerSideProps: GetServerSideProps = withAdminSession(
     // const auctions = (await getRandomAuctions(100, 100)) || [];
     // console.log(auctions);
     const token = await checkIfAdminTokenValidAndRefresh(req.session);
+
     if (token) {
       return { props: { token: token.token, admin: token.user } };
     } else {
@@ -103,7 +104,7 @@ export default function AdminAddAdminPage(
       console.error(err);
     }
   }
-
+  if (!props.admin) router.push("/admin");
   return (
     <Box>
       <AdminHeader admin={props.admin} />
