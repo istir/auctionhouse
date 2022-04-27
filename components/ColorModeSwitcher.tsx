@@ -22,7 +22,7 @@ export default function ColorModeSwitcher(props: ColorModeSwitcherProps) {
   return (
     <Button
       size="md"
-      fontSize="lg"
+      // fontSize="lg"
       variant={props.renderBg ? "solid" : "transparent"}
       colorScheme={props.colorScheme ? props.colorScheme : "blue"}
       // variant="ghost"
@@ -35,7 +35,7 @@ export default function ColorModeSwitcher(props: ColorModeSwitcherProps) {
       justifyContent="center"
       alignItems="center"
     >
-      <Text mr="2">{props.text}</Text>
+      {props.text && <Text mr="2">{props.text}</Text>}
       <SwitchIcon />
     </Button>
   );

@@ -32,18 +32,37 @@ export default function AuctionSeller({
   return (
     <Button
       variant="pill"
-      minH="fit-content"
+      height={"100%"}
+      minH="max-content"
       overflow="hidden"
       backgroundColor={useColorModeValue("light.primary4", "dark.primary4")}
     >
-      {renderSellerAvatar()}
-      <Flex
-        ml="2"
-        flexDirection={{ base: "column", md: "row" }}
-        gap={{ md: 1 }}
-      >
-        <Text>{auction.seller.firstName}</Text>
-        <Text>{auction.seller.lastName}</Text>
+      <Flex alignItems="center" justifyContent={"center"}>
+        {renderSellerAvatar()}
+        <Flex
+          flexDirection={"column"}
+          alignItems="center"
+          justifyContent={"center"}
+          mb="1"
+        >
+          <Text
+            fontSize={"sm"}
+            fontWeight="normal"
+            color={useColorModeValue("blackAlpha.500", "whiteAlpha.500")}
+          >
+            Sprzedawca
+          </Text>
+          <Flex alignItems="center" justifyContent={"center"}>
+            <Flex
+              ml="2"
+              // flexDirection={{ base: "column", md: "row" }}
+              gap={1}
+            >
+              <Text>{auction.seller.firstName}</Text>
+              <Text>{auction.seller.lastName}</Text>
+            </Flex>
+          </Flex>
+        </Flex>
       </Flex>
     </Button>
   );

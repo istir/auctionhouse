@@ -34,36 +34,6 @@ export const getServerSideProps: GetServerSideProps = withAdminSession(
     } else {
       return { props: { token: "" } };
     }
-    // if (token) {
-    //   const user = await prisma.user.findUnique({
-    //     where: { id: token.user.id },
-    //     select: {
-    //       avatar: true,
-    //       firstName: true,
-    //       lastName: true,
-    //       cart: { include: { items: true } },
-    //       id: true,
-    //     },
-    //   });
-    //   if (user) {
-    //     return {
-    //       props: {
-    //         token: token.token,
-    //         user: user,
-    //         auctions: auctions ? auctions : [],
-    //       },
-    //     };
-    //   }
-    //   return {
-    //     props: {
-    //       token: token.token,
-    //       user: token.user,
-    //       auctions: auctions ? auctions : [],
-    //     },
-    //   };
-    // } else {
-    //   return { props: { token: "", auctions: auctions ? auctions : [] } };
-    // }
   }
 );
 export default function AdminAddAdminPage(
@@ -108,51 +78,63 @@ export default function AdminAddAdminPage(
   return (
     <Box>
       <AdminHeader admin={props.admin} />
-      <Text fontWeight={"bold"} fontSize="2xl" color="red.500">
-        Dodajesz nowego administratora!!!
-      </Text>
-      <Formik initialValues={initialValues} onSubmit={onSubmit}>
-        <Form>
-          <Stack>
-            <FormInput
-              // validator={validateEmail}
-              label="Adres e-mail"
-              name="email"
-              // isError={setAnyFormikError}
-            />
-
-            <FormInput
-              // validator={validatePassword}
-              label="Hasło"
-              name="password"
-              isPassword
-              // isError={setAnyFormikError}
-            />
-            <Text color="red.500" fontWeight="bold" mt="2">
-              {localizeErrors(error)}
-            </Text>
-            <Button
-              type="submit"
-              mt="2"
-              isLoading={loading}
-              // colorScheme="blue"
-              bg={useColorModeValue(
-                "light.primaryContainer",
-                "dark.primaryContainer"
-              )}
-              _hover={{
-                backgroundColor: useColorModeValue(
-                  "light.tertiaryContainer",
-                  "dark.tertiaryContainer"
-                ),
-              }}
-              // colorScheme={anyFormikError ? "red" : "blue"}
+      <Box mx="2">
+        <Text
+          fontWeight={"bold"}
+          fontSize="2xl"
+          color="red.500"
+          textAlign={"center"}
+        >
+          Dodawanie nowego administratora
+        </Text>
+        <Formik initialValues={initialValues} onSubmit={onSubmit}>
+          <Form>
+            <Stack
+              maxW={{ base: "100%", md: "70vw" }}
+              justifyContent="center"
+              alignItems={"center"}
+              margin="auto"
             >
-              Dodaj administratora
-            </Button>
-          </Stack>
-        </Form>
-      </Formik>
+              <FormInput
+                // validator={validateEmail}
+                label="Adres e-mail"
+                name="email"
+                // isError={setAnyFormikError}
+              />
+
+              <FormInput
+                // validator={validatePassword}
+                label="Hasło"
+                name="password"
+                isPassword
+                // isError={setAnyFormikError}
+              />
+              <Text color="red.500" fontWeight="bold" mt="2">
+                {localizeErrors(error)}
+              </Text>
+              <Button
+                type="submit"
+                mt="2"
+                isLoading={loading}
+                // colorScheme="blue"
+                bg={useColorModeValue(
+                  "light.primaryContainer",
+                  "dark.primaryContainer"
+                )}
+                _hover={{
+                  backgroundColor: useColorModeValue(
+                    "light.tertiaryContainer",
+                    "dark.tertiaryContainer"
+                  ),
+                }}
+                // colorScheme={anyFormikError ? "red" : "blue"}
+              >
+                Dodaj administratora
+              </Button>
+            </Stack>
+          </Form>
+        </Formik>
+      </Box>
     </Box>
   );
 }

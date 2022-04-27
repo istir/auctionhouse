@@ -166,7 +166,7 @@ const styles: Styles = {
   }),
 };
 const config: ThemeConfig = {
-  initialColorMode: "dark",
+  initialColorMode: "system",
   useSystemColorMode: false,
 };
 const components = {

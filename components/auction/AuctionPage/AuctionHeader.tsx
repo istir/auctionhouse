@@ -1,7 +1,9 @@
 import { Auction, Bid, Category, User } from ".prisma/client";
 import { Box, Flex, Text } from "@chakra-ui/layout";
+import { useBreakpoint } from "@chakra-ui/react";
 import React from "react";
 import useLightModeCheck from "../../../libs/hooks/useLightModeCheck";
+import PopupLogin from "../../login/PopupLogin";
 import AuctionAddToCart from "./AuctionAddToCart";
 import AuctionBid from "./AuctionBid";
 // import AuctionBuyNow from "./AuctionBuyNow";
@@ -11,6 +13,8 @@ interface AuctionHeaderProps {
   user?: User;
   setInCart: (boolean: boolean) => void;
   inCart: boolean;
+  refresh?: () => void;
+
   auction: Auction & {
     category: Category;
     seller: User;
@@ -25,7 +29,7 @@ export default function AuctionHeader({
 }: AuctionHeaderProps): JSX.Element {
   const imageRef = React.useRef<HTMLImageElement>(null);
   const lightMode = useLightModeCheck();
-
+  const breakpoint = useBreakpoint();
   // console.log(imageRef.current?.height);
 
   //TODO: Kategoria1 -> Kategoria2 -> KATEGORIA3 jako linki
@@ -43,15 +47,26 @@ export default function AuctionHeader({
         >
           {auction.name}
         </Text>
-        <Flex justifyContent="space-between" gridGap="2">
+        <Flex
+          justifyContent="space-between"
+          gridGap="2"
+          flexDirection={{ base: "column", md: "row" }}
+        >
           <AuctionSeller auction={auction} />
           {auction.bidding ? (
             <AuctionBid auction={auction} user={props.user} />
-          ) : (
+          ) : props.user ? (
             <AuctionAddToCart
+              full={breakpoint === "base" || false}
+              // autoFull
               auction={auction}
               setInCart={props.setInCart}
               inCart={props.inCart}
+            />
+          ) : (
+            <PopupLogin
+              refresh={props.refresh}
+              text="Zaloguj się i dodaj do koszyka!"
             />
           )}
         </Flex>

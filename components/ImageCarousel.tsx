@@ -14,22 +14,8 @@ interface ImageCarouselProps {
 
 export default function ImageCarousel(props: ImageCarouselProps): JSX.Element {
   const isLightMode = useLightModeCheck();
-  // const [emblaRef, emblaApi] = useEmblaCarousel({ containScroll: "keepSnaps" });
-  // const [currentImage, setCurrentImage] = React.useState<number>(
-  //   emblaApi?.selectedScrollSnap() || 0
-  // );
-  // const [canScrollLeft, setCanScrollLeft] = React.useState<boolean>(
-  //   emblaApi ? emblaApi.canScrollPrev() : false
-  // );
-  // const [canScrollRight, setCanScrollRight] = React.useState<boolean>(
-  //   emblaApi ? emblaApi.canScrollNext() : props.images.length > 1 ? true : false
-  // );
-  // emblaApi?.on("select", () => {
-  //   setCanScrollLeft(emblaApi.canScrollPrev());
-  //   setCanScrollRight(emblaApi.canScrollNext());
-  //   setCurrentImage(emblaApi?.selectedScrollSnap());
-  // });
-
+  const [prevX, setPrevX] = React.useState<number>(0);
+  const [prevY, setPrevY] = React.useState<number>(0);
   function renderImages() {
     return props.images.map((image) => (
       <Image
@@ -139,6 +125,19 @@ export default function ImageCarousel(props: ImageCarouselProps): JSX.Element {
         borderRadius="inherit"
         pointerEvents="all"
         overflow={"hidden"}
+        onTouchStart={(e) => {
+          setPrevY(e.touches[0].clientY);
+          setPrevX(e.touches[0].clientX);
+        }}
+        onTouchMoveCapture={(e) => {
+          if (
+            Math.abs(prevX - e.nativeEvent.changedTouches[0].clientX) <
+            Math.abs(prevY - e.nativeEvent.changedTouches[0].clientY)
+          ) {
+            console.log("BOTTOM");
+            e.stopPropagation();
+          }
+        }}
       >
         <Carousel
           showArrows
@@ -148,6 +147,7 @@ export default function ImageCarousel(props: ImageCarouselProps): JSX.Element {
           renderArrowPrev={renderLeftArrow}
           renderArrowNext={renderRightArrow}
           renderIndicator={renderSizeBar}
+          axis="horizontal"
         >
           {renderImages()}
         </Carousel>

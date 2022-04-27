@@ -1,4 +1,4 @@
-import { Box, Table, Tbody, Td, Thead, Tr } from "@chakra-ui/react";
+import { Box, Table, Tbody, Td, Text, Thead, Tr } from "@chakra-ui/react";
 import { Admin } from "@prisma/client";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
@@ -35,31 +35,43 @@ export default function RemoveAdminPage(
 ): JSX.Element {
   const router = useRouter();
   if (!props.admin) router.push("/admin");
+
   return (
     <Box>
       <AdminHeader admin={props.admin} />
-      <Table>
-        <Thead>
-          <Tr>
-            <Td>Id</Td>
-            <Td>Nazwa</Td>
-            <Td>Usuń</Td>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {props.admins?.map((admin) => (
-            <Tr key={admin.id}>
-              <Td>{admin.id}</Td>
-              <Td>{admin.email}</Td>
-              <Td>
-                <NextButton href={`/api/admin/removeAdmin?id=${admin.id}`}>
-                  Usuń
-                </NextButton>
-              </Td>
+      <Box>
+        <Text
+          fontWeight={"bold"}
+          fontSize="2xl"
+          color="red.500"
+          textAlign={"center"}
+        >
+          Usuwanie administratora
+        </Text>
+
+        <Table>
+          <Thead>
+            <Tr>
+              <Td>Id</Td>
+              <Td>Nazwa</Td>
+              <Td>Usuń</Td>
             </Tr>
-          ))}
-        </Tbody>
-      </Table>
+          </Thead>
+          <Tbody>
+            {props.admins?.map((admin) => (
+              <Tr key={admin.id}>
+                <Td>{admin.id}</Td>
+                <Td>{admin.email}</Td>
+                <Td>
+                  <NextButton href={`/api/admin/removeAdmin?id=${admin.id}`}>
+                    Usuń
+                  </NextButton>
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </Box>
     </Box>
   );
 }

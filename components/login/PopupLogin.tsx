@@ -24,6 +24,7 @@ interface PopupLoginProps {
   refresh?: () => void;
   setUser?: (user: User | undefined) => void;
   dontRenderIcon?: boolean;
+  text?: string;
   buttonSize?: "sm" | "lg" | "md" | "xs";
 
   buttonColorScheme?:
@@ -87,7 +88,9 @@ export default function PopupLogin(props: PopupLoginProps): JSX.Element {
       >
         <Flex flexDir={"row"} justifyContent="center" alignItems={"center"}>
           {props.dontRenderIcon || <FaSignInAlt />}
-          <Text ml={props.dontRenderIcon ? "0" : "2"}>Zaloguj się</Text>
+          <Text ml={props.dontRenderIcon ? "0" : "2"}>
+            {props.text || "Zaloguj się"}
+          </Text>
         </Flex>
       </Button>
       <Modal

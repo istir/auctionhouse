@@ -20,6 +20,7 @@ import { useBreakpoint } from "@chakra-ui/media-query";
 // import { useDisclosure } from "@chakra-ui/hooks";
 import AuctionAddToCart from "./AuctionAddToCart";
 import Header from "../../header/header";
+import PopupLogin from "../../login/PopupLogin";
 interface AuctionProps {
   user?: User & {
     cart: Cart & {
@@ -123,6 +124,7 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
               user={props.user}
               setInCart={setInCart}
               inCart={inCart}
+              refresh={props.refresh}
             />
             <Box zIndex="2" pos="relative" mt="5">
               {props.auction.markdown
@@ -175,16 +177,23 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
                 : null}
             </Box>
             <Flex justifyContent="center" my="4">
-              {props.auction.bidding || (
-                <AuctionAddToCart
-                  inCart={inCart}
-                  setInCart={setInCart}
-                  auction={props.auction}
-                  seller={props.auction.seller}
-                  size="lg"
-                  full
-                />
-              )}
+              {props.auction.bidding ||
+                (props.user ? (
+                  <AuctionAddToCart
+                    user={props.user}
+                    inCart={inCart}
+                    setInCart={setInCart}
+                    auction={props.auction}
+                    seller={props.auction.seller}
+                    size="lg"
+                    full
+                  />
+                ) : (
+                  <PopupLogin
+                    refresh={props.refresh}
+                    text="Zaloguj się i dodaj do koszyka!"
+                  />
+                ))}
             </Flex>
           </Box>
         </Box>

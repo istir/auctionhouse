@@ -1,4 +1,4 @@
-import { Auction, User } from ".prisma/client";
+import { Auction, Cart, User } from ".prisma/client";
 import { Button } from "@chakra-ui/button";
 import { Flex, Grid, Text } from "@chakra-ui/react";
 import axios from "axios";
@@ -9,7 +9,11 @@ import AuctionBuyModal from "../AuctionBuyWindow.tsx/AuctionBuyModal";
 
 interface AuctionAddToCartProps {
   auction: Auction;
-
+  user?: User & {
+    cart: Cart & {
+      items: Auction[];
+    };
+  };
   size?: "md" | "lg";
   seller?: User;
   full?: boolean;
@@ -25,6 +29,7 @@ export default function AuctionAddToCart({
   const router = useRouter();
   function sendAjaxRequest() {
     // console.log("ZAAAMN");
+    if (!props.user) return;
     props.setInCart(true);
     if (props.inCart) {
       router.push("/cart");
@@ -58,6 +63,7 @@ export default function AuctionAddToCart({
       seller={props.seller}
       auction={auction}
       inCart={props.inCart}
+      user={props.user}
       onPress={sendAjaxRequest}
     >
       <Button

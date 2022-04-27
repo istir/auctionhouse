@@ -5,6 +5,7 @@ import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
 import { useRouter } from "next/router";
 import React from "react";
+import AdminHeader from "../../components/AdminHeader";
 import FormInput from "../../components/form/FormInput";
 import withAdminSession from "../../libs/admin/adminIronSession";
 import checkIfAdminTokenValidAndRefresh from "../../libs/admin/checkIfAdminTokenValidAndRefresh";
@@ -102,49 +103,65 @@ export default function AdminLoginPage(
 
   return (
     <Box>
-      <Text>Logowanie do panelu administracyjnego</Text>
-      <Formik initialValues={initialValues} onSubmit={onSubmit}>
-        <Form>
-          <Stack>
-            <FormInput
-              // validator={validateEmail}
-              label="Adres e-mail"
-              name="email"
-              // isError={setAnyFormikError}
-            />
+      <AdminHeader />
+      <Box m="2">
+        <Text
+          fontWeight={"bold"}
+          fontSize="2xl"
+          color="red.500"
+          textAlign={"center"}
+        >
+          Logowanie do panelu administracyjnego
+        </Text>
 
-            <FormInput
-              // validator={validatePassword}
-              label="Hasło"
-              name="password"
-              isPassword
-              // isError={setAnyFormikError}
-            />
-            <Text color="red.500" fontWeight="bold" mt="2">
-              {localizeErrors(error)}
-            </Text>
-            <Button
-              type="submit"
-              mt="2"
-              isLoading={loading}
-              // colorScheme="blue"
-              bg={useColorModeValue(
-                "light.primaryContainer",
-                "dark.primaryContainer"
-              )}
-              _hover={{
-                backgroundColor: useColorModeValue(
-                  "light.tertiaryContainer",
-                  "dark.tertiaryContainer"
-                ),
-              }}
-              // colorScheme={anyFormikError ? "red" : "blue"}
+        <Formik initialValues={initialValues} onSubmit={onSubmit}>
+          <Form>
+            <Stack
+              maxW={{ base: "100%", md: "70vw" }}
+              justifyContent="center"
+              alignItems={"center"}
+              margin="auto"
             >
-              Zaloguj
-            </Button>
-          </Stack>
-        </Form>
-      </Formik>
+              <FormInput
+                // validator={validateEmail}
+                label="Adres e-mail"
+                name="email"
+                // isError={setAnyFormikError}
+              />
+
+              <FormInput
+                // validator={validatePassword}
+                label="Hasło"
+                name="password"
+                isPassword
+                // isError={setAnyFormikError}
+              />
+              <Text color="red.500" fontWeight="bold" mt="2">
+                {localizeErrors(error)}
+              </Text>
+              <Button
+                type="submit"
+                mt="2"
+                isLoading={loading}
+                // colorScheme="blue"
+                bg={useColorModeValue(
+                  "light.primaryContainer",
+                  "dark.primaryContainer"
+                )}
+                _hover={{
+                  backgroundColor: useColorModeValue(
+                    "light.tertiaryContainer",
+                    "dark.tertiaryContainer"
+                  ),
+                }}
+                // colorScheme={anyFormikError ? "red" : "blue"}
+              >
+                Zaloguj
+              </Button>
+            </Stack>
+          </Form>
+        </Formik>
+      </Box>
     </Box>
   );
 }

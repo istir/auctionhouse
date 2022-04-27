@@ -13,7 +13,7 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import { Auction, User } from "@prisma/client";
+import { Auction, Cart, User } from "@prisma/client";
 import { useRouter } from "next/router";
 import React from "react";
 import AuctionMoreFromUser from "./AuctionMoreFromUser";
@@ -24,6 +24,11 @@ interface AuctionBuyModalProps {
   seller?: User;
   onPress: () => void;
   inCart: boolean;
+  user?: User & {
+    cart: Cart & {
+      items: Auction[];
+    };
+  };
 }
 
 export default function AuctionBuyModal(

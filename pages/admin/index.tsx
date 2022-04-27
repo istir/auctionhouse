@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import { Admin } from "@prisma/client";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
@@ -65,12 +65,44 @@ export const getServerSideProps: GetServerSideProps = withAdminSession(
 export default function AdminIndexPage(
   props: AdminIndexPageProps
 ): JSX.Element {
-  if (!props.token || !props.admin)
-    return (
-      <Box>
-        Nie jesteś zalogowany{" "}
-        <NextButton href="/admin/login">Zaloguj</NextButton>
-      </Box>
-    );
-  return <AdminHeader admin={props.admin} />;
+  // if (!props.token || !props.admin)
+  //   return (
+  //     <Box>
+  //       Nie jesteś zalogowany{" "}
+  //       <NextButton href="/admin/login">Zaloguj</NextButton>
+  //     </Box>
+  //   );
+  return (
+    <Box>
+      {/* <AdminHeader admin={props.admin} /> */}
+      <Flex
+        flexDir={"column"}
+        placeItems="center"
+        placeContent={"center"}
+        // width={"full"}
+        margin={{ base: 0, md: 6 }}
+        padding="2"
+        borderRadius={{ base: "none", md: "md" }}
+        backgroundColor={useColorModeValue("light.primary1", "dark.primary1")}
+        boxShadow="md"
+        minH={"64"}
+      >
+        <Text fontSize={"2xl"} fontWeight="bold" textAlign={"center"}>
+          Panel administracyjny Auctionhouse
+        </Text>
+        {!props.token || !props.admin ? (
+          <Flex flexDir={"column"}>
+            <Text>Nie jesteś zalogowany</Text>
+            <NextButton href="/admin/login">Zaloguj</NextButton>
+          </Flex>
+        ) : (
+          <AdminHeader
+            admin={props.admin}
+            dontRenderBG
+            justifyContent="center"
+          />
+        )}
+      </Flex>
+    </Box>
+  );
 }
