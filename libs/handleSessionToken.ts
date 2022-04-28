@@ -26,6 +26,7 @@ export default async function handleSessionToken(
     }
   }
   async function save() {
+    token = token || session.get("user")?.token;
     if (token) {
       if (user) {
         session.set("user", { token, user });

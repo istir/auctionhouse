@@ -5,7 +5,9 @@ import prisma from "../../prisma/prisma";
 import withSession from "../../libs/ironSession";
 import { Session } from "next-iron-session";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
-import { printErrorStackTrace, printStackTrace } from "../../libs/stackTrace";
+import { printErrorStackTrace } from "../../libs/stackTrace";
+import { validateName } from "../../libs/validator";
+import handleSessionToken from "../../libs/handleSessionToken";
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
     const isValidToken = await checkIfTokenValidAndRefresh(req.session);
@@ -16,55 +18,54 @@ export default withSession(
       return res.status(403).end("Forbidden");
     }
     //? 1 get JSON data from request
-    let { id, password } = req.body;
+    let { id, password, firstName, lastName, avatar } = req.body;
     // console.log("password", password);
+    console.log(firstName, lastName);
     const user = await prisma.user.findUnique({
       where: { id },
     });
-    console.log("user", user);
+
     // ? 2.5. if user doesn't exist throw a generic error
     if (!user) {
       return res.status(200).end("Data doesn't exist");
     }
+
+    if (
+      (firstName && validateName(firstName)) ||
+      (lastName && validateName(lastName))
+    ) {
+      return res.status(400).end("Invalid name");
+    }
+
+    firstName = firstName || user.firstName;
+    lastName = lastName || user.lastName;
+    avatar = avatar || user.avatar;
+
     return argon2
       .verify({
         pass: password,
         encoded: user.password,
       })
       .then(async () => {
-        const sessionToken = req.session.get("user");
-        if (sessionToken) {
-          req.session.destroy();
-          await req.session.save();
-        }
-        const address = await prisma.address.deleteMany({
-          where: { userId: id },
-        });
-        const tokens = await prisma.token.deleteMany({ where: { userId: id } });
-        const cart = await prisma.cart.findUnique({ where: { userId: id } });
-        if (cart) {
-          const cartDel = await prisma.cart.delete({ where: { userId: id } });
-        }
-        const auctionsAsBuyer = await prisma.auction.updateMany({
-          where: { buyerId: id },
-          data: { buyerId: -1 },
-        });
-        const auctionsAsSeller = await prisma.auction.updateMany({
-          where: { sellerId: id },
-          data: { sellerId: -1 },
-        });
-        const bids = await prisma.bid.updateMany({
-          where: { userId: id },
-          data: { userId: -1 },
-        });
-        const del = await prisma.user.delete({
+        const changed = await prisma.user.update({
           where: { id },
+          data: { firstName, lastName, avatar },
+          include: { tokens: true },
         });
-        if (del) {
-          printStackTrace(`Deleted user: ${user.email}`);
-          return res.status(200).end("User deleted");
+        if (changed) {
+          await handleSessionToken(req.session, "", {
+            firstName: changed.firstName,
+            lastName: changed.lastName,
+            id: changed.id,
+            email: changed.email,
+            phoneNumber: changed.phoneNumber,
+          });
+          printErrorStackTrace(`Changed information for user: ${user.email}`);
+          return res.status(200).end("OK");
         }
-        printErrorStackTrace(`Failed to delete user: ${user.email}`);
+        printErrorStackTrace(
+          `Failed to change information for user: ${user.email}`
+        );
         return res.status(200).end("Something went wrong");
       })
       .catch((e) => {

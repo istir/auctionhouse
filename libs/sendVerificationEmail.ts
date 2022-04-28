@@ -13,6 +13,7 @@ export default async function sendVerificationEmail(email: string) {
     return printErrorStackTrace(`User ${user.email} has no verification token`);
 
   const _m = await sendEmail(
+    "Weryfikacja konta Auctionhouse",
     email,
     `<h1>Witaj w Auctionhouse!</h1><p>Już tylko jeden krok dzieli cię od cieszenia się kontem!</p><a href=${
       process.env.NODE_ENV === "production"

@@ -1,7 +1,11 @@
 import { createTransport } from "nodemailer";
 import { printDevStackTrace, printErrorStackTrace } from "./stackTrace";
 
-export default async function sendEmail(email: string, message: string) {
+export default async function sendEmail(
+  title: string,
+  email: string,
+  message: string
+) {
   if (!email) return;
   const transporter = createTransport({
     service: process.env.EMAIL_PROVIDER,
@@ -24,7 +28,7 @@ export default async function sendEmail(email: string, message: string) {
     from: "Auctionhouse",
 
     to: `${email}`,
-    subject: `form message`,
+    subject: title || "Auctionhouse",
 
     html: message,
   };
