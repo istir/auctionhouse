@@ -18,6 +18,7 @@ interface LoginProps {
 
 export const Login: React.FC<LoginProps> = (props: LoginProps) => {
   const [error, setError] = React.useState<string>("");
+  const [erroredEmail, setErroredEmail] = React.useState<string>("");
   // const [anyFormikError, setAnyFormikError] = React.useState<boolean[]>([
   //   false,
   // ]);
@@ -67,6 +68,7 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
             // TODO: show error
             props.setLoading?.(false);
             ful.data?.status ? setError(ful.data.status) : setError(ful.data);
+            setErroredEmail(values.email);
           }
           // ful.status=200&&ful.statusText='OK'&&props?.refresh()&&props?.closePopup();
         },
@@ -113,6 +115,20 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
           <Text color="red.500" fontWeight="bold" mt="2">
             {localizeErrors(error)}
           </Text>
+          {error === "User not verified" && (
+            <Button
+              onClick={() => {
+                axios({
+                  url: `/api/sendVerificationEmail?email=${erroredEmail}`,
+                }).then((ful) => {
+                  setError("Wysłano email weryfikacyjny");
+                });
+                // sendVerificationEmail(erroredEmail);
+              }}
+            >
+              Wyślij maila weryfikującego
+            </Button>
+          )}
           <Button
             type="submit"
             mt="2"
@@ -134,116 +150,6 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
         </Stack>
       </Form>
     </Formik>
-    //       {/* <label htmlFor="email" className="font-semibold ">
-    //         Adres e-mail
-    //       </label>
-    //       <Field
-    //         className={`${inputClassName} ${styleFormikError(
-    //           errors.email,
-    //           touched.email
-    //         )}`}
-    //         name="email"
-    //         //   validate={validateEmail}
-    //       ></Field> */}
-    //       {/* {errors.email && touched.email && (
-    //         <div className={errorDivClassName}>{errors.email}</div>
-    //       )} */}
-
-    //       <label htmlFor="password" className="font-semibold ">
-    //         Hasło
-    //       </label>
-    //       <Field
-    //         className={`${inputClassName} ${styleFormikError(
-    //           errors.password,
-    //           touched.password
-    //         )}`}
-    //         name="password"
-    //         type="password"
-    //         //   validate={validatePassword}
-    //       ></Field>
-    //       {/* {errors.password && touched.password && (
-    //         <div className={errorDivClassName}>{errors.password}</div>
-    //       )} */}
-    //       <fieldset>
-    //         <label htmlFor="rememberMe" className="font-semibold mr-2">
-    //           Zapamiętaj na 30 dni
-    //         </label>
-
-    //         <Field name="rememberMe" type="checkbox"></Field>
-    //       </fieldset>
-    //       <Text color="red.500" fontWeight="bold">
-    //         {error}
-    //       </Text>
-    //       <button
-    //         type="submit"
-    //         className={`rounded-md border-2 duration-150 font-semibold ${
-    //           checkForAnyError(errors, touched)
-    //             ? "border-red-200 bg-red-100 hover:bg-red-400 hover:border-red-500"
-    //             : "border-blue-200 bg-blue-100 hover:bg-blue-400 hover:border-blue-500"
-    //         }`}
-    //       >
-    //         Zaloguj
-    //       </button>
-    //     </Form>
-    //   )}
-    // </Formik>
-
-    // <Formik initialValues={initialFormikValues} onSubmit={HandleOnSubmit}>
-    //   {({ errors, touched }) => (
-    //     <Form className="flex flex-col gap-1 justify-center w-full p-2">
-    //       <label htmlFor="email" className="font-semibold ">
-    //         Adres e-mail
-    //       </label>
-    //       <Field
-    //         className={`${inputClassName} ${styleFormikError(
-    //           errors.email,
-    //           touched.email
-    //         )}`}
-    //         name="email"
-    //         //   validate={validateEmail}
-    //       ></Field>
-    //       {/* {errors.email && touched.email && (
-    //           <div className={errorDivClassName}>{errors.email}</div>
-    //         )} */}
-
-    //       <label htmlFor="password" className="font-semibold ">
-    //         Hasło
-    //       </label>
-    //       <Field
-    //         className={`${inputClassName} ${styleFormikError(
-    //           errors.password,
-    //           touched.password
-    //         )}`}
-    //         name="password"
-    //         type="password"
-    //         //   validate={validatePassword}
-    //       ></Field>
-    //       {/* {errors.password && touched.password && (
-    //           <div className={errorDivClassName}>{errors.password}</div>
-    //         )} */}
-    //       <fieldset>
-    //         <label htmlFor="rememberMe" className="font-semibold mr-2">
-    //           Zapamiętaj na 30 dni
-    //         </label>
-
-    //         <Field name="rememberMe" type="checkbox"></Field>
-    //       </fieldset>
-    //       <Text color="red.500" fontWeight="bold">
-    //         {error}
-    //       </Text>
-    //       <button
-    //         type="submit"
-    //         className={`rounded-md border-2 duration-150 font-semibold ${
-    //           checkForAnyError(errors, touched)
-    //             ? "border-red-200 bg-red-100 hover:bg-red-400 hover:border-red-500"
-    //             : "border-blue-200 bg-blue-100 hover:bg-blue-400 hover:border-blue-500"
-    //         }`}
-    //       >
-    //         Zaloguj
-    //       </button>
-    //     </Form>
-    //   )}
-    // </Formik>
   );
 };
 export default Login;

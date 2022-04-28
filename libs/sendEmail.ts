@@ -36,7 +36,7 @@ export default async function sendEmail(email: string, message: string) {
         printErrorStackTrace(`email send error: ${err}`);
         reject(err);
       } else {
-        printDevStackTrace(`email send info: ${info}`);
+        printDevStackTrace(`email send for ${email}`);
 
         resolve(info);
       }
