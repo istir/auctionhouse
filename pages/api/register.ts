@@ -74,8 +74,20 @@ export default withSession(
     phoneNumber = phoneNumber.replace(/-/g, ""); //* replace - with nothing
     zipCode = parseInt(zipCode.toString().replace("-", "")); //* replace - with nothing
 
-    let birthDateAsDateObject = birthDate !== "" ? new Date(birthDate) : "";
+    if (process.env.NODE_ENV === "development") {
+      zipCode = 12345;
+    }
 
+    let birthDateAsDateObject = birthDate !== "" ? new Date(birthDate) : "";
+    if (
+      process.env.NODE_ENV === "development" &&
+      birthDateAsDateObject === ""
+    ) {
+      birthDateAsDateObject = new Date();
+    }
+    if (process.env.NODE_ENV === "development" && password === "") {
+      password = "123";
+    }
     //? 2 encode the password
     //! using argon2-browser
     //! might want to migrate to native node-argon2 but vercel might not like that
@@ -97,6 +109,7 @@ export default withSession(
           verificationToken: randomSalt(32, true),
         },
       });
+      console.log(created);
       //* auto login after registration, turned off because need to verify first
       // const token = await generateToken(created.id, true);
       // console.log("TOKEN", token);
@@ -109,6 +122,7 @@ export default withSession(
       //   email: created.email,
       //   phoneNumber: created.phoneNumber,
       // });
+
       try {
         if (created) {
           const mailSent = await sendVerificationEmail(created.email);
@@ -135,6 +149,7 @@ export default withSession(
       }
     } catch (err: any) {
       //? 4 if email is already there throw a generic error
+      console.log(err);
       console.error("ERROR", err.code);
       if (err.code === "P2002") {
         res.status(200).end("email already exists"); //TODO: zapytać o kod tutaj

@@ -129,7 +129,6 @@ export default function PopupLogin(props: PopupLoginProps): JSX.Element {
                 refresh={props.refresh}
                 closePopup={onClose}
                 setLoading={setLoading}
-                setUser={props.setUser}
               />
             )}
             <Flex

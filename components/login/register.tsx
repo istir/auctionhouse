@@ -97,8 +97,12 @@ export const Register: React.FC<RegisterProps> = (props) => {
         if (ful.status === 200) {
           if (ful.data === "OK" || ful.data === "OK + Address") {
             props?.setUser?.(ful.data as User);
-            props?.refresh?.();
-            props?.closePopup?.();
+            setError(
+              "Wysłano maila weryfikującego. Sprawdź swoją skrzynkę pocztową"
+            );
+            props.setLoading?.(false);
+            // props?.refresh?.();
+            // props?.closePopup?.();
             return;
           }
           if (ful.data === "email already exists") {
@@ -192,7 +196,14 @@ export const Register: React.FC<RegisterProps> = (props) => {
             Zarejestruj
           </Button>
         </Form>
-        <Text color={isLightMode ? "red.400" : "red.600"}>{error}</Text>
+        <Text
+          fontWeight={"semibold"}
+          color={
+            isLightMode ? "light.onPrimaryContainer" : "dark.onPrimaryContainer"
+          }
+        >
+          {error}
+        </Text>
       </>
     </Formik>
   );

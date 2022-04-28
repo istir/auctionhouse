@@ -14,7 +14,11 @@ export default async function handler(
       data: { verified: true },
     });
     if (userToVerify) {
-      return res.status(200).end(`Konto ${userToVerify.email} zweryfikowane.`);
+      return res
+        .status(200)
+        .end(
+          `<h1>Konto ${userToVerify.email} zweryfikowane.</h1> <a href="/">Powrót do strony głównej</a>`
+        );
     }
   } catch {
     return res.status(200).end("Coś poszło nie tak");

@@ -17,11 +17,13 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 import NextButton from "../NextButton";
+import OpenSettingsButton from "../settings/OpenSettingsButton";
 
 interface UserMenuOptionsProps {
   refresh?: () => void;
   setUser?: (user: User | undefined) => void;
   setLoading?: (loading: boolean) => void;
+  user?: User;
 }
 
 export default function UserMenuOptions(
@@ -60,6 +62,23 @@ export default function UserMenuOptions(
       },
       // href: "/my-auctions",
       href: "#",
+      component: (
+        <OpenSettingsButton
+          key={"Ustawienia"}
+          w="full"
+          m="0"
+          p="0"
+          paddingInlineEnd={"0"}
+          paddingInlineStart="0"
+          variant={"ghost"}
+          user={props.user}
+        >
+          <Box mr="2">
+            <FaCog />
+          </Box>
+          Ustawienia
+        </OpenSettingsButton>
+      ),
       icon: <FaCog />,
     },
     {
@@ -86,7 +105,7 @@ export default function UserMenuOptions(
       bg={useColorModeValue("light.primary4", "dark.primary4")}
     >
       {items.map((item) =>
-        item.href ? (
+        item.href && item.href !== "#" ? (
           <MenuItem
             // cursor={"pointer"}
             key={item.name}
@@ -123,6 +142,8 @@ export default function UserMenuOptions(
               </Button>
             </NextLink> */}
           </MenuItem>
+        ) : item.component ? (
+          item.component
         ) : (
           <MenuItem
             // cursor={"pointer"}

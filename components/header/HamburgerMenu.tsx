@@ -260,6 +260,7 @@ export default function HamburgerMenu(props: HamburgerMenuProps): JSX.Element {
                   refresh={props.refresh}
                   setUser={props.setUser}
                   setLoading={setLoading}
+                  user={props.user}
                 />
               </Menu>
             )}

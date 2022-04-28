@@ -5,6 +5,7 @@
  */
 
 export function validateEmail(value: string): void | string {
+  if (process.env.NODE_ENV === "development") return;
   if (!value) {
     return "Pole nie może być puste";
   }
@@ -21,6 +22,7 @@ export function validateEmail(value: string): void | string {
  */
 
 export function validateName(value: string): void | string {
+  if (process.env.NODE_ENV === "development") return;
   if (!value) {
     return "Pole nie może być puste";
   }
@@ -28,6 +30,7 @@ export function validateName(value: string): void | string {
   // if(value.search(/\W/)) return ""
 }
 export function validatePrice(value: string | number): void | string {
+  if (process.env.NODE_ENV === "development") return;
   if (!value) return "Pole nie może być puste";
 
   if (value < 0) return "Cena nie może być ujemna";
@@ -42,6 +45,7 @@ export function validatePrice(value: string | number): void | string {
  * @returns error message or nothing
  */
 export function validatePassword(value: string): void | string {
+  if (process.env.NODE_ENV === "development") return;
   let error = "Hasło musi zawierać co najmniej";
   let isError = false;
   if (value.length < 8) {
@@ -63,6 +67,7 @@ export function validatePassword(value: string): void | string {
 }
 
 export function validateUserName(value: string): void | string {
+  if (process.env.NODE_ENV === "development") return;
   let error = "Login musi zawierać co najmniej";
   let isError = false;
   if (value.length < 5) {
@@ -90,6 +95,7 @@ export function validateUserName(value: string): void | string {
  */
 
 export function validateZipCode(value: string): string | void {
+  if (process.env.NODE_ENV === "development") return;
   const regexQuery = "^[0-9]{2}-?[0-9]{3}$";
   const regex = new RegExp(regexQuery);
   if (!value) {
@@ -106,6 +112,7 @@ export function validateZipCode(value: string): string | void {
  * @returns error message or nothing
  */
 export function validateAddress(value: string): string | void {
+  if (process.env.NODE_ENV === "development") return;
   if (!value) {
     return "Pole nie może być puste";
   }
@@ -124,6 +131,7 @@ export function validateAddress(value: string): string | void {
  * @returns error message or nothing
  */
 export function validatePhoneNumber(value: string): string | void {
+  if (process.env.NODE_ENV === "development") return;
   if (!value) {
     return "Pole nie może być puste";
   }
@@ -141,6 +149,7 @@ export function validatePhoneNumber(value: string): string | void {
 @returns error message or nothing 
 */
 export function validateDate(value: string): string | void {
+  if (process.env.NODE_ENV === "development") return;
   function isLeapYear(year: string) {
     let yearInt = parseInt(year);
     if (isNaN(yearInt)) return false;
