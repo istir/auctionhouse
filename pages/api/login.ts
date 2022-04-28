@@ -63,6 +63,9 @@ export default withSession(
       res.status(200).end("Data doesn't exist");
       return;
     }
+    if (!user.verified) {
+      return res.status(200).end("User not verified");
+    }
     //? 3. compare hash and password of a user
 
     argon2

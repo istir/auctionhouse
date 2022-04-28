@@ -23,6 +23,8 @@ export function localizeErrors(errorMessage: string) {
   switch (errorMessage) {
     case "Data doesn't exist":
       return "Dane nie istnieją";
+    case "User not verified":
+      return "Konto nie jest zweryfikowane. Przejdź do skrzynki pocztowej i zweryfikuj konto";
     default:
       return errorMessage;
   }

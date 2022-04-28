@@ -13,8 +13,11 @@ import {
 } from "../../libs/validator";
 import withSession from "../../libs/ironSession";
 import { Session } from "next-iron-session";
-import handleSessionToken from "../../libs/handleSessionToken";
-import generateToken from "../../libs/generateToken";
+import sendVerificationEmail from "../../libs/sendVerificationEmail";
+import {
+  printDevStackTrace,
+  printErrorStackTrace,
+} from "../../libs/stackTrace";
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
     // > ------------------------- how it should work --------------------------- //
@@ -91,21 +94,29 @@ export default withSession(
           firstName,
           lastName,
           phoneNumber,
+          verificationToken: randomSalt(32, true),
         },
       });
-      const token = await generateToken(created.id, true);
-      console.log("TOKEN", token);
-      const t = await handleSessionToken(req.session, token, {
-        firstName: created.firstName,
-        lastName: created.lastName,
-        id: created.id,
-        // birthDateAsString: converTdateToString(user.birthDate),
-        // birthDate:user.birthDate,
-        email: created.email,
-        phoneNumber: created.phoneNumber,
-      });
+      //* auto login after registration, turned off because need to verify first
+      // const token = await generateToken(created.id, true);
+      // console.log("TOKEN", token);
+      // const t = await handleSessionToken(req.session, token, {
+      //   firstName: created.firstName,
+      //   lastName: created.lastName,
+      //   id: created.id,
+      //   // birthDateAsString: converTdateToString(user.birthDate),
+      //   // birthDate:user.birthDate,
+      //   email: created.email,
+      //   phoneNumber: created.phoneNumber,
+      // });
       try {
         if (created) {
+          const mailSent = await sendVerificationEmail(created.email);
+          if (mailSent) {
+            printDevStackTrace(`mail sent to ${created.email}`);
+          } else {
+            printErrorStackTrace(`mail not sent to ${created.email}`);
+          }
           const address = await prisma.address.create({
             data: {
               city,

@@ -40,6 +40,8 @@ model User {
   auctionsAsSeller Auction[] @relation(name: "seller")
   auctionsAsBuyer  Auction[] @relation(name: "buyer")
   bids             Bid[]
+  verified         Boolean  @default(false)
+  verificationToken String? @unique
 }
 
 model Cart {
