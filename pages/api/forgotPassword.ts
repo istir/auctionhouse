@@ -32,7 +32,7 @@ export default async function search(
     if (u) {
       //TODO SEND
 
-      sendEmail(
+      const mail = await sendEmail(
         "Resetowania hasła Auctionhouse",
         user.email,
         `<h1>Dzieli Cię tylko krok od resetu hasła w serwisie Auctionhouse!</h1><p>Aby potwierdzić chęć zmiany hasła <a href="${
@@ -41,6 +41,11 @@ export default async function search(
             : "http://localhost:3000"
         }/reset-password/${u.verificationToken}">naciśnij ten link.</a></p>`
       );
+      if (mail) {
+        printDevStackTrace(`Email sent to: ${user.email}`);
+      } else {
+        printErrorStackTrace(`Email not sent to: ${user.email}`);
+      }
     }
   } else {
     printErrorStackTrace(
