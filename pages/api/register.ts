@@ -18,6 +18,7 @@ import {
   printDevStackTrace,
   printErrorStackTrace,
 } from "../../libs/stackTrace";
+import insertVerificationTokenIntoUser from "../../libs/insertVerificationTokenIntoUser";
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
     // > ------------------------- how it should work --------------------------- //
@@ -106,7 +107,7 @@ export default withSession(
           firstName,
           lastName,
           phoneNumber,
-          verificationToken: randomSalt(32, true),
+          // verificationToken: randomSalt(32, true),
         },
       });
       console.log(created);
@@ -122,7 +123,9 @@ export default withSession(
       //   email: created.email,
       //   phoneNumber: created.phoneNumber,
       // });
-
+      if (created) {
+        const u = await insertVerificationTokenIntoUser(created.id);
+      }
       try {
         if (created) {
           const mailSent = await sendVerificationEmail(created.email);

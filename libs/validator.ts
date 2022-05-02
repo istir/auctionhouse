@@ -65,7 +65,19 @@ export function validatePassword(value: string): void | string {
   error = error.replace(/,([^,]*)$/, " i " + "$1");
   if (isError) return error;
 }
-
+export function validateConfirmPassword(
+  password: string,
+  value: string
+): void | string {
+  // if (process.env.NODE_ENV === "development") return;
+  let error = "";
+  if (password && value) {
+    if (password !== value) {
+      error = "Hasła nie są takie same";
+    }
+  }
+  return error;
+}
 export function validateUserName(value: string): void | string {
   if (process.env.NODE_ENV === "development") return;
   let error = "Login musi zawierać co najmniej";

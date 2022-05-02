@@ -17,6 +17,7 @@ import {
 import { User } from "@prisma/client";
 import React from "react";
 import { FaSignInAlt } from "react-icons/fa";
+import ForgotPassword from "./ForgotPassword";
 import Login from "./login";
 import Register from "./register";
 
@@ -51,7 +52,9 @@ interface PopupLoginProps {
 }
 
 export default function PopupLogin(props: PopupLoginProps): JSX.Element {
-  const [type, setType] = React.useState<"login" | "register">("login");
+  const [type, setType] = React.useState<"login" | "register" | "forgor">(
+    "login"
+  );
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = React.useState<boolean>(false);
   function getSize(currentBreakpoint: string | undefined) {
@@ -68,6 +71,11 @@ export default function PopupLogin(props: PopupLoginProps): JSX.Element {
         return "lg";
     }
   }
+
+  // function forgorPassword() {
+  //   axios({url:"/api/resetPassword",method:"POST",data:{email:}})
+  // }
+
   return (
     <>
       <Button
@@ -124,17 +132,19 @@ export default function PopupLogin(props: PopupLoginProps): JSX.Element {
                 setLoading={setLoading}
                 setUser={props.setUser}
               />
-            ) : (
+            ) : type === "register" ? (
               <Register
                 refresh={props.refresh}
                 closePopup={onClose}
                 setLoading={setLoading}
               />
+            ) : (
+              <ForgotPassword />
             )}
             <Flex
               justifyContent={"center"}
               alignItems="center"
-              flexDir={"column"}
+              flexDir={"row"}
               mt="10"
             >
               <Text>
@@ -151,6 +161,7 @@ export default function PopupLogin(props: PopupLoginProps): JSX.Element {
                 //     "dark.tertiaryContainer"
                 //   ),
                 // }}
+                p="2"
                 variant={"ghost"}
                 onClick={() => {
                   setType((prevType) => {
@@ -161,6 +172,33 @@ export default function PopupLogin(props: PopupLoginProps): JSX.Element {
                 {type === "login" ? "Zarejestruj się!" : "Zaloguj się!"}
               </Button>
             </Flex>
+            {type === "login" && (
+              <Flex
+                justifyContent={"center"}
+                alignItems="center"
+                flexDir={"column"}
+                mt="2"
+              >
+                <Button
+                  // bg={useColorModeValue(
+                  //   "light.secondaryContainer",
+                  //   "dark.secondaryContainer"
+                  // )}
+                  // _hover={{
+                  //   backgroundColor: useColorModeValue(
+                  //     "light.tertiaryContainer",
+                  //     "dark.tertiaryContainer"
+                  //   ),
+                  // }}
+                  variant={"solid"}
+                  onClick={() => {
+                    setType("forgor");
+                  }}
+                >
+                  Zapomniałem hasła
+                </Button>
+              </Flex>
+            )}
           </ModalBody>
         </ModalContent>
       </Modal>
