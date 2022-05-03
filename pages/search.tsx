@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { Auction, Bid, Token, User } from "@prisma/client";
+import { Auction, Bid, User } from "@prisma/client";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
 import { useRouter } from "next/router";
@@ -14,7 +14,6 @@ import prisma from "../prisma/prisma";
 interface SearchProps {
   user?: User;
   auctions: (Auction & { bids: Bid[] })[];
-  token: Token;
 }
 export const getServerSideProps: GetServerSideProps = withSession(
   async function ({
@@ -56,7 +55,6 @@ export const getServerSideProps: GetServerSideProps = withSession(
       if (user) {
         return {
           props: {
-            token: token.token,
             user: user,
             auctions: auctions ? auctions : [],
           },
@@ -64,13 +62,12 @@ export const getServerSideProps: GetServerSideProps = withSession(
       }
       return {
         props: {
-          token: token.token,
           user: token.user,
           auctions: auctions ? auctions : [],
         },
       };
     } else {
-      return { props: { token: "", auctions: auctions ? auctions : [] } };
+      return { props: { auctions: auctions ? auctions : [] } };
     }
   }
 );
@@ -83,11 +80,7 @@ export default function Search(props: SearchProps): JSX.Element {
   };
   return (
     <Box>
-      <Header
-        user={props.user}
-        refresh={refreshData}
-        token={props.token.token}
-      />
+      <Header user={props.user} refresh={refreshData} />
       {props.auctions.length === 0 && <Box>Nie znaleziono aukcji.</Box>}
       <AuctionsGrid auctions={props.auctions} />
     </Box>

@@ -1,5 +1,5 @@
 import { Box, useColorModeValue } from "@chakra-ui/react";
-import { Category, CategoryParent, Token, User } from "@prisma/client";
+import { Category, CategoryParent, User } from "@prisma/client";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
 import { useRouter } from "next/router";
@@ -15,7 +15,6 @@ interface CategoriesPageProps {
   parentCategories: (CategoryParent & {
     categories: Category[];
   })[];
-  token: Token;
 }
 
 export const getServerSideProps: GetServerSideProps = withSession(
@@ -45,7 +44,6 @@ export const getServerSideProps: GetServerSideProps = withSession(
       if (user) {
         return {
           props: {
-            token: token.token,
             user: user,
             parentCategories: parentCategories || [],
           },
@@ -53,13 +51,12 @@ export const getServerSideProps: GetServerSideProps = withSession(
       }
       return {
         props: {
-          token: token.token,
           user: token.user,
           parentCategories: parentCategories || [],
         },
       };
     } else {
-      return { props: { token: "", parentCategories: parentCategories || [] } };
+      return { props: { parentCategories: parentCategories || [] } };
     }
   }
 );
