@@ -110,10 +110,14 @@ export default function CategoriesByName(
   return (
     <Box>
       <Header user={props.user} refresh={refreshData} />
-      {props.auctions.length === 0 && <Box>Nie znaleziono aukcji.</Box>}
       <TitleHolder title={props.categoryName} router={router}>
         <AuctionsGrid auctions={props.auctions} />
       </TitleHolder>
+      {props.auctions.length === 0 && (
+        <Box mx="2" fontSize={"lg"}>
+          Nie znaleziono aukcji.
+        </Box>
+      )}
     </Box>
   );
 }
