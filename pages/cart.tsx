@@ -1,10 +1,9 @@
 import { Auction, User } from "@prisma/client";
-// import { trace } from "console";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import CartComponent from "../components/header/Cart";
+import CartComponent from "../components/header/CartComponent";
 import Header from "../components/header/header";
 import checkIfTokenValidAndRefresh from "../libs/checkIfTokenValidAndRefresh";
 // import getItemsInCart from "../libs/getItemsInCart";

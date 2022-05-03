@@ -1,17 +1,16 @@
-import { Box, Flex, Grid, Text, useColorModeValue } from "@chakra-ui/react";
+import { Box, useColorModeValue } from "@chakra-ui/react";
 import { Category, CategoryParent, Token, User } from "@prisma/client";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
 import { useRouter } from "next/router";
 import React from "react";
 import Header from "../../components/header/header";
+import Categories from "../../components/mainPage/categories/Categories";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
 import withSession from "../../libs/ironSession";
 import prisma from "../../prisma/prisma";
 
-import NextButton from "../../components/NextButton";
-
-interface CategoriesProps {
+interface CategoriesPageProps {
   user?: User;
   parentCategories: (CategoryParent & {
     categories: Category[];
@@ -65,7 +64,9 @@ export const getServerSideProps: GetServerSideProps = withSession(
   }
 );
 
-export default function Categories(props: CategoriesProps): JSX.Element {
+export default function CategoriesPage(
+  props: CategoriesPageProps
+): JSX.Element {
   const router = useRouter();
   const colors = useColorModeValue("light.primary1", "dark.primary1");
   const buttonColors = useColorModeValue("light.primary4", "dark.primary4");
@@ -75,46 +76,9 @@ export default function Categories(props: CategoriesProps): JSX.Element {
   };
   return (
     <Box>
-      <Header
-        user={props.user}
-        refresh={refreshData}
-        token={props.token.token}
-      />
+      <Header user={props.user} refresh={refreshData} />
 
-      <Grid pb="5" gap={{ base: "3", md: "6" }} m="3">
-        <Text fontSize={{ base: "2xl", md: "3xl" }} mb={{ base: "2", md: "6" }}>
-          Wszystkie kategorie
-        </Text>
-        {props.parentCategories?.map(
-          (parentCategory) =>
-            parentCategory?.categories?.length > 0 && (
-              <Box
-                key={parentCategory.id}
-                backgroundColor={colors}
-                padding={4}
-                borderRadius="lg"
-                boxShadow={"lg"}
-              >
-                <Text fontSize={{ base: "xl", md: "2xl" }} mb="2">
-                  {parentCategory.name}
-                </Text>
-                <Flex flexDirection={{ base: "column", md: "row" }} gap="2">
-                  {parentCategory.categories?.map((category) => (
-                    <NextButton
-                      key={category.id}
-                      href={`/categories/${category.url || "#"}`}
-                      borderRadius={"lg"}
-                      boxShadow="sm"
-                      backgroundColor={buttonColors}
-                    >
-                      <Text>{category.name}</Text>
-                    </NextButton>
-                  ))}
-                </Flex>
-              </Box>
-            )
-        )}
-      </Grid>
+      <Categories parentCategories={props.parentCategories} />
     </Box>
   );
 }

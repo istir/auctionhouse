@@ -47,8 +47,6 @@ interface PopupLoginProps {
     | "whatsapp"
     | "twitter"
     | "telegram";
-  // closePopup: () => void;
-  // isModalOpen: boolean;
 }
 
 export default function PopupLogin(props: PopupLoginProps): JSX.Element {
@@ -58,30 +56,22 @@ export default function PopupLogin(props: PopupLoginProps): JSX.Element {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = React.useState<boolean>(false);
   function getSize(currentBreakpoint: string | undefined) {
-    // console.log(currentBreakpoint);
     if (undefined) return "md";
     switch (currentBreakpoint) {
       case "base":
         return "full";
       case "sm":
         return "full";
-      // case "md":
-      //   return "lg";
       default:
         return "lg";
     }
   }
-
-  // function forgorPassword() {
-  //   axios({url:"/api/resetPassword",method:"POST",data:{email:}})
-  // }
 
   return (
     <>
       <Button
         onClick={onOpen}
         size={props.buttonSize || "md"}
-        // colorScheme={props.buttonColorScheme}
         bg={useColorModeValue(
           "light.primaryContainer",
           "dark.primaryContainer"
@@ -112,14 +102,15 @@ export default function PopupLogin(props: PopupLoginProps): JSX.Element {
         <ModalContent>
           <ModalCloseButton zIndex={"999"} />
           <ModalHeader>
-            {type === "login" ? "Logowanie" : "Rejestracja"}
+            {type === "login"
+              ? "Logowanie"
+              : type === "register"
+              ? "Rejestracja"
+              : "Przypomnij hasło"}
           </ModalHeader>
           <ModalBody
             display="flex"
             w="full"
-            // overflow={"hidden"}
-            // maxH={"90vh"}
-            // mt="20"
             justifyItems="center"
             alignItems="center"
             justifyContent={"center"}
@@ -151,16 +142,6 @@ export default function PopupLogin(props: PopupLoginProps): JSX.Element {
                 {type === "login" ? "Nie masz konta?" : "Masz już konto?"}
               </Text>
               <Button
-                // bg={useColorModeValue(
-                //   "light.secondaryContainer",
-                //   "dark.secondaryContainer"
-                // )}
-                // _hover={{
-                //   backgroundColor: useColorModeValue(
-                //     "light.tertiaryContainer",
-                //     "dark.tertiaryContainer"
-                //   ),
-                // }}
                 p="2"
                 variant={"ghost"}
                 onClick={() => {
@@ -180,16 +161,6 @@ export default function PopupLogin(props: PopupLoginProps): JSX.Element {
                 mt="2"
               >
                 <Button
-                  // bg={useColorModeValue(
-                  //   "light.secondaryContainer",
-                  //   "dark.secondaryContainer"
-                  // )}
-                  // _hover={{
-                  //   backgroundColor: useColorModeValue(
-                  //     "light.tertiaryContainer",
-                  //     "dark.tertiaryContainer"
-                  //   ),
-                  // }}
                   variant={"solid"}
                   onClick={() => {
                     setType("forgor");

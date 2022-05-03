@@ -2,16 +2,14 @@ import { Auction, Bid, Category, User } from ".prisma/client";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import { useBreakpoint } from "@chakra-ui/react";
 import React from "react";
-import useLightModeCheck from "../../../libs/hooks/useLightModeCheck";
 import PopupLogin from "../../login/PopupLogin";
 import AuctionAddToCart from "./AuctionAddToCart";
 import AuctionBid from "./AuctionBid";
-// import AuctionBuyNow from "./AuctionBuyNow";
 import AuctionSeller from "./AuctionSeller";
 
 interface AuctionHeaderProps {
   user?: User;
-  setInCart: (boolean: boolean) => void;
+  setInCart: (_boolean: boolean) => void;
   inCart: boolean;
   refresh?: () => void;
 
@@ -28,13 +26,8 @@ export default function AuctionHeader({
   ...props
 }: AuctionHeaderProps): JSX.Element {
   const imageRef = React.useRef<HTMLImageElement>(null);
-  const lightMode = useLightModeCheck();
   const breakpoint = useBreakpoint();
-  // console.log(imageRef.current?.height);
 
-  //TODO: Kategoria1 -> Kategoria2 -> KATEGORIA3 jako linki
-  //TODO: Na desktopie poprawiony header
-  //TODO: na mobilce hamburger menu
   return (
     <Box>
       <Box pos="relative">
@@ -43,7 +36,6 @@ export default function AuctionHeader({
           mt={`${imageRef.current?.height}px`}
           fontWeight="bold"
           fontSize="lg"
-          // mt="5"
         >
           {auction.name}
         </Text>
@@ -58,10 +50,10 @@ export default function AuctionHeader({
           ) : props.user ? (
             <AuctionAddToCart
               full={breakpoint === "base" || false}
-              // autoFull
               auction={auction}
               setInCart={props.setInCart}
               inCart={props.inCart}
+              // user={props.user}
             />
           ) : (
             <PopupLogin

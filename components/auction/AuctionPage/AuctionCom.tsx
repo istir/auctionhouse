@@ -1,23 +1,12 @@
 import { Auction, Bid, Cart, Category, User } from ".prisma/client";
-import {
-  Box,
-  Flex,
-  // Heading,
-  ListItem,
-  Text,
-  UnorderedList,
-} from "@chakra-ui/layout";
+import { Box, Flex, ListItem, Text, UnorderedList } from "@chakra-ui/layout";
 import React from "react";
-// import useColorSchemeContext from "../../../libs/hooks/useColorSchemeContext";
 import useLightModeCheck from "../../../libs/hooks/useLightModeCheck";
-// import ColorModeSwitcher from "../../ColorModeSwitcher";
-// import Header from "../../header/Header";
 import AuctionHeader from "./AuctionHeader";
 import AuctionImages from "./AuctionImages";
 import ReactMarkdown from "react-markdown";
 import { Image } from "@chakra-ui/image";
-import { useBreakpoint } from "@chakra-ui/media-query";
-// import { useDisclosure } from "@chakra-ui/hooks";
+
 import AuctionAddToCart from "./AuctionAddToCart";
 import Header from "../../header/header";
 import PopupLogin from "../../login/PopupLogin";
@@ -37,87 +26,28 @@ interface AuctionProps {
 }
 
 export default function AuctionCom(props: AuctionProps): JSX.Element {
-  // console.log(props.auction.markdown);
   const isLightMode = useLightModeCheck();
   const [inCart, setInCart] = React.useState<boolean>(
     (props.user?.cart?.items.filter((item) => item.id === props.auction.id)
       .length as number) > 0
   );
-  // console.log(inCart);
-  // const colorScheme = React.useContext(useColorSchemeContext);
-  // const [breakpointSize, setBreakpointSize] = React.useState<string>(
-  //   getSize(useBreakpoint())
-  // );
-  // const [drawerBreakpointSize, setDrawerBreakpointSize] =
-  //   React.useState<string>(getSize(useBreakpoint()));
-  // const { isOpen, onOpen, onClose } = useDisclosure();
 
-  function getSize(currentBreakpoint: string | undefined): string {
-    // max-width: var(--chakra-sizes-xs);
-    // console.log(currentBreakpoint);
-
-    if (undefined) return "md";
-    switch (currentBreakpoint) {
-      case "base":
-        // setDrawerBreakpointSize("full");
-        return "sm";
-      case "sm":
-        // setDrawerBreakpointSize("full");
-        return "full";
-      // case "md":
-      //   return "lg";
-      default:
-        // setDrawerBreakpointSize("lg");
-        return "lg";
-    }
-  }
-  // function getDrawerBreakpointMargin(breakpoint: string | undefined) {
-  //   // const breakpoint = getSize(useBreakpoint());
-  //   // console.log(`var(--chakra-sizes-${getSize(breakpoint)})`);
-  //   if (isOpen) {
-  //     return `var(--chakra-sizes-${getSize(breakpoint)})`;
-  //   }
-  //   return "0";
-  // }
   return (
     <Box>
-      {/* <style>{`ul {margin-left:2rem}`}</style> */}
-      <Header
-        drawerWidth={getSize(useBreakpoint())}
-        // isDrawerOpen={isOpen}
-        // onDrawerOpen={onOpen}
-        // onDrawerClose={onClose}
-        user={props.user}
-        refresh={props.refresh}
-      />
+      <Header user={props.user} refresh={props.refresh} />
 
       <Box
         bg={isLightMode ? "light.primary1" : "dark.primary1"}
         m={["0", "5", "10"]}
-        // mr={["0","10","20"]}
         shadow={["none", "md"]}
-        // px={["3", "10"]}
-        // transform={`translateX(${getDrawerBreakpointMargin(useBreakpoint())})`}
-        // marginLeft={getDrawerBreakpointMargin(useBreakpoint())}
-        // py="8"
         borderRadius="2xl"
         overflow="hidden"
       >
-        <AuctionImages
-          name={props.auction.name}
-          images={props.auction.image}
-          // scroll={scroll}
-        />
+        <AuctionImages name={props.auction.name} images={props.auction.image} />
         <Box zIndex="2" pos="relative" mt={["70vh", "70vh", "55vh"]}>
-          {/* <AuctionGradient lightMode={isLightMode} /> */}
-          {/*//TODO: somehow fix so that gradient won't affect <ImageCarousel/> */}
           <Box
-            // bg={isLightMode ? "gray.50" : "gray.900"}
             bg={isLightMode ? "light.primary1" : "dark.primary1"}
             px={["3", "10"]}
-            // borderBottomRadius="2xl"
-
-            // mt="-6"
           >
             <AuctionHeader
               auction={props.auction}
@@ -153,8 +83,6 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
                         ),
                         ul: ({ node, ...props }) => (
                           <UnorderedList
-                            // style={{ background: "#000" }}
-                            // children={node.children}
                             ml="8"
                             {...props}
                             // @ts-ignore
@@ -171,7 +99,6 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
                       }}
                     >
                       {item}
-                      {/* {props.auction.markdown.split("\n").join("\n\n\n")} */}
                     </ReactMarkdown>
                   ))
                 : null}

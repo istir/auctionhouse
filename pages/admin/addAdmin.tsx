@@ -11,6 +11,7 @@ import withAdminSession from "../../libs/admin/adminIronSession";
 import checkIfAdminTokenValidAndRefresh from "../../libs/admin/checkIfAdminTokenValidAndRefresh";
 import { localizeErrors } from "../../libs/localizeStrings";
 import AdminHeader from "../../components/AdminHeader";
+import FormMessage from "../../components/form/FormMessage";
 
 interface AdminAddAdminPageProps {
   token: string;
@@ -40,6 +41,7 @@ export default function AdminAddAdminPage(
   props: AdminAddAdminPageProps
 ): JSX.Element {
   const [error, setError] = React.useState<string>("");
+  const [success, setSuccess] = React.useState<string>("");
   const initialValues = { password: "", email: "" };
   const [loading, setLoading] = React.useState<boolean>(false);
   const router = useRouter();
@@ -56,7 +58,7 @@ export default function AdminAddAdminPage(
           } else {
             // TODO: show error
             setLoading(false);
-            setError(`Dodano nowego administratora: ${ful.data}`);
+            setSuccess(`Dodano nowego administratora: ${ful.data}`);
             console.log(ful.data);
             // ful.data?.status ? setError(ful.data.status) : setError(ful.data);
           }
@@ -109,9 +111,10 @@ export default function AdminAddAdminPage(
                 isPassword
                 // isError={setAnyFormikError}
               />
-              <Text color="red.500" fontWeight="bold" mt="2">
-                {localizeErrors(error)}
-              </Text>
+              <FormMessage
+                success={localizeErrors(success)}
+                error={localizeErrors(error)}
+              />
               <Button
                 type="submit"
                 mt="2"

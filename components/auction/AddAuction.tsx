@@ -1,4 +1,4 @@
-import { Box, Button, Text, useColorModeValue } from "@chakra-ui/react";
+import { Button, Flex, Stack, Text, useColorModeValue } from "@chakra-ui/react";
 import { Auction, User } from "@prisma/client";
 import { MDEditorProps } from "@uiw/react-md-editor";
 import { Form, Formik } from "formik";
@@ -14,6 +14,8 @@ import FormDate from "../form/FormDate";
 import axios from "axios";
 import FormImages from "../form/FormImages";
 import { useRouter } from "next/router";
+import FormMessage from "../form/FormMessage";
+import FormSelect from "../form/FormSelect";
 const MDEditor = dynamic<MDEditorProps>(() => import("@uiw/react-md-editor"), {
   ssr: false,
 });
@@ -25,6 +27,16 @@ interface AddAuctionProps {
 export default function AddAuction(props: AddAuctionProps): JSX.Element {
   const maxImages = 10;
   const router = useRouter();
+  const [categories, setCategories] = React.useState<
+    {
+      id: number;
+      name: string;
+      categories: {
+        id: number;
+        name: string;
+      }[];
+    }[]
+  >([]);
   const [error, setError] = React.useState<string>("");
   const [sending, setSending] = React.useState<boolean[]>(
     new Array(maxImages).fill(false)
@@ -36,7 +48,7 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
   type FormikValues = Omit<Auction, "id" | "buyerId">;
   const initialValues: FormikValues = {
     bidding: false,
-    categoryId: 1,
+    categoryId: 0,
     dateEnd: new Date(
       new Date(
         new Date().getFullYear(),
@@ -60,81 +72,97 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
     timesBought: 0,
     usersBought: 0,
   };
+
+  React.useEffect(() => {
+    axios({ url: "/api/getCategories" }).then((ful) => {
+      if (Array.isArray(ful.data) && ful.data.length > 0) {
+        setCategories(ful.data);
+      }
+    });
+    return () => {
+      //cleanup - ComponentWillUnmount
+    };
+  }, []);
+
   function handleOnSubmit(values: FormikValues) {
-    // console.log("suuubmit");
-    // console.log({ ...initialValues, markdown: md });
-    // console.log(md);
-    console.log(imagesUri);
     const imgs = imagesUri.filter((i) => i !== "");
-    // return;
     axios({
       url: "/api/addAuction",
       method: "post",
       data: { ...values, markdown: md, image: imgs },
-    }).then((ful) => {
-      router.push(`/auction/${ful.data.url}`);
-      console.log(ful.data);
-    });
+    }).then(
+      (ful) => {
+        router.push(`/auction/${ful.data.url}`);
+      },
+      (_rej) => {
+        setError("Coś poszło nie tak, spróbuj ponownie");
+      }
+    );
   }
   return (
     <Formik initialValues={initialValues} onSubmit={handleOnSubmit}>
-      <Box>
-        <Form>
-          <FormInput
-            validator={validateName}
-            name={"name"}
-            label={"Nazwa aukcji"}
-          />
-          <FormCheckbox label="Licytacja" name="bidding" />
-          <FormInput
-            validator={validatePrice}
-            name={"price"}
-            label={"Cena"}
-            isNumeric
-          />
-          <FormImages
-            name="images"
-            label="Zdjęcia"
-            setImagesUri={setImagesUri}
-            imagesUri={imagesUri}
-            maxImages={maxImages}
-            setSending={setSending}
-            sending={sending}
-          />
-          <Box>Kategoria!!!</Box>
-          {/* <FormInput validator={} name={} label={}/> */}
-          <Text fontWeight={"semibold"} py="2">
-            Opis
-          </Text>
-          <MDEditor
-            value={md}
-            onChange={(value = "") => {
-              setMd(value);
-            }}
-          />
+      <Flex margin="5" justifyContent={"center"} alignItems="center">
+        <Stack minW={{ base: "full", md: "50vw" }}>
+          <Form>
+            <FormInput
+              validator={validateName}
+              name={"name"}
+              label={"Nazwa aukcji"}
+            />
+            <FormCheckbox label="Licytacja" name="bidding" />
+            <FormInput
+              validator={validatePrice}
+              name={"price"}
+              label={"Cena"}
+              isNumeric
+            />
+            <FormImages
+              name="images"
+              label="Zdjęcia"
+              setImagesUri={setImagesUri}
+              imagesUri={imagesUri}
+              maxImages={maxImages}
+              setSending={setSending}
+              sending={sending}
+            />
+            {/* <Box>Kategoria!!!</Box> */}
+            <FormSelect
+              name="categoryId"
+              label="Kategoria"
+              categories={categories}
+            />
+            <Text fontWeight={"semibold"} py="2">
+              Opis
+            </Text>
+            <MDEditor
+              value={md}
+              onChange={(value = "") => {
+                setMd(value);
+              }}
+            />
 
-          <FormDate name="dateEnd" label="Koniec aukcji" dateTime minToday />
-          <Button
-            type="submit"
-            mt="2"
-            isLoading={sending.some((s) => s)}
-            // colorScheme="blue"
-            bg={useColorModeValue(
-              "light.primaryContainer",
-              "dark.primaryContainer"
-            )}
-            _hover={{
-              backgroundColor: useColorModeValue(
-                "light.tertiaryContainer",
-                "dark.tertiaryContainer"
-              ),
-            }}
-            // colorScheme={anyFormikError ? "red" : "blue"}
-          >
-            Dodaj aukcję
-          </Button>
-        </Form>
-      </Box>
+            <FormDate name="dateEnd" label="Koniec aukcji" dateTime minToday />
+            <FormMessage error={error} />
+            <Button
+              type="submit"
+              mt="2"
+              isLoading={sending.some((s) => s)}
+              bg={useColorModeValue(
+                "light.primaryContainer",
+                "dark.primaryContainer"
+              )}
+              _hover={{
+                backgroundColor: useColorModeValue(
+                  "light.tertiaryContainer",
+                  "dark.tertiaryContainer"
+                ),
+              }}
+            >
+              Dodaj aukcję
+            </Button>
+          </Form>
+        </Stack>
+      </Flex>
     </Formik>
   );
 }

@@ -13,14 +13,11 @@ interface FormCheckboxProps {
 }
 
 export default function FormCheckbox(props: FormCheckboxProps): JSX.Element {
-  const [field, meta, helpers] = useField({
+  const [field, meta] = useField({
     name: props.name,
     validate: props.validator,
   });
-  // props.isError && props.isError(meta.error && meta.touched ? true : false);
   return (
-    // <Field name={props.name} validate={props.validator}>
-    //   {({ field, form }: { field: FieldInputProps<> }) => (
     <FormControl isInvalid={meta.error && meta.touched ? true : false}>
       <HStack>
         <Checkbox
@@ -29,14 +26,10 @@ export default function FormCheckbox(props: FormCheckboxProps): JSX.Element {
           name={props.name}
           onChange={field.onChange}
           isChecked={field.value}
-          //  onChange={formik.handleChange}
-          //  isChecked={formik.values.rememberMe}
         ></Checkbox>
         <FormLabel htmlFor={props.name}>{props.label}</FormLabel>
       </HStack>
       <FormErrorMessage>{meta.error}</FormErrorMessage>
     </FormControl>
   );
-  //   )}
-  // </Field>
 }

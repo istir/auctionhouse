@@ -31,11 +31,7 @@ interface FormImagesProps {
 
 export default function FormImages(props: FormImagesProps): JSX.Element {
   const [images, setImages] = React.useState<ImageListType>([]);
-  const [positionWithImages, setPositionWithImages] = React.useState<boolean[]>(
-    new Array(props.maxImages).fill(false)
-  );
   const bgColor = useColorModeValue("light.primary1", "dark.primary1");
-  // console.log(getConfig().publicRuntimeConfig.IBB_UPLOAD_URL);
   return (
     <Box>
       <Text fontWeight={"semibold"} py="2">
@@ -44,7 +40,6 @@ export default function FormImages(props: FormImagesProps): JSX.Element {
       <ReactImageUploading
         multiple
         value={images}
-        // onChange={onChange}
         onChange={(
           value: ImageListType,
           addUpdatedIndex?: number[] | undefined
@@ -98,7 +93,6 @@ export default function FormImages(props: FormImagesProps): JSX.Element {
         }) => (
           <Box>
             <Button
-              // style={isDragging ? { color: "red" } : undefined}
               colorScheme={isDragging ? "red" : "blue"}
               onClick={onImageUpload}
               {...dragProps}
@@ -125,10 +119,6 @@ export default function FormImages(props: FormImagesProps): JSX.Element {
                     <PopoverTrigger>
                       <Box
                         onClick={() => {
-                          // setPositionWithImages((prev) => {
-                          //   prev[index] = false;
-                          //   return [...prev];
-                          // });
                           //@ts-ignore
                           props.setImagesUri((prev) => {
                             prev[index] = "";
@@ -147,8 +137,6 @@ export default function FormImages(props: FormImagesProps): JSX.Element {
                           boxShadow:
                             "inset 0 0 2px 20px var(--chakra-colors-red-600)",
                         }}
-                        //   border="1px solid #fff "
-
                         borderRadius={"full"}
                       >
                         <FaTimesCircle size="20px" />
@@ -181,21 +169,4 @@ export default function FormImages(props: FormImagesProps): JSX.Element {
       </ReactImageUploading>
     </Box>
   );
-  // const [field, meta, helpers] = useField({
-  //     name: props.name,
-
-  //   });
-  // return ( <FormControl isInvalid={meta.error && meta.touched ? true : false}>
-  //     <FormLabel htmlFor={props.name}>{props.label}</FormLabel>
-  //     <Input
-  //       {...field}
-  //       // {...props}
-  //       id={props.name}
-  //       placeholder={props.label}
-  //       type={
-  //         props.isPassword ? "password" : props.isNumeric ? "number" : "text"
-  //       }
-  //     />
-  //     <FormErrorMessage>{meta.error}</FormErrorMessage>
-  //   </FormControl>);
 }

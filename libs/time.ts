@@ -63,13 +63,13 @@ export function formatTime(time: RemainingTime) {
     time.months
       ? time.months > 0
         ? `${time.months}  ${time.months == 1 ? "miesiąc" : "miesięcy"} `
-        : "00"
+        : ""
       : ""
   }${
     time.days
       ? time.days > 0
         ? `${time.days} ${time.days == 1 ? "dzień" : "dni"} `
-        : "00"
+        : ""
       : ""
   }${time.hours ? (time.hours > 0 ? `${time.hours}:` : "00") : ""}${
     time.minutes ? (time.minutes > 0 ? `${time.minutes}:` : "00") : ""

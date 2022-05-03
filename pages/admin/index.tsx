@@ -15,14 +15,6 @@ interface AdminIndexPageProps {
 
 export const getServerSideProps: GetServerSideProps = withAdminSession(
   async function ({ req }: { req: NextApiRequest & { session: Session } }) {
-    // return await getUserFromSession(req);
-    // const auctions = await prisma.auction.findMany({
-    //   where: { dateEnd: "" },
-    //   take: 100,
-    //   include: { bids: true },
-    // });
-    // const auctions = (await getRandomAuctions(100, 100)) || [];
-    // console.log(auctions);
     const token = await checkIfAdminTokenValidAndRefresh(req.session);
     console.log(token);
     if (token) {
@@ -30,56 +22,17 @@ export const getServerSideProps: GetServerSideProps = withAdminSession(
     } else {
       return { props: { token: "", admin: "" } };
     }
-    // if (token) {
-    //   const user = await prisma.user.findUnique({
-    //     where: { id: token.user.id },
-    //     select: {
-    //       avatar: true,
-    //       firstName: true,
-    //       lastName: true,
-    //       cart: { include: { items: true } },
-    //       id: true,
-    //     },
-    //   });
-    //   if (user) {
-    //     return {
-    //       props: {
-    //         token: token.token,
-    //         user: user,
-    //         auctions: auctions ? auctions : [],
-    //       },
-    //     };
-    //   }
-    //   return {
-    //     props: {
-    //       token: token.token,
-    //       user: token.user,
-    //       auctions: auctions ? auctions : [],
-    //     },
-    //   };
-    // } else {
-    //   return { props: { token: "", auctions: auctions ? auctions : [] } };
-    // }
   }
 );
 export default function AdminIndexPage(
   props: AdminIndexPageProps
 ): JSX.Element {
-  // if (!props.token || !props.admin)
-  //   return (
-  //     <Box>
-  //       Nie jesteś zalogowany{" "}
-  //       <NextButton href="/admin/login">Zaloguj</NextButton>
-  //     </Box>
-  //   );
   return (
     <Box>
-      {/* <AdminHeader admin={props.admin} /> */}
       <Flex
         flexDir={"column"}
         placeItems="center"
         placeContent={"center"}
-        // width={"full"}
         margin={{ base: 0, md: 6 }}
         padding="2"
         borderRadius={{ base: "none", md: "md" }}

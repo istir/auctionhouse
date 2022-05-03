@@ -90,8 +90,6 @@ export default withSession(
       password = "123";
     }
     //? 2 encode the password
-    //! using argon2-browser
-    //! might want to migrate to native node-argon2 but vercel might not like that
     const hash = await argon2.hash({
       pass: password,
       salt: randomSalt(32),

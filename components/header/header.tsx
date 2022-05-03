@@ -1,106 +1,151 @@
-import React, { useContext } from "react";
-
-import useColorSchemeContext from "../../libs/hooks/useColorSchemeContext";
-import HamburgerMenu from "./HamburgerMenu";
+import React from "react";
 // import HeaderBar from "./HeaderBar";
 import { User } from ".prisma/client";
+import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
+import {
+  Avatar,
+  Box,
+  Button,
+  Collapse,
+  Flex,
+  IconButton,
+  Menu,
+  MenuButton,
+  Stack,
+  Text,
+  useBreakpointValue,
+  useColorModeValue,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { FaChevronDown } from "react-icons/fa";
+import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
+import PopupLogin from "../login/PopupLogin";
+import HamburgerOptions from "./HamburgerOptions";
+import SearchComponent from "./SearchComponent";
+import UserMenuOptions from "./UserMenuOptions";
 interface HeaderProps {
   user?: User;
-  token?: string;
   refresh?: () => void;
-  drawerWidth?: string;
   setUser?: (user: User | undefined) => void;
-  // isDrawerOpen?: boolean;
-  // onDrawerOpen?: () => void;
-  // onDrawerClose?: () => void;
 }
-//TODO: Change logic so that user is axios'd
-export const Header: React.FC<HeaderProps> = ({
-  user,
-  // refresh,
-  drawerWidth,
-  ...props
-}) => {
-  // console.log(userId);
-  // userId && ajaxUser(userId);
+export default function Header(props: HeaderProps): JSX.Element {
+  const { isOpen, onToggle } = useDisclosure();
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const router = useRouter();
 
-  const { color } = useContext(useColorSchemeContext);
-  const [refresh, setRefresh] = React.useState<number>(0);
-
-  // function performRefresh() {
-  //   console.log("refreshing...", user);
-  //   setRefresh(refresh + 1);
-  // }
-  // function renderCorrectMenu(currentSize: string | undefined) {
-  //   switch (currentSize) {
-  //     case "base":
-  //       return (
-  //         <HamburgerMenu
-  //           user={user}
-  //           drawerWidth={drawerWidth}
-  //           refresh={props.refresh}
-  //         />
-  //       );
-  //     case "sm":
-  //       return (
-  //         <HamburgerMenu
-  //           user={user}
-  //           drawerWidth={drawerWidth}
-  //           refresh={props.refresh}
-  //         />
-  //       );
-  //     case "md":
-  //       return (
-  //         <HamburgerMenu
-  //           user={user}
-  //           drawerWidth={drawerWidth}
-  //           refresh={props.refresh}
-  //         />
-  //       );
-  //     case "lg":
-  //       return <HeaderBar refresh={props.refresh} user={user} />;
-
-  //     default:
-  //       return <HeaderBar refresh={props.refresh} user={user} />;
-  //   }
-  // }
-  // return renderCorrectMenu(useBreakpoint());
+  const lightMode = useLightModeCheck();
   return (
-    <HamburgerMenu
-      user={user}
-      refresh={props.refresh}
-      setUser={props.setUser}
-    />
+    <Box zIndex={100}>
+      <Flex
+        bg={useColorModeValue(`light.primary1`, "dark.primary1")}
+        color={useColorModeValue("gray.600", "white")}
+        minH="60px"
+        py={{ base: 2 }}
+        px={{ base: 4 }}
+        borderBottom={1}
+        borderStyle="solid"
+        borderColor={useColorModeValue("light.primary5", "dark.primary5")}
+        align="center"
+      >
+        <Flex
+          flex={{ base: 1, md: "auto" }}
+          ml={{ base: -2 }}
+          display={{ base: "flex", md: "none" }}
+        >
+          <IconButton
+            onClick={onToggle}
+            icon={
+              isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />
+            }
+            variant={"ghost"}
+            aria-label={"Toggle Navigation"}
+          />
+        </Flex>
+        <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
+          <Text
+            textAlign={useBreakpointValue({ base: "center", md: "left" })}
+            fontFamily={"heading"}
+            color={useColorModeValue("gray.800", "white")}
+            as={"a"}
+            href="/"
+            onClick={() => {
+              router.push("/");
+            }}
+          >
+            auctionhouse
+          </Text>
+
+          <Flex display={{ base: "none", md: "flex" }} ml={10}></Flex>
+        </Flex>
+        <Stack
+          flex={{ base: 1, md: 0 }}
+          justify={"flex-end"}
+          direction={"row"}
+          spacing={6}
+        >
+          <Flex>
+            <SearchComponent paddingX="2" />
+            <Flex paddingRight={"2"} display={{ base: "none", md: "flex" }}>
+              <HamburgerOptions
+                currentUser={props.user}
+                refresh={props.refresh}
+                loggedIn={props.user ? true : false}
+                renderAsButtons
+              />
+            </Flex>
+            {!props.user ? (
+              <PopupLogin
+                setUser={props.setUser}
+                refresh={props.refresh}
+                buttonSize="sm"
+              />
+            ) : (
+              <Menu>
+                <MenuButton
+                  as={Button}
+                  rounded={"full"}
+                  variant={"link"}
+                  cursor={"pointer"}
+                  minW={0}
+                  isLoading={loading}
+                >
+                  <Flex
+                    placeItems={"center"}
+                    bg="whiteAlpha.300"
+                    borderRadius={"full"}
+                    pr="2"
+                    border="2px"
+                    borderColor={
+                      lightMode ? "blackAlpha.500" : "whiteAlpha.500"
+                    }
+                  >
+                    <Avatar
+                      size={"sm"}
+                      src={props.user.avatar || "undefined"}
+                      mr="1"
+                    />
+                    <FaChevronDown />
+                  </Flex>
+                </MenuButton>
+                <UserMenuOptions
+                  refresh={props.refresh}
+                  setUser={props.setUser}
+                  setLoading={setLoading}
+                  user={props.user}
+                />
+              </Menu>
+            )}
+          </Flex>
+        </Stack>
+      </Flex>
+      <Collapse in={isOpen} animateOpacity>
+        <HamburgerOptions
+          currentUser={props.user}
+          refresh={props.refresh}
+          loggedIn={props.user ? true : false}
+        />
+      </Collapse>
+    </Box>
   );
-  // return (
-  //   // <header className=" pl-3 pr-3 md:pl-10 md:pr-10 flex justify-between sticky bg-gray-200 dark:bg-gray-700 min-w-full min-h-full p-1 h-12 md:h-16 items-center shadow-md">
-  //   //   {drawLogo()}
-  //   //   <nav className="flex items-center gap-3">
-  //   //     <IconMenu />
-  //   //     <NameMenu user={user} refresh={refresh} />
-  //   //   </nav>
-  //   // </header>
-  //   // <Flex
-  //   //   as="header"
-  //   //   px={["3", "10"]}
-  //   //   justifyContent="space-between"
-  //   //   pos="sticky"
-  //   //   bg={lightMode ? `gray.200` : `gray.700`}
-  //   //   minW="full"
-  //   //   minH="full"
-  //   //   p="1"
-  //   //   h={[12, 16]}
-  //   //   alignItems="center"
-  //   //   shadow="md"
-  //   //   zIndex="5"
-  //   // >
-  //   //   {drawLogo()}
-  //   //   <Flex as="nav" alignItems="center" gridGap="3">
-  //   //     {/* className="flex items-center gap-3" */}
-  //   //     <IconMenu />
-  //   //     <NameMenu user={user} refresh={refresh} />
-  //   //   </Flex>
-  //   // </Flex>
-  // );
-};
-export default Header;
+}

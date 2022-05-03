@@ -22,14 +22,10 @@ export default function ColorModeSwitcher(props: ColorModeSwitcherProps) {
   return (
     <Button
       size="md"
-      // fontSize="lg"
       variant={props.renderBg ? "solid" : "transparent"}
       colorScheme={props.colorScheme ? props.colorScheme : "blue"}
-      // variant="ghost"
       color="current"
-      // marginLeft="2"
       onClick={toggleColorMode}
-      // icon={<SwitchIcon />}
       aria-label={`Switch to ${text} mode`}
       {...props}
       justifyContent="center"

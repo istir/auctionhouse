@@ -13,7 +13,7 @@ interface FormVerifyPasswordProps {
 export default function FormVerifyPassword(
   props: FormVerifyPasswordProps
 ): JSX.Element {
-  const [field, meta, helpers] = useField({
+  const [field, meta] = useField({
     name: props.name,
     validate: props.validator,
   });

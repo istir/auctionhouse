@@ -14,19 +14,35 @@ export default async function getCategories(
   } else {
     categoryId = req.query.categoryId;
   }
-  if (!categoryId) {
-    res.end("None");
-    return;
+  if (categoryId) {
+    const category = await prisma.category.findUnique({
+      where: { id: categoryId },
+      // select: {
+      //   id: true,
+      //   name: true,
+      //   CategoryParent: { select: { name: true, id: true } },
+      // },
+      // include: { children: true },
+    });
+    if (!category) {
+      res.status(200).end("Wrong id");
+      return;
+    }
+    res.status(200).end(JSON.stringify(category));
+  } else {
+    const category = await prisma.categoryParent.findMany({
+      select: {
+        id: true,
+        name: true,
+        categories: { select: { id: true, name: true } },
+      },
+      // include: { children: true },
+    });
+    if (!category) {
+      res.status(200).end("No categories");
+      return;
+    }
+    res.status(200).end(JSON.stringify(category));
   }
-
-  const category = await prisma.category.findUnique({
-    where: { id: categoryId },
-    // include: { children: true },
-  });
-  if (!category) {
-    res.end("Wrong id");
-    return;
-  }
-  res.end(JSON.stringify(category));
 }
 // );

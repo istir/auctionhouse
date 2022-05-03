@@ -19,6 +19,7 @@ import {
 import { Auction, Bid, Category, User } from "@prisma/client";
 import axios from "axios";
 import React from "react";
+import FormMessage from "../../form/FormMessage";
 import AuctionTimer from "../AuctionTimer";
 
 interface AuctionBidProps {
@@ -65,19 +66,23 @@ export default function AuctionBid(props: AuctionBidProps): JSX.Element {
   }
   async function sendBid() {
     if (price < currentPrice) return onClose();
-    if (isAuctionEnded()) return onClose();
+    if (auctionended) return onClose();
     setSending(true);
-    // const test = { auctionId: props.auction.id, offer: price };
-    // console.log(test);
     axios({
       method: "POST",
       url: "/api/sendBid",
       data: { auctionId: props.auction.id, offer: price },
-    }).then((ful) => {
-      setSending(false);
-      onClose();
-      setCurrentPrice(price);
-    });
+    }).then(
+      (_ful) => {
+        setSending(false);
+        onClose();
+        setCurrentPrice(price);
+      },
+      (_rej) => {
+        setSending(false);
+        setError("Coś poszło nie tak, spróbuj ponownie");
+      }
+    );
   }
 
   return (
@@ -87,7 +92,7 @@ export default function AuctionBid(props: AuctionBidProps): JSX.Element {
       boxShadow={"md"}
       padding="4"
     >
-      {isAuctionEnded() ? (
+      {auctionended ? (
         <Box>Aukcja zakończona</Box>
       ) : (
         <Box>
@@ -114,7 +119,6 @@ export default function AuctionBid(props: AuctionBidProps): JSX.Element {
               </ModalFooter>
             </ModalContent>
           </Modal>
-          {/* <Box>Czas do końca: {timeToEnd}</Box> */}
           <AuctionTimer
             dateToEnd={props.auction.dateEnd}
             onEnd={() => {
@@ -144,7 +148,6 @@ export default function AuctionBid(props: AuctionBidProps): JSX.Element {
               mt="2"
               w={"full"}
               backgroundColor={buttonColor}
-              // _hover={{}}
               disabled={
                 props.user === undefined ||
                 props.user.id === props.auction?.sellerId ||
@@ -160,7 +163,7 @@ export default function AuctionBid(props: AuctionBidProps): JSX.Element {
             >
               Licytuj
             </Button>
-            <Text color="red.200">{error}</Text>
+            <FormMessage error={error} />
           </Box>
         </Box>
       )}

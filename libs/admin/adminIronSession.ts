@@ -4,10 +4,9 @@ import { env } from "process";
 
 export default function withAdminSession(handler: any) {
   return withIronSession(handler, {
-    // password: process.env.SECRET_COOKIE_PASSWORD,
     password:
-      process.env.NODE_ENV === "production" && env.SESSION_PASSWORD
-        ? env.SESSION_PASSWORD
+      process.env.NODE_ENV === "production" && env.ADMIN_SESSION_PASSWORD
+        ? env.ADMIN_SESSION_PASSWORD
         : "qwejy1237f89sdasith23jk4h7891fysd89afui1h4h2uiy89gfsa", //* this should be an environment variable
     cookieName: "aid",
     cookieOptions: {

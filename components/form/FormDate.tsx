@@ -8,29 +8,23 @@ import { useField } from "formik";
 import React from "react";
 
 interface FormDateProps {
-  // children: JSX.Element;
   validator?: (value: string) => void | string;
   name: string;
   label: string;
   dateTime?: boolean;
   minToday?: boolean;
-  // isError?: (arg: boolean) => void;
 }
 
 export default function FormDate(props: FormDateProps): JSX.Element {
-  const [field, meta, helpers] = useField({
+  const [field, meta] = useField({
     name: props.name,
     validate: props.validator,
   });
-  // props.isError && props.isError(meta.error && meta.touched ? true : false);
   return (
-    // <Field name={props.name} validate={props.validator}>
-    //   {({ field, form }: { field: FieldInputProps<> }) => (
     <FormControl isInvalid={meta.error && meta.touched ? true : false}>
       <FormLabel htmlFor={props.name}>{props.label}</FormLabel>
       <Input
         {...field}
-        // {...props}
         id={props.name}
         placeholder={props.label}
         type={props.dateTime ? "datetime-local" : "date"}
@@ -67,7 +61,5 @@ export default function FormDate(props: FormDateProps): JSX.Element {
       />
       <FormErrorMessage>{meta.error}</FormErrorMessage>
     </FormControl>
-    //   )}
-    // </Field>
   );
 }

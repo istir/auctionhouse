@@ -1,13 +1,12 @@
 import { Box } from "@chakra-ui/layout";
 import React from "react";
-// import useEmblaCarousel from "embla-carousel-react";
 import { Image } from "@chakra-ui/image";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Button } from "@chakra-ui/button";
 import useLightModeCheck from "../libs/hooks/useLightModeCheck";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-// import Image from "next/image"
+
 interface ImageCarouselProps {
   images: string[];
 }
@@ -24,46 +23,29 @@ export default function ImageCarousel(props: ImageCarouselProps): JSX.Element {
         alt="Image"
         pos="relative"
         h={["65vh", "65vh", "50vh"]}
-        // w="100vw"
-        // height={"-webkit-fit-content"}
         pointerEvents="all"
         objectFit="contain"
-        // flex="0 0 100%"
-        // layout="fill"
       ></Image>
     ));
   }
 
-  function renderLeftArrow(
-    clickHandler: () => void,
-    hasNext: boolean,
-    label: string
-  ) {
-    return renderArrow("left", clickHandler, hasNext, label);
+  function renderLeftArrow(clickHandler: () => void, hasNext: boolean) {
+    return renderArrow("left", clickHandler, hasNext);
   }
-  function renderRightArrow(
-    clickHandler: () => void,
-    hasNext: boolean,
-    label: string
-  ) {
-    return renderArrow("right", clickHandler, hasNext, label);
+  function renderRightArrow(clickHandler: () => void, hasNext: boolean) {
+    return renderArrow("right", clickHandler, hasNext);
   }
   function renderArrow(
     type: "left" | "right",
     clickHandler: () => void,
-    hasNext: boolean,
-    label: string
+    hasNext: boolean
   ) {
     return (
       <Button
         color="black"
-        // justifyContent="center"
         alignItems="center"
-        // flexDir="row"
-        // h="100%"
         visibility={hasNext ? "visible" : "hidden"}
         opacity={hasNext ? "1" : "0"}
-        // opacity={emblaApi?.canScrollNext() ? "1" : "0"}
         top="50%"
         transform="translateY(-50%)"
         variant="pill"
@@ -83,10 +65,9 @@ export default function ImageCarousel(props: ImageCarouselProps): JSX.Element {
   }
 
   function renderSizeBar(
-    clickHandler: (e: React.MouseEvent | React.KeyboardEvent) => void,
+    clickHandler: (_e: React.MouseEvent | React.KeyboardEvent) => void,
     isSelected: boolean,
-    index: number,
-    label: string
+    index: number
   ) {
     function renderDot(id: number) {
       return (
@@ -134,7 +115,6 @@ export default function ImageCarousel(props: ImageCarouselProps): JSX.Element {
             Math.abs(prevX - e.nativeEvent.changedTouches[0].clientX) <
             Math.abs(prevY - e.nativeEvent.changedTouches[0].clientY)
           ) {
-            console.log("BOTTOM");
             e.stopPropagation();
           }
         }}

@@ -1,16 +1,14 @@
-import { Button, Stack, Text } from "@chakra-ui/react";
+import { Button, Stack } from "@chakra-ui/react";
 import axios from "axios";
 import { Form, Formik, FormikValues } from "formik";
 import React from "react";
 import { validateEmail } from "../../libs/validator";
 import FormInput from "../form/FormInput";
+import FormMessage from "../form/FormMessage";
 
-interface ForgotPasswordProps {}
-
-export default function ForgotPassword(
-  props: ForgotPasswordProps
-): JSX.Element {
+export default function ForgotPassword(): JSX.Element {
   const [error, setError] = React.useState<string>("");
+  const [success, setSuccess] = React.useState<string>("");
   const [loading, setLoading] = React.useState<boolean>(false);
   const initialValues = { email: "" };
   function handleOnSubmit(values: FormikValues) {
@@ -20,11 +18,11 @@ export default function ForgotPassword(
     axios.post("/api/forgotPassword", values).then(
       (ful) => {
         if (ful.status === 200) {
-          setError("Wysłano link resetujący hasło.");
+          setSuccess("Wysłano link resetujący hasło.");
           setLoading(false);
         }
       },
-      (rej) => {
+      () => {
         setError("Coś poszło nie tak. Spróbuj ponownie później.");
         setLoading(false);
       }
@@ -42,9 +40,7 @@ export default function ForgotPassword(
           <Button type="submit" isLoading={loading}>
             Zapomniałem hasła!
           </Button>
-          <Text color="red.500" fontWeight="bold" mt="2">
-            {error}
-          </Text>
+          <FormMessage success={success} error={error} />
         </Stack>
       </Form>
     </Formik>

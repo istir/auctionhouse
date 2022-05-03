@@ -1,114 +1,124 @@
-// import {
-//   faCamera,
-//   faCar,
-//   faDesktop,
-//   faFirstAid,
-//   faGamepad,
-//   faHome,
-//   faTshirt,
-//   faVolleyballBall,
-// } from "@fortawesome/free-solid-svg-icons";
 import {
-  FaCamera,
-  FaCar,
-  FaDesktop,
-  FaFirstAid,
-  FaGamepad,
-  FaHome,
-  FaTshirt,
-  FaVolleyballBall,
-} from "react-icons/fa";
-
+  Box,
+  Button,
+  Collapse,
+  Flex,
+  Grid,
+  Text,
+  useColorModeValue,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { Category, CategoryParent } from "@prisma/client";
 import React from "react";
-import Category from "./category";
-import { Flex } from "@chakra-ui/react";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import NextButton from "../../NextButton";
 
 interface CategoriesProps {
-  position?: "left" | "center" | "right";
-  small?: boolean;
+  parentCategories: (CategoryParent & {
+    categories: Category[];
+  })[];
+  flexDirection?: { base: "column" | "row"; md: "column" | "row" };
+  dontRenderHeader?: boolean;
+  gridDirection?: "row" | "column";
+  gridTemplateColumns?: string;
+  gridTemplateRows?: string;
+  collapsable?: boolean;
 }
 
 export default function Categories(props: CategoriesProps): JSX.Element {
-  function checkPosition() {
-    if (!props.position) return "";
-    if (props.position == "center") return "mx-auto";
-    if (props.position == "left") return "mr-auto";
-    if (props.position == "right") return "ml-auto";
+  const colors = useColorModeValue("light.primary1", "dark.primary1");
+  const buttonColors = useColorModeValue("light.primary4", "dark.primary4");
+  const { isOpen, onToggle } = useDisclosure();
+  function renderCategories() {
+    return (
+      <Grid
+        pb="5"
+        gap={{ base: "3", md: "6" }}
+        m="3"
+        gridAutoColumns={"3"}
+        alignItems="normal"
+      >
+        {props.dontRenderHeader || (
+          <Text
+            fontSize={{ base: "2xl", md: "3xl" }}
+            mb={{ base: "2", md: "6" }}
+          >
+            Wszystkie kategorie
+          </Text>
+        )}
+        <Grid
+          gridTemplateColumns={
+            props.gridDirection === "column"
+              ? props.gridTemplateColumns ||
+                "repeat(auto-fit,minmax(240px,1fr))"
+              : ""
+          }
+          gridTemplateRows={
+            props.gridDirection === "row"
+              ? props.gridTemplateRows || "repeat(auto-fit,minmax(240px,1fr))"
+              : ""
+          }
+          gap={{ base: "3", md: "6" }}
+        >
+          {props.parentCategories?.map(
+            (parentCategory) =>
+              parentCategory?.categories?.length > 0 && (
+                <Box
+                  key={parentCategory.id}
+                  backgroundColor={colors}
+                  padding={4}
+                  borderRadius="lg"
+                  boxShadow={"lg"}
+                >
+                  <Text fontSize={{ base: "xl", md: "2xl" }} mb="2">
+                    {parentCategory.name}
+                  </Text>
+                  <Flex
+                    flexDirection={
+                      props.flexDirection || { base: "column", md: "row" }
+                    }
+                    gap="2"
+                  >
+                    {parentCategory.categories?.map((category) => (
+                      <NextButton
+                        key={category.id}
+                        href={`/categories/${category.url || "#"}`}
+                        borderRadius={"lg"}
+                        boxShadow="sm"
+                        backgroundColor={buttonColors}
+                      >
+                        <Text>{category.name}</Text>
+                      </NextButton>
+                    ))}
+                  </Flex>
+                </Box>
+              )
+          )}
+        </Grid>
+      </Grid>
+    );
   }
-
-  return (
-    <Flex
-      flexWrap={props.small ? "nowrap" : "wrap"}
-      justifyContent="center"
-      width={props.small ? "100%" : "fit-content"}
-      gridGap="2"
-    >
-      <Category
-        icon={<FaDesktop />}
-        color="blue.300"
-        darkColor="blue.500"
-        text="KOMPUTERY"
-        small={props.small}
-        categoryId={1}
-        onClick={() => {}}
-      />
-      <Category
-        icon={<FaGamepad />}
-        color="pink.200"
-        darkColor="pink.400"
-        text="GRY"
-        categoryId={2}
-        small={props.small}
-        onClick={() => {}}
-      />
-      <Category
-        icon={<FaTshirt />}
-        color="red.300"
-        darkColor="red.500"
-        text="ubrania"
-        small={props.small}
-        onClick={() => {}}
-      />
-      <Category
-        icon={<FaFirstAid />}
-        color="green.300"
-        darkColor="green.500"
-        text="zdrowie"
-        small={props.small}
-        onClick={() => {}}
-      />
-      <Category
-        icon={<FaVolleyballBall />}
-        color="yellow.200"
-        darkColor="yellow.400"
-        text="sport"
-        small={props.small}
-        onClick={() => {}}
-      />
-      <Category
-        icon={<FaCar />}
-        color="red.400"
-        darkColor="red.600"
-        text="motoryzacja"
-        small={props.small}
-        onClick={() => {}}
-      />
-      <Category
-        icon={<FaHome />}
-        color="blue.300"
-        darkColor="blue.500"
-        text="dom"
-        small={props.small}
-        onClick={() => {}}
-      />
-      <Category
-        icon={<FaCamera />}
-        color="green.200"
-        darkColor="green.400"
-        text="fotografia"
-        small={props.small}
-        onClick={() => {}}
-      />
-    </Flex>
-  );
+  //   <Collapse in={isOpen} animateOpacity>
+  //   <HamburgerOptions
+  //     currentUser={props.user}
+  //     refresh={props.refresh}
+  //     loggedIn={props.user ? true : false}
+  //   />
+  // </Collapse>
+  if (!props.parentCategories) return <></>;
+  if (props.collapsable)
+    return (
+      <Flex justifyContent={"center"} flexDirection="column" width="full" m="2">
+        <Flex alignItems={"center"} justifyContent="center">
+          <Button onClick={onToggle} width="max-content" bgColor={buttonColors}>
+            <Flex gap="2" alignItems={"center"}>
+              {isOpen ? <FaChevronUp /> : <FaChevronDown />}
+              <Text>Wszystkie kategorie</Text>
+            </Flex>
+          </Button>
+        </Flex>
+        <Collapse in={isOpen}>{renderCategories()}</Collapse>
+      </Flex>
+    );
+  return renderCategories();
 }

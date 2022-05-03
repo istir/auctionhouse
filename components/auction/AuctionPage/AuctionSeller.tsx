@@ -1,6 +1,5 @@
 import { Auction, User } from ".prisma/client";
 import { Button } from "@chakra-ui/button";
-
 import { Flex, Text } from "@chakra-ui/layout";
 import { Avatar, useColorModeValue } from "@chakra-ui/react";
 import React from "react";
@@ -13,12 +12,9 @@ export default function AuctionSeller({
   auction,
 }: AuctionSellerProps): JSX.Element {
   function renderSellerAvatar() {
-    // console.log(auction.seller.avatar);
-    // if (auction.seller.avatar) {
     return (
       <Avatar
         src={auction.seller.avatar || undefined}
-        // alt={`${auction.seller.firstName} ${auction.seller.lastName}`}
         w={["24px", "32px"]}
         h={["24px", "32px"]}
         objectFit="cover"
@@ -26,7 +22,6 @@ export default function AuctionSeller({
         shadow="md"
       />
     );
-    // }
   }
 
   return (
@@ -53,11 +48,7 @@ export default function AuctionSeller({
             Sprzedawca
           </Text>
           <Flex alignItems="center" justifyContent={"center"}>
-            <Flex
-              ml="2"
-              // flexDirection={{ base: "column", md: "row" }}
-              gap={1}
-            >
+            <Flex ml="2" gap={1}>
               <Text>{auction.seller.firstName}</Text>
               <Text>{auction.seller.lastName}</Text>
             </Flex>

@@ -14,8 +14,6 @@ export default function AuctionTimer(props: AuctionTimerProps): JSX.Element {
 
   React.useEffect(() => {
     const timer = renderRemainingTime(props.dateToEnd);
-
-    //effect - ComponentDidUpdate
     return () => {
       //cleanup - ComponentWillUnmount
       timer && clearInterval(timer);
@@ -37,7 +35,6 @@ export default function AuctionTimer(props: AuctionTimerProps): JSX.Element {
   }
   function renderRemainingTime(dateEnd: string) {
     const deadline = parseInt(dateEnd);
-    // if(timeToEnd)
     if (!deadline && timeToEnd !== "") {
       setTimeToEnd("");
     }
@@ -50,7 +47,6 @@ export default function AuctionTimer(props: AuctionTimerProps): JSX.Element {
 
   function timeColor(dateToEnd: string) {
     const deadline = parseInt(dateToEnd);
-    // if(timeToEnd)
     if (!deadline) return;
     if (deadline - Date.now() < 3600000) return "red.400";
     return "gray.400";

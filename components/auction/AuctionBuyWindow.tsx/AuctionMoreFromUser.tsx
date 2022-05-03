@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { Auction, Bid } from "@prisma/client";
 import axios from "axios";
 import React from "react";
@@ -18,7 +18,6 @@ export default function AuctionMoreFromUser(
   const [auctions, setAuctions] = React.useState<(Auction & { bids: Bid[] })[]>(
     []
   );
-  // const ref = useRef<HTMLDivElement>(null);
   React.useEffect(() => {
     if (props.auctions && props.auctions.length > 0) {
       setAuctions(props.auctions);
@@ -48,17 +47,15 @@ export default function AuctionMoreFromUser(
     return () => {
       //cleanup - ComponentWillUnmount
     };
-  }, [props.limit, props.userId]);
+  }, [props.auctions, props.getRandomAuctions, props.userId, props.limit]);
 
   return (
     <Box>
-      {/* {ref?.current?.clientWidth ? ( */}
-      <AuctionCarousel
-        auctions={auctions}
-        smaller={props.smaller}
-        // width={ref?.current?.clientWidth}
-      />
-      {/* ) : null} */}
+      {auctions ? (
+        <AuctionCarousel auctions={auctions} smaller={props.smaller} />
+      ) : (
+        <Text>Brak przedmiotów</Text>
+      )}
     </Box>
   );
 }

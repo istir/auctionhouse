@@ -28,25 +28,8 @@ export default function SearchComponent(
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [search, setSearch] = React.useState<string>("");
   const router = useRouter();
-  //on mobile open modal with search bar
-  //on desktop use inputgroup to search
 
   function sendSearch() {
-    // axios({
-    //   url: "/api/search",
-    //   method: "POST",
-    //   data: { query: search, desc: true },
-    // }).then(
-    //   (ful) => {
-    //     console.log(ful);
-    //     // setSending(false);
-    //     // onClose();
-    //     // setCurrentPrice(price);
-    //   },
-    //   (rej) => {
-    //     console.log(rej);
-    //   }
-    // );
     router.push("/search?q=" + search);
     console.log(search);
   }
@@ -61,9 +44,6 @@ export default function SearchComponent(
           borderRadius={"full"}
           icon={<FaSearch />}
           size="sm"
-          // onClick={() => {
-          //   isOpen ? onOpen() : onClose();
-          // }}
           onClick={onOpen}
         />
         <Modal
@@ -100,8 +80,6 @@ export default function SearchComponent(
                 <Button
                   mt="2"
                   width={"full"}
-                  // colorScheme="green"
-                  // _focus={useColorModeValue("")}
                   bg={useColorModeValue(
                     "light.primaryContainer",
                     "dark.primaryContainer"
@@ -116,13 +94,6 @@ export default function SearchComponent(
                 </Button>
               </Box>
             </ModalBody>
-
-            {/* <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button variant='ghost'>Secondary Action</Button>
-          </ModalFooter> */}
           </ModalContent>
         </Modal>
       </Box>
@@ -130,33 +101,22 @@ export default function SearchComponent(
       <Box display={{ base: "none", md: "flex" }} paddingX={props.paddingX}>
         <InputGroup
           size="sm"
-          // border={open ? "1px" : "0px"}
           border="2px"
           borderRadius={"full"}
           borderColor={useColorModeValue("blackAlpha.500", "whiteAlpha.500")}
           overflow="hidden"
-          // minW="0"
           _focusWithin={{
             boxShadow: "0 0 0 3px var(--chakra-colors-gray-200);",
           }}
-          // transition={"0.3s"}
           transitionDuration="normal"
-          // width={open ? "48" : "40px"}
         >
           <Input
             size="sm"
-            // transition={"0.3s"}
             border="0"
-            // width={isOpen ? "48" : "0"}
-            // minWidth={"30vw"}
-            // maxWidth={"80vw"}
             width={"40vw"}
-            // minW="0"
-            // padding={0}
             placeholder="Czego szukasz?"
             _focus={{
               border: "0px",
-              // backgroundColor: "var(--chakra-colors-whiteAlpha-300)",
             }}
             value={search}
             onKeyDown={(e) => {
@@ -170,13 +130,7 @@ export default function SearchComponent(
             }}
           ></Input>
 
-          <InputRightAddon
-            m="0"
-            p="0"
-            border="0"
-            // borderRadius={"md"}
-            background="transparent"
-          >
+          <InputRightAddon m="0" p="0" border="0" background="transparent">
             <IconButton
               m="0"
               p="0"
@@ -185,10 +139,6 @@ export default function SearchComponent(
               icon={<FaSearch />}
               borderLeftRadius="full"
               onClick={() => {
-                // setSearch("");
-                // setOpen((prev) => {
-                //   return !prev;
-                // });
                 sendSearch();
               }}
             />

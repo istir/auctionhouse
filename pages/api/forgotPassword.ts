@@ -3,6 +3,7 @@ import prisma from "../../prisma/prisma";
 import {
   printDevStackTrace,
   printErrorStackTrace,
+  printStackTrace,
 } from "../../libs/stackTrace";
 import { Session } from "next-iron-session";
 import sendEmail from "../../libs/sendEmail";
@@ -42,7 +43,7 @@ export default async function search(
         }/reset-password/${u.verificationToken}">naciśnij ten link.</a></p>`
       );
       if (mail) {
-        printDevStackTrace(`Email sent to: ${user.email}`);
+        printStackTrace(`Email sent to: ${user.email}`);
       } else {
         printErrorStackTrace(`Email not sent to: ${user.email}`);
       }

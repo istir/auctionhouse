@@ -5,6 +5,10 @@ import { Session } from "next-iron-session";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
 import withSession from "../../libs/ironSession";
 import generateUrl from "../../libs/generateUrl";
+import {
+  printDevErrorStackTrace,
+  printDevStackTrace,
+} from "../../libs/stackTrace";
 // export default withSession(
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
@@ -20,9 +24,9 @@ export default withSession(
     const image = req.body.image as string[];
     // const sellerId = req.body.sellerId
     const price = req.body.price as number;
-    const categoryId = req.body.categoryId as number;
+    const categoryId = req.body.categoryId as string;
 
-    console.log(bidding, markdown, name, dateEnd, image, price);
+    console.log(bidding, markdown, name, dateEnd, image, price, categoryId);
     // const auctionId = parseInt(req.body.auctionId as string) || 0;
     const isValidToken = await checkIfTokenValidAndRefresh(req.session);
 
@@ -59,7 +63,7 @@ export default withSession(
     let goAgane = true;
     while (goAgane === true) {
       goAgane = false;
-      const c = await prisma.auction
+      return await prisma.auction
         .create({
           data: {
             name,
@@ -70,36 +74,30 @@ export default withSession(
             dateEnd: new Date(dateEnd).getTime().toString(),
             timesBought: 0,
             usersBought: 0,
-            categoryId,
+            categoryId: parseInt(categoryId),
             sellerId: isValidToken.user.id,
             url: generatedUrl,
           },
         })
         .catch((err) => {
+          printDevStackTrace(`Catch: ${err}`);
           if (err.code === "P2002") {
+            printDevErrorStackTrace("P2002");
             goAgane = true;
             generatedUrl = generateUrl(name);
           }
+        })
+        .finally(() => {
+          printDevStackTrace(`finally, generatedUrl: ${generatedUrl}`);
+          return res
+            .status(200)
+            .end(JSON.stringify({ status: "OK", url: generatedUrl }));
         });
     }
-    // const auction = await prisma.auction.create({
-    //   data: {
-    //     name,
-    //     price,
-    //     bidding,
-    //     markdown,
-    //     image,
-    //     dateEnd: new Date(dateEnd).getTime().toString(),
-    //     timesBought: 0,
-    //     usersBought: 0,
-    //     categoryId,
-    //     sellerId: isValidToken.user.id,
-    //     url:generateUrl(name)
-    //   },
-    // });
-    return res
-      .status(200)
-      .end(JSON.stringify({ status: "OK", url: generatedUrl }));
+
+    // return res
+    //   .status(200)
+    //   .end(JSON.stringify({ status: "OK", url: generatedUrl }));
     // console.log(generateUrl(name));
     // return res.status(200).end("Error");
   }

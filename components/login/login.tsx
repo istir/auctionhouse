@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/button";
-import { Stack, Text } from "@chakra-ui/layout";
+import { Stack } from "@chakra-ui/layout";
 import { useColorModeValue } from "@chakra-ui/react";
 import { User } from "@prisma/client";
 import axios from "axios";
@@ -8,6 +8,7 @@ import React from "react";
 import { localizeErrors } from "../../libs/localizeStrings";
 import FormCheckbox from "../form/FormCheckbox";
 import FormInput from "../form/FormInput";
+import FormMessage from "../form/FormMessage";
 
 interface LoginProps {
   refresh?: () => void;
@@ -16,12 +17,10 @@ interface LoginProps {
   setUser?: (user: User | undefined) => void;
 }
 
-export const Login: React.FC<LoginProps> = (props: LoginProps) => {
+export default function Login(props: LoginProps): JSX.Element {
   const [error, setError] = React.useState<string>("");
+  const [success, setSuccess] = React.useState<string>("");
   const [erroredEmail, setErroredEmail] = React.useState<string>("");
-  // const [anyFormikError, setAnyFormikError] = React.useState<boolean[]>([
-  //   false,
-  // ]);
   type FormikValues = {
     password: string;
     email: string;
@@ -34,12 +33,6 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
   };
 
   function HandleOnSubmit(values: FormikValues) {
-    // const [{ data, loading, error }, refetch] = useAxios({
-    //   url: "/api/login",
-    //   method: "POST",
-    //   params: values,
-    // });
-    // console.log(data, loading, error, refetch);
     try {
       setError("");
       props.setLoading?.(true);
@@ -51,12 +44,7 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
             ful.data.status === "OK" &&
             props?.setUser !== undefined
           ) {
-            // setUser();
-            // console.log(ful.data.user);
-            // console.log("LOLW");
-            // props?.setLoading?.(false);
             props?.setUser?.(ful.data.user as User);
-            // props?.refresh?.();
             props?.closePopup?.();
           } else if (
             (ful.status == 200 && ful.data.status === "refresh") ||
@@ -65,19 +53,15 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
             props?.refresh?.();
             props?.closePopup?.();
           } else {
-            // TODO: show error
             props.setLoading?.(false);
             ful.data?.status ? setError(ful.data.status) : setError(ful.data);
             setErroredEmail(values.email);
           }
-          // ful.status=200&&ful.statusText='OK'&&props?.refresh()&&props?.closePopup();
         },
-        (rej) => {
-          console.error(rej);
+        () => {
           setError(
             "Ups, coś poszło nie tak! Sprawdź dane logowania i spróbuj ponownie."
-          ); //! ?
-          // TODO: show error
+          );
         }
       );
     } catch (err) {
@@ -85,45 +69,23 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
     }
   }
 
-  function checkForAnyError(error: any, touched: any) {
-    const keys = Object.keys(error);
-    for (let i = 0; i < keys.length; i += 1) {
-      if (error[keys[i]].length > 0 && touched[keys[i]]) return true;
-    }
-    return false;
-  }
-
   return (
     <Formik initialValues={initialFormikValues} onSubmit={HandleOnSubmit}>
       <Form style={{ width: "inherit" }}>
         <Stack>
-          <FormInput
-            // validator={validateEmail}
-            label="Adres e-mail"
-            name="email"
-            // isError={setAnyFormikError}
-          />
+          <FormInput label="Adres e-mail" name="email" />
 
-          <FormInput
-            // validator={validatePassword}
-            label="Hasło"
-            name="password"
-            isPassword
-            // isError={setAnyFormikError}
-          />
+          <FormInput label="Hasło" name="password" isPassword />
           <FormCheckbox label="Zapamiętaj mnie" name="rememberMe" />
-          <Text color="red.500" fontWeight="bold" mt="2">
-            {localizeErrors(error)}
-          </Text>
+          <FormMessage error={localizeErrors(error)} success={success} />
           {error === "User not verified" && (
             <Button
               onClick={() => {
                 axios({
                   url: `/api/sendVerificationEmail?email=${erroredEmail}`,
                 }).then((ful) => {
-                  setError("Wysłano email weryfikacyjny");
+                  setSuccess("Wysłano email weryfikacyjny");
                 });
-                // sendVerificationEmail(erroredEmail);
               }}
             >
               Wyślij maila weryfikującego
@@ -132,7 +94,6 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
           <Button
             type="submit"
             mt="2"
-            // colorScheme="blue"
             bg={useColorModeValue(
               "light.primaryContainer",
               "dark.primaryContainer"
@@ -143,7 +104,6 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
                 "dark.tertiaryContainer"
               ),
             }}
-            // colorScheme={anyFormikError ? "red" : "blue"}
           >
             Zaloguj
           </Button>
@@ -151,5 +111,4 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
       </Form>
     </Formik>
   );
-};
-export default Login;
+}

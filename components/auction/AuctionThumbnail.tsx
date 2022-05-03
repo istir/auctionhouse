@@ -3,8 +3,7 @@ import { Box, Flex, Grid, Text } from "@chakra-ui/layout";
 import { Image, useColorModeValue } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
-import React, { useContext } from "react";
-import useColorSchemeContext from "../../libs/hooks/useColorSchemeContext";
+import React from "react";
 import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
 import AuctionTimer from "./AuctionTimer";
 
@@ -17,29 +16,20 @@ export default function AuctionThumbnail(
   props: AuctionThumbnailProps
 ): JSX.Element {
   const isLightMode = useLightModeCheck();
-  const { color } = useContext(useColorSchemeContext);
   const router = useRouter();
   const auctionColor = useColorModeValue("blackAlpha.500", "whiteAlpha.500");
   const [hover, setHover] = React.useState<boolean>(false);
-  // const auctionColor = useColorModeValue(
-  //   props.auction.bidding ? "red.400" : "green.400",
-  //   props.auction.bidding ? "red.700" : "green.700"
-  // );
   function renderImage(image: string) {
-    // if (!image) return <Box></Box>;
     return (
       <Flex flexDir="column">
         {image ? (
           <Image
             width="calc(100% - 2 * var(--chakra-space-2))"
-            // mx="2"
-            // height="full"
             height={"80"}
             objectFit="contain"
             src={image}
             alt={props.auction.name}
             backgroundColor="white"
-            // borderBottomRadius={"lg"}
             borderRadius="lg"
             shadow="md"
             marginX="auto"
@@ -98,7 +88,6 @@ export default function AuctionThumbnail(
       return (
         <Grid templateColumns={"max-content auto"} gap="2" alignItems="center">
           <Text
-            // fontSize="lg"
             fontWeight={"bold"}
             color={isLightMode ? "gray.600" : "gray.400"}
           >
@@ -117,7 +106,6 @@ export default function AuctionThumbnail(
       return (
         <Grid templateColumns={"max-content auto"} gap="2" alignItems="center">
           <Text
-            // fontSize="lg"
             fontWeight={"bold"}
             color={isLightMode ? "gray.600" : "gray.400"}
           >
@@ -127,60 +115,15 @@ export default function AuctionThumbnail(
       );
     }
   }
-  /*
-  function renderCorrectPrice(
-    originalPrice: number | null,
-    currentPrice: number
-  ) {
-    function renderOldPrice(oldPrice: number) {
-      return (
-        <Box
-          display="inline-block"
-          color={isLightMode ? "gray.600" : "gray.400"}
-          fontSize={"sm"}
-          fontWeight={"normal"}
-          textDecoration={"line-through"}
-          // textTransform={"uppercase"}
-          marginRight="1.5"
-        >
-          {(oldPrice.toFixed(2) + "").replace(".", ",").replace(",00", "")} zł
-        </Box>
-      );
-    }
-    function renderCurrentPrice(currentPrice: number, sale: boolean) {
-      return (
-        <Box
-          display="inline-block"
-          fontWeight={"bold"}
-          fontSize={sale ? "lg" : "md"}
-          color={sale ? (isLightMode ? "red.400" : "red.600") : "current"}
-        >
-          {currentPrice} zł
-        </Box>
-      );
-    }
-    if (originalPrice && originalPrice > currentPrice) {
-      // return <span className="line-through text-grey-400 font-semibold"></span>;
-      return (
-        <Flex alignItems={"center"}>
-          {renderOldPrice(originalPrice)}
-          {renderCurrentPrice(currentPrice, true)}
-        </Flex>
-      );
-    } else {
-      return renderCurrentPrice(currentPrice, false);
-    }
-  }
-  */
+
   return (
     <Grid
-      onMouseEnter={(e) => {
+      onMouseEnter={() => {
         setHover(true);
       }}
-      onMouseLeave={(e) => {
+      onMouseLeave={() => {
         setHover(false);
       }}
-      // minH={{ base: "20", md: "80" }}
       minH="80"
       backgroundColor={isLightMode ? `light.primary3` : `dark.primary3`}
       borderRadius="lg"
@@ -196,22 +139,10 @@ export default function AuctionThumbnail(
       }}
       transition="all 0.2s ease-in-out"
       _hover={{ md: { transform: "scale(1.05)" } }}
-      // templateRows="auto max-content"
     >
       {renderImage(props.auction.image[0])}
       <Grid templateRows={"4"} padding="2" pt="0">
-        <Text
-          fontSize={"sm"}
-          color={auctionColor}
-          // pos="absolute"
-          // backgroundColor={"blackAlpha.500"}
-          // p="2"
-          // borderTopLeftRadius={"lg"}
-          // borderBottomRightRadius={"md"}
-          // fontWeight="bold"
-          // color={auctionColor}
-          // mx="2"
-        >
+        <Text fontSize={"sm"} color={auctionColor}>
           {props.auction.bidding ? "Licytacja" : "Kup Teraz"}
         </Text>
         <Box

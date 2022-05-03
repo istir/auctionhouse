@@ -17,7 +17,7 @@ interface AuctionAddToCartProps {
   size?: "md" | "lg";
   seller?: User;
   full?: boolean;
-  setInCart: (boolean: boolean) => void;
+  setInCart: (_boolean: boolean) => void;
   inCart: boolean;
 }
 
@@ -28,8 +28,8 @@ export default function AuctionAddToCart({
   const lightMode = useLightModeCheck();
   const router = useRouter();
   function sendAjaxRequest() {
-    // console.log("ZAAAMN");
-    if (!props.user) return;
+    // if (!props.user) return;
+    console.log("props.user");
     props.setInCart(true);
     if (props.inCart) {
       router.push("/cart");
@@ -76,10 +76,6 @@ export default function AuctionAddToCart({
         size={props.size}
         width={props.full ? "full" : "fit-content"}
         overflow="hidden"
-
-        // style={{ WebkitTapHighlightColor: "transparent" }}
-        // css={{ WebkitTapHighlightColor: "transparent" }}
-        // __css={{ WebkitTapHighlightColor: "transparent" }}
       >
         {props.inCart ? (
           <Flex alignItems="center">W koszyku</Flex>

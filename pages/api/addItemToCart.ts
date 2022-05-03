@@ -33,6 +33,7 @@ export default withSession(
     const auction = await prisma.auction.findUnique({
       where: { id: auctionId },
     });
+    console.log("auction:", auction);
     const user = await prisma.user.findUnique({
       where: { email: isValidToken.user.email },
     });

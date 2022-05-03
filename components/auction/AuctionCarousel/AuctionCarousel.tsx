@@ -9,7 +9,6 @@ import "swiper/css/navigation";
 import AuctionThumbnail from "../AuctionThumbnail";
 interface AuctionCarouselProps {
   auctions: (Auction & { bids: Bid[] })[];
-  // width?: number;
   size?: number;
   smaller?: boolean;
 }
@@ -27,42 +26,7 @@ export default function AuctionCarousel(
     ]) || 3;
   const w = useBreakpointValue({ base: 170, sm: 160, md: 180, lg: 230 });
 
-  // const [prevWidth, setPrevWidth] = React.useState<number>(0);
-  // const ref = useRef<HTMLDivElement>(null);
-  // const [count, setCount] = React.useState<number>(calculateCount);
-  // if (typeof window !== "undefined") {
-  //   window.addEventListener("resize", () => {
-  //     setCount(calculateCount);
-  //   });
-  // }
-
-  // function calculateCount() {
-  //   // console.log("prop?", props.width);
-  //   // console.log("update");
-  //   // const w = 256;
-  //   if (
-  //     ref &&
-  //     ref?.current?.clientWidth &&
-  //     ref?.current?.clientWidth !== prevWidth &&
-  //     ref?.current?.clientWidth > 0 &&
-  //     w
-  //   ) {
-  //     setPrevWidth(ref?.current?.clientWidth);
-  //     return Math.floor(ref?.current?.clientWidth / w);
-  //   } else if (ref?.current?.clientWidth !== prevWidth && w) {
-  //     if (typeof window !== "undefined") {
-  //       // console.log("window width: ", window.innerWidth);
-  //       return Math.floor(window?.innerWidth / w);
-  //     } else return 3;
-  //     // if (window !== undefined && window.innerWidth > 0) {
-  //     //   // return Math.floor(window?.innerWidth / 256);
-  //     //   return 1;
-  //     // } else
-  //     // return 3;
-  //   } else return count;
-  // }
   return (
-    // <Box ref={ref}>
     <Box>
       <Swiper
         slidesPerView={s}
@@ -71,9 +35,6 @@ export default function AuctionCarousel(
         allowTouchMove
         mousewheel
         keyboard
-        // pagination={{
-        //   clickable: true,
-        // }}
         navigation={true}
         modules={[Navigation]}
       >

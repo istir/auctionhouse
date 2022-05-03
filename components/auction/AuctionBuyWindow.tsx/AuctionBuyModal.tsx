@@ -37,7 +37,6 @@ export default function AuctionBuyModal(
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   function getSize(currentBreakpoint: string | undefined) {
-    // if (!currentBreakpoint) return "md";
     switch (currentBreakpoint) {
       case "base":
         return "full";
@@ -55,15 +54,12 @@ export default function AuctionBuyModal(
         return "6xl";
     }
   }
-  // console.log(props.seller);
   return (
     <>
       {React.Children.map(props.children, (child) => {
         return React.cloneElement(child as React.ReactElement, {
           onClick: () => {
-            // console.log("ZAMN1");
             if (!props.inCart) onOpen();
-
             props.onPress();
           },
         });

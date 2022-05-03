@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import AdminHeader from "../../components/AdminHeader";
 import FormInput from "../../components/form/FormInput";
+import FormMessage from "../../components/form/FormMessage";
 import withAdminSession from "../../libs/admin/adminIronSession";
 import checkIfAdminTokenValidAndRefresh from "../../libs/admin/checkIfAdminTokenValidAndRefresh";
 import { localizeErrors } from "../../libs/localizeStrings";
@@ -17,56 +18,19 @@ interface AdminLoginPageProps {
 
 export const getServerSideProps: GetServerSideProps = withAdminSession(
   async function ({ req }: { req: NextApiRequest & { session: Session } }) {
-    // return await getUserFromSession(req);
-    // const auctions = await prisma.auction.findMany({
-    //   where: { dateEnd: "" },
-    //   take: 100,
-    //   include: { bids: true },
-    // });
-    // const auctions = (await getRandomAuctions(100, 100)) || [];
-    // console.log(auctions);
     const token = await checkIfAdminTokenValidAndRefresh(req.session);
     if (token) {
       return { props: { token: token.token } };
     } else {
       return { props: { token: "" } };
     }
-    // if (token) {
-    //   const user = await prisma.user.findUnique({
-    //     where: { id: token.user.id },
-    //     select: {
-    //       avatar: true,
-    //       firstName: true,
-    //       lastName: true,
-    //       cart: { include: { items: true } },
-    //       id: true,
-    //     },
-    //   });
-    //   if (user) {
-    //     return {
-    //       props: {
-    //         token: token.token,
-    //         user: user,
-    //         auctions: auctions ? auctions : [],
-    //       },
-    //     };
-    //   }
-    //   return {
-    //     props: {
-    //       token: token.token,
-    //       user: token.user,
-    //       auctions: auctions ? auctions : [],
-    //     },
-    //   };
-    // } else {
-    //   return { props: { token: "", auctions: auctions ? auctions : [] } };
-    // }
   }
 );
 export default function AdminLoginPage(
-  props: AdminLoginPageProps
+  _props: AdminLoginPageProps
 ): JSX.Element {
   const [error, setError] = React.useState<string>("");
+
   const initialValues = { password: "", email: "" };
   const [loading, setLoading] = React.useState<boolean>(false);
   const router = useRouter();
@@ -136,9 +100,7 @@ export default function AdminLoginPage(
                 isPassword
                 // isError={setAnyFormikError}
               />
-              <Text color="red.500" fontWeight="bold" mt="2">
-                {localizeErrors(error)}
-              </Text>
+              <FormMessage error={localizeErrors(error)} />
               <Button
                 type="submit"
                 mt="2"

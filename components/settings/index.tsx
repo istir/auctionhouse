@@ -26,6 +26,7 @@ import React from "react";
 import { validateName, validatePassword } from "../../libs/validator";
 import FormInput from "../form/FormInput";
 import FormImages from "../form/FormImages";
+import FormMessage from "../form/FormMessage";
 interface SettingsProps {
   isOpen: boolean;
   onOpen: () => void;
@@ -34,6 +35,11 @@ interface SettingsProps {
 }
 
 export default function Settings(props: SettingsProps): JSX.Element {
+  const [changePasswordError, setChangePasswordError] =
+    React.useState<string>("");
+  const [changeInfoError, setChangeInfoError] = React.useState<string>("");
+  const [deleteAccountError, setDeleteAccountError] =
+    React.useState<string>("");
   const maxImages = 1;
   const [sending, setSending] = React.useState<boolean[]>(
     new Array(maxImages).fill(false)
@@ -79,16 +85,11 @@ export default function Settings(props: SettingsProps): JSX.Element {
     }).then(
       (ful) => {
         setLoading(false);
-        console.log(ful.data);
         router.reload();
-        // console.log(ful.data);
       },
-      (rej) => {
+      () => {
+        setChangeInfoError("Coś poszło nie tak, spróbuj ponownie");
         setLoading(false);
-        // console.log(rej);
-        // if (rej.data !== "Wrong password")
-        // router.reload();
-        // console.log(rej.data);
       }
     );
   }
@@ -108,14 +109,10 @@ export default function Settings(props: SettingsProps): JSX.Element {
         setLoading(false);
         console.log(ful.data);
         router.reload();
-        // console.log(ful.data);
       },
-      (rej) => {
+      () => {
+        setChangePasswordError("Coś poszło nie tak, spróbuj ponownie");
         setLoading(false);
-        // console.log(rej);
-        // if (rej.data !== "Wrong password")
-        // router.reload();
-        // console.log(rej.data);
       }
     );
   }
@@ -131,14 +128,10 @@ export default function Settings(props: SettingsProps): JSX.Element {
         setLoading(false);
         console.log(ful.data);
         router.reload();
-        // console.log(ful.data);
       },
-      (rej) => {
+      () => {
+        setDeleteAccountError("Coś poszło nie tak, spróbuj ponownie");
         setLoading(false);
-        // console.log(rej);
-        // if (rej.data !== "Wrong password")
-        // router.reload();
-        // console.log(rej.data);
       }
     );
   }
@@ -184,7 +177,7 @@ export default function Settings(props: SettingsProps): JSX.Element {
                         validator={validatePassword}
                         isPassword
                       />
-
+                      <FormMessage error={changePasswordError} />
                       <Button
                         colorScheme={"red"}
                         type="submit"
@@ -241,6 +234,7 @@ export default function Settings(props: SettingsProps): JSX.Element {
                         label="Podaj obecne hasło"
                         isPassword
                       />
+                      <FormMessage error={changeInfoError} />
                       <Button
                         colorScheme={"red"}
                         type="submit"
@@ -277,6 +271,7 @@ export default function Settings(props: SettingsProps): JSX.Element {
                         label="Podaj obecne hasło"
                         isPassword
                       />
+                      <FormMessage error={deleteAccountError} />
                       <Popover>
                         {({ onClose }) => (
                           <>

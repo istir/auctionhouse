@@ -1,4 +1,4 @@
-import { Bid, Token, User } from ".prisma/client";
+import { Bid, Category, CategoryParent, User } from ".prisma/client";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
 import Header from "../components/header/header";
@@ -7,27 +7,29 @@ import withSession from "../libs/ironSession";
 import { useRouter } from "next/router";
 import prisma from "../prisma/prisma";
 import { Auction } from "@prisma/client";
-// import Categories from "../components/mainPage/categories/categories";
 import { Box } from "@chakra-ui/layout";
-// import { Button } from "@chakra-ui/button";
-// import AuctionMoreFromUser from "../components/auction/AuctionBuyWindow.tsx/AuctionMoreFromUser";
-// import AuctionGetRandomAuctions from "../components/auction/AuctionBuyWindow.tsx/AuctionGetRandomAuctions";
 import getRandomAuctions from "../libs/getRandomAuctionsLib";
 import { useState } from "react";
 import AuctionsGrid from "../components/auction/AuctionsGrid";
-// import { useDisclosure } from "@chakra-ui/react";
+import Categories from "../components/mainPage/categories/Categories";
+
+interface HomePageProps {
+  parentCategories: (CategoryParent & {
+    categories: Category[];
+  })[];
+  user?: User;
+  auctions: (Auction & { bids: Bid[] })[];
+}
 
 export const getServerSideProps: GetServerSideProps = withSession(
   async function ({ req }: { req: NextApiRequest & { session: Session } }) {
-    // return await getUserFromSession(req);
+    const parentCategories = await prisma.categoryParent.findMany({
+      include: {
+        categories: { include: { auctions: { select: { _count: true } } } },
+      },
+    });
 
-    // const auctions = await prisma.auction.findMany({
-    //   where: { dateEnd: "" },
-    //   take: 100,
-    //   include: { bids: true },
-    // });
     const auctions = (await getRandomAuctions(100, 100)) || [];
-    // console.log(auctions);
     const token = await checkIfTokenValidAndRefresh(req.session);
     if (token) {
       const user = await prisma.user.findUnique({
@@ -43,28 +45,31 @@ export const getServerSideProps: GetServerSideProps = withSession(
       if (user) {
         return {
           props: {
-            token: token.token,
             user: user,
             auctions: auctions ? auctions : [],
+            parentCategories: parentCategories || [],
           },
         };
       }
       return {
         props: {
-          token: token.token,
+          parentCategories: parentCategories || [],
           user: token.user,
           auctions: auctions ? auctions : [],
         },
       };
     } else {
-      return { props: { token: "", auctions: auctions ? auctions : [] } };
+      return {
+        props: {
+          auctions: auctions ? auctions : [],
+          parentCategories: parentCategories || [],
+        },
+      };
     }
   }
 );
 
-export default function Home(
-  props: Token & { user?: User } & { auctions: (Auction & { bids: Bid[] })[] }
-) {
+export default function Home(props: HomePageProps) {
   const [user, setUser] = useState<User | undefined>(props.user);
 
   const router = useRouter();
@@ -74,26 +79,15 @@ export default function Home(
 
   return (
     <Box>
-      <Header
-        user={user}
-        setUser={setUser}
-        token={props.token}
-        refresh={refreshData}
-        // isDrawerOpen={isOpen}
-        // onDrawerOpen={onOpen}
-        // onDrawerClose={onClose}
-      ></Header>
-      {/* <Button
-        onClick={() => {
-          router.push("/auction/krzeslo-komputerowe-2");
-        }}
-      >
-        Testowa aukcja
-      </Button> */}
+      <Header user={user} setUser={setUser} refresh={refreshData} />
+      <Categories
+        dontRenderHeader
+        gridDirection="column"
+        flexDirection={{ base: "column", md: "column" }}
+        parentCategories={props.parentCategories}
+        collapsable
+      />
       <AuctionsGrid auctions={props.auctions} />
-      {/* <AuctionGetRandomAuctions auctions={props.auctions} /> */}
-      {/* <PickedForYou width="100%" auctionsToShow={props.auctions} /> */}
-      {/* <Categories position="center" /> */}
     </Box>
   );
 }

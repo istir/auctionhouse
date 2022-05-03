@@ -10,10 +10,8 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { User } from "@prisma/client";
-import { useRouter } from "next/router";
 import React from "react";
 import { FaMoon, FaSun, FaThLarge } from "react-icons/fa";
-// import ColorModeSwitcher from "../ColorModeSwitcher";
 import NextLink from "next/link";
 interface HamburgerOptionsProps {
   refresh?: () => void;
@@ -26,17 +24,13 @@ interface HamburgerOptionsProps {
 export default function HamburgerOptions(
   props: HamburgerOptionsProps
 ): JSX.Element {
-  const router = useRouter();
   const { toggleColorMode } = useColorMode();
   const SwitchIcon = useColorModeValue(FaMoon, FaSun);
   const { colorMode } = useColorMode();
-  const text = useColorModeValue("Ciemny motyw", "Jasny motyw");
   const items = [
     {
       name: "Kategorie",
-      onClick: () => {
-        // router.push("/cart");
-      },
+      onClick: () => {},
       href: "/categories",
       icon: <FaThLarge />,
     },
@@ -57,8 +51,6 @@ export default function HamburgerOptions(
         onClick={onClick}
         textDecoration="none"
         cursor={"pointer"}
-        // textDecorationLine={"none"}
-        // textDecorationStyle={"none"}
         py={2}
       >
         <Box mr="2">{icon}</Box>
@@ -80,21 +72,17 @@ export default function HamburgerOptions(
                   <Box>
                     <NextLink key={item.name} href={item.href} passHref>
                       <IconButton
-                        // href={item.href}
                         as={Link}
                         size="sm"
                         aria-label={item.name}
                         icon={item.icon}
                         borderRadius="full"
                         border={"2px"}
-                        // borderColor="whiteAlpha.500"
                         borderColor={
                           colorMode === "dark"
                             ? "whiteAlpha.500"
                             : "blackAlpha.500"
                         }
-
-                        // onClick={item.onClick}
                       ></IconButton>
                     </NextLink>
                   </Box>
@@ -104,8 +92,6 @@ export default function HamburgerOptions(
                   <PopoverBody>{item.name}</PopoverBody>
                 </PopoverContent>
               </Popover>
-
-              {/* <Button>{item.name}</Button> */}
             </Flex>
           ) : (
             <Flex key={item.name}>
@@ -140,7 +126,6 @@ export default function HamburgerOptions(
       }}
     >
       <VStack justifyContent="center" alignItems="center">
-        {/* <Text>Witaj, {props.currentUser?.firstName}!</Text> */}
         <VStack display={"flex"} width="full">
           {items.map((item) =>
             item.href ? (
@@ -154,52 +139,6 @@ export default function HamburgerOptions(
             )
           )}
         </VStack>
-        {/* <Button
-          as="a"
-          href="/cart"
-          onClick={() => {
-            router.push("/cart");
-          }}
-        >
-          <Flex flexDir={"row"} justifyContent="center" alignItems={"center"}>
-            <FaShoppingCart />
-            <Text ml="2">Koszyk</Text>
-          </Flex>
-        </Button>
-
-        <Button
-          as="a"
-          href="/my-auctions"
-          onClick={() => {
-            router.push("/cart");
-          }}
-        >
-          <Flex flexDir={"row"} justifyContent="center" alignItems={"center"}>
-            <FaBookmark />
-            <Text ml="2">Moje licytacje</Text>
-          </Flex>
-        </Button>
-        <Button>
-          <Flex flexDir={"row"} justifyContent="center" alignItems={"center"}>
-            <FaPlus />
-            <Text ml="2">Dodaj przedmiot</Text>
-          </Flex>
-        </Button>
-        <Button onClick={toggleColorMode}>
-          <SwitchIcon />
-          <Text ml="2">{text}</Text>
-        </Button>
-        <Button>
-          <Flex flexDir={"row"} justifyContent="center" alignItems={"center"}>
-            <FaCog />
-            <Text ml="2">Ustawienia</Text>
-          </Flex>
-        </Button>
-        {props.loggedIn ? (
-          <LogoutButton refresh={props.refresh} />
-        ) : (
-          <PopupLogin refresh={props.refresh} />
-        )} */}
       </VStack>
     </Box>
   );
