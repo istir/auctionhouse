@@ -11,7 +11,7 @@ import {
 import { Category, CategoryParent } from "@prisma/client";
 import React from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import NextButton from "../../NextButton";
+import NextButton from "../NextButton";
 
 interface CategoriesProps {
   parentCategories: (CategoryParent & {

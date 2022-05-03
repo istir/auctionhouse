@@ -5,7 +5,7 @@ import { Session } from "next-iron-session";
 import { useRouter } from "next/router";
 import React from "react";
 import Header from "../../components/header/header";
-import Categories from "../../components/mainPage/categories/Categories";
+import Categories from "../../components/mainPage/Categories";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
 import withSession from "../../libs/ironSession";
 import prisma from "../../prisma/prisma";

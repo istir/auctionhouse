@@ -11,7 +11,7 @@ import { Box } from "@chakra-ui/layout";
 import getRandomAuctions from "../libs/getRandomAuctionsLib";
 import { useState } from "react";
 import AuctionsGrid from "../components/auction/AuctionsGrid";
-import Categories from "../components/mainPage/categories/Categories";
+import Categories from "../components/mainPage/Categories";
 
 interface HomePageProps {
   parentCategories: (CategoryParent & {
