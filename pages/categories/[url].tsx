@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import AuctionsGrid from "../../components/auction/AuctionsGrid";
 import Header from "../../components/header/header";
+import TitleHolder from "../../components/TitleHolder";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
 import withSession from "../../libs/ironSession";
 import { printDevStackTrace } from "../../libs/stackTrace";
@@ -14,6 +15,7 @@ import prisma from "../../prisma/prisma";
 interface CategoriesByNameProps {
   user?: User;
   auctions: (Auction & { bids: Bid[] })[];
+  categoryName: string;
 }
 export const getServerSideProps: GetServerSideProps = withSession(
   async function ({
@@ -53,7 +55,10 @@ export const getServerSideProps: GetServerSideProps = withSession(
         include: { bids: true },
       });
     }
-
+    const category = await prisma.category.findFirst({
+      where: { url: params.url },
+      select: { name: true },
+    });
     // printDevStackTrace(`Auctions: ${JSON.stringify(auctions)}`);
     // console.log(auctions);
     const token = await checkIfTokenValidAndRefresh(req.session);
@@ -73,6 +78,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
           props: {
             user: user,
             auctions: auctions ? auctions : [],
+            categoryName: category ? category.name : "",
           },
         };
       }
@@ -80,10 +86,16 @@ export const getServerSideProps: GetServerSideProps = withSession(
         props: {
           user: token.user,
           auctions: auctions ? auctions : [],
+          categoryName: category ? category.name : "",
         },
       };
     } else {
-      return { props: { auctions: auctions ? auctions : [] } };
+      return {
+        props: {
+          auctions: auctions ? auctions : [],
+          categoryName: category ? category.name : "",
+        },
+      };
     }
   }
 );
@@ -99,7 +111,9 @@ export default function CategoriesByName(
     <Box>
       <Header user={props.user} refresh={refreshData} />
       {props.auctions.length === 0 && <Box>Nie znaleziono aukcji.</Box>}
-      <AuctionsGrid auctions={props.auctions} />
+      <TitleHolder title={props.categoryName} router={router}>
+        <AuctionsGrid auctions={props.auctions} />
+      </TitleHolder>
     </Box>
   );
 }

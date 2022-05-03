@@ -80,6 +80,7 @@ export default function Home(props: HomePageProps) {
   return (
     <Box>
       <Header user={user} setUser={setUser} refresh={refreshData} />
+
       <Categories
         dontRenderHeader
         gridDirection="column"
@@ -87,6 +88,7 @@ export default function Home(props: HomePageProps) {
         parentCategories={props.parentCategories}
         collapsable
       />
+
       <AuctionsGrid auctions={props.auctions} />
     </Box>
   );

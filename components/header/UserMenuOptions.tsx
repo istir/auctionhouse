@@ -101,7 +101,7 @@ export default function UserMenuOptions(
 
   return (
     <MenuList
-      zIndex={100}
+      zIndex={"modal"}
       bg={useColorModeValue("light.primary4", "dark.primary4")}
     >
       {items.map((item) =>
