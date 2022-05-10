@@ -17,6 +17,55 @@ a {
   box-sizing: border-box;
 }
 
+.logo,
+.logo svg.fa {
+  /* background: linear-gradient(133deg, #fff, #000); */
+  background-size: 400% 400% !important;
+
+  -webkit-animation: logoAnimation 20s ease infinite;
+  -moz-animation: logoAnimation 20s ease infinite;
+  animation: logoAnimation 20s ease infinite;
+}
+.logo svg.fa {
+  fill: url(#rg);
+  /* -webkit-animation: logoAnimation 20s ease infinite;
+  -moz-animation: logoAnimation 20s ease infinite;
+  animation: logoAnimation 20s ease infinite; */
+}
+@-webkit-keyframes logoAnimation {
+  0% {
+    background-position: 4% 0%;
+  }
+  50% {
+    background-position: 97% 100%;
+  }
+  100% {
+    background-position: 4% 0%;
+  }
+}
+@-moz-keyframes logoAnimation {
+  0% {
+    background-position: 4% 0%;
+  }
+  50% {
+    background-position: 97% 100%;
+  }
+  100% {
+    background-position: 4% 0%;
+  }
+}
+@keyframes logoAnimation {
+  0% {
+    background-position: 4% 0%;
+  }
+  50% {
+    background-position: 97% 100%;
+  }
+  100% {
+    background-position: 4% 0%;
+  }
+}
+
 .swiper-button-next,
 .swiper-button-prev {
   color: var(--chakra-colors-red-200) !important;

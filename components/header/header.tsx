@@ -24,6 +24,7 @@ import PopupLogin from "../login/PopupLogin";
 import HamburgerOptions from "./HamburgerOptions";
 import SearchComponent from "./SearchComponent";
 import UserMenuOptions from "./UserMenuOptions";
+import Logo from "./Logo";
 interface HeaderProps {
   user?: User;
   refresh?: () => void;
@@ -73,7 +74,7 @@ export default function Header(props: HeaderProps): JSX.Element {
               router.push("/");
             }}
           >
-            auctionhouse
+            <Logo />
           </Text>
 
           <Flex display={{ base: "none", md: "flex" }} ml={10}></Flex>
