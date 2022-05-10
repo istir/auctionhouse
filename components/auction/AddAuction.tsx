@@ -1,4 +1,11 @@
-import { Button, Flex, Stack, Text, useColorModeValue } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  Stack,
+  Text,
+  useColorMode,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import { Auction, User } from "@prisma/client";
 import { MDEditorProps } from "@uiw/react-md-editor";
 import { Form, Formik } from "formik";
@@ -27,6 +34,7 @@ interface AddAuctionProps {
 export default function AddAuction(props: AddAuctionProps): JSX.Element {
   const maxImages = 10;
   const router = useRouter();
+
   const [categories, setCategories] = React.useState<
     {
       id: number;
@@ -99,6 +107,7 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
       }
     );
   }
+
   return (
     <Formik initialValues={initialValues} onSubmit={handleOnSubmit}>
       <Flex margin="5" justifyContent={"center"} alignItems="center">
@@ -134,12 +143,20 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
             <Text fontWeight={"semibold"} py="2">
               Opis
             </Text>
-            <MDEditor
-              value={md}
-              onChange={(value = "") => {
-                setMd(value);
-              }}
-            />
+
+            <div
+              data-color-mode={useColorMode().colorMode}
+              style={{ overflow: "hidden" }}
+            >
+              <div className="wmde-markdown-var"> </div>
+              <MDEditor
+                height={400}
+                value={md}
+                onChange={(value = "") => {
+                  setMd(value);
+                }}
+              />
+            </div>
 
             <FormDate name="dateEnd" label="Koniec aukcji" dateTime minToday />
             <FormMessage error={error} />
