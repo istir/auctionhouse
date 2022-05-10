@@ -78,10 +78,15 @@ export default function HamburgerOptions(
                         icon={item.icon}
                         borderRadius="full"
                         border={"2px"}
+                        backgroundColor={
+                          colorMode === "light"
+                            ? "light.surfaceVariant"
+                            : "dark.surfaceVariant"
+                        }
                         borderColor={
-                          colorMode === "dark"
-                            ? "whiteAlpha.500"
-                            : "blackAlpha.500"
+                          colorMode === "light"
+                            ? "light.surfaceVariant"
+                            : "dark.surfaceVariant"
                         }
                       ></IconButton>
                     </NextLink>
@@ -104,8 +109,15 @@ export default function HamburgerOptions(
                     borderRadius="full"
                     onClick={item.onClick}
                     border={"2px"}
+                    backgroundColor={
+                      colorMode === "light"
+                        ? "light.surfaceVariant"
+                        : "dark.surfaceVariant"
+                    }
                     borderColor={
-                      colorMode === "dark" ? "whiteAlpha.500" : "blackAlpha.500"
+                      colorMode === "light"
+                        ? "light.surfaceVariant"
+                        : "dark.surfaceVariant"
                     }
                   ></IconButton>
                 </PopoverTrigger>

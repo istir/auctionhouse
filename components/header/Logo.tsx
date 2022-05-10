@@ -15,7 +15,7 @@ export default function Logo(props: LogoProps): JSX.Element {
   return (
     <Flex
       justifyContent={"center"}
-      height="10"
+      //   height="10"
       alignItems="center"
       gap="2"
       color="transparent"

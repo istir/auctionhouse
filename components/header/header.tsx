@@ -12,8 +12,6 @@ import {
   Menu,
   MenuButton,
   Stack,
-  Text,
-  useBreakpointValue,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -25,6 +23,7 @@ import HamburgerOptions from "./HamburgerOptions";
 import SearchComponent from "./SearchComponent";
 import UserMenuOptions from "./UserMenuOptions";
 import Logo from "./Logo";
+import NextButton from "../NextButton";
 interface HeaderProps {
   user?: User;
   refresh?: () => void;
@@ -64,8 +63,10 @@ export default function Header(props: HeaderProps): JSX.Element {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
-          <Text
-            textAlign={useBreakpointValue({ base: "center", md: "left" })}
+          <NextButton
+            variant={"ghost"}
+            borderRadius="full"
+            // textAlign={useBreakpointValue({ base: "center", md: "left" })}
             fontFamily={"heading"}
             color={useColorModeValue("gray.800", "white")}
             as={"a"}
@@ -75,7 +76,7 @@ export default function Header(props: HeaderProps): JSX.Element {
             }}
           >
             <Logo />
-          </Text>
+          </NextButton>
 
           <Flex display={{ base: "none", md: "flex" }} ml={10}></Flex>
         </Flex>
@@ -113,12 +114,14 @@ export default function Header(props: HeaderProps): JSX.Element {
                 >
                   <Flex
                     placeItems={"center"}
-                    bg="whiteAlpha.300"
+                    bg={
+                      lightMode ? "light.surfaceVariant" : "dark.surfaceVariant"
+                    }
                     borderRadius={"full"}
                     pr="2"
                     border="2px"
                     borderColor={
-                      lightMode ? "blackAlpha.500" : "whiteAlpha.500"
+                      lightMode ? "light.surfaceVariant" : "dark.surfaceVariant"
                     }
                   >
                     <Avatar

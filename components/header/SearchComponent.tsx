@@ -44,6 +44,14 @@ export default function SearchComponent(
           borderRadius={"full"}
           icon={<FaSearch />}
           size="sm"
+          backgroundColor={useColorModeValue(
+            "light.surfaceVariant",
+            "dark.surfaceVariant"
+          )}
+          borderColor={useColorModeValue(
+            "light.surfaceVariant",
+            "dark.surfaceVariant"
+          )}
           onClick={onOpen}
         />
         <Modal
@@ -103,7 +111,10 @@ export default function SearchComponent(
           size="sm"
           border="2px"
           borderRadius={"full"}
-          borderColor={useColorModeValue("blackAlpha.500", "whiteAlpha.500")}
+          borderColor={useColorModeValue(
+            "light.surfaceVariant",
+            "dark.surfaceVariant"
+          )}
           overflow="hidden"
           _focusWithin={{
             boxShadow: "0 0 0 3px var(--chakra-colors-gray-200);",
@@ -137,6 +148,10 @@ export default function SearchComponent(
               size="sm"
               aria-label="Szukaj"
               icon={<FaSearch />}
+              backgroundColor={useColorModeValue(
+                "light.surfaceVariant",
+                "dark.surfaceVariant"
+              )}
               borderLeftRadius="full"
               onClick={() => {
                 sendSearch();
