@@ -4,7 +4,6 @@ import {
   Flex,
   Stack,
   Text,
-  useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { Auction, User } from "@prisma/client";
@@ -214,7 +213,7 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
             </Text>
             <Box borderRadius={"md"} overflow="hidden" shadow={"md"}>
               <div
-                data-color-mode={useColorMode().colorMode}
+                data-color-mode={useColorModeValue("light", "dark")}
                 style={{ overflow: "hidden" }}
               >
                 <div className="wmde-markdown-var"> </div>
