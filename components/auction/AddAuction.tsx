@@ -30,6 +30,9 @@ const MDEditor = dynamic<MDEditorProps>(() => import("@uiw/react-md-editor"), {
 
 interface AddAuctionProps {
   user: User;
+
+  modify?: Auction;
+  admin?: boolean;
 }
 
 export default function AddAuction(props: AddAuctionProps): JSX.Element {
@@ -81,7 +84,36 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
     timesBought: 0,
     usersBought: 0,
   };
-
+  const modifyValues: FormikValues = {
+    bidding: props.modify?.bidding || false,
+    categoryId: props.modify?.categoryId || 0,
+    dateEnd: props.modify?.dateEnd
+      ? new Date(parseInt(props.modify?.dateEnd))
+          .toISOString()
+          .replace(/:[0-9]{0,2}\..+$/, "")
+      : new Date(
+          new Date(
+            new Date().getFullYear(),
+            new Date().getMonth(),
+            new Date().getDate() + 1,
+            new Date().getHours(),
+            new Date().getMinutes()
+          ).getTime() -
+            new Date().getTimezoneOffset() * 60000 +
+            600000
+        )
+          .toISOString()
+          .replace(/:[0-9]{0,2}\..+$/, ""),
+    image: props.modify?.image || [],
+    markdown: props.modify?.markdown || "",
+    name: props.modify?.name || "",
+    originalPrice: props.modify?.originalPrice || null,
+    price: (props.modify?.price as any) || ("" as any),
+    sellerId: props.modify?.sellerId || props.user.id,
+    url: props.modify?.url || "",
+    timesBought: props.modify?.timesBought || 0,
+    usersBought: props.modify?.usersBought || 0,
+  };
   React.useEffect(() => {
     axios({ url: "/api/getCategories" }).then((ful) => {
       if (Array.isArray(ful.data) && ful.data.length > 0) {
@@ -94,23 +126,57 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
   }, []);
 
   function handleOnSubmit(values: FormikValues) {
-    const imgs = imagesUri.filter((i) => i !== "");
-    axios({
-      url: "/api/addAuction",
-      method: "post",
-      data: { ...values, markdown: md, image: imgs },
-    }).then(
-      (ful) => {
-        router.push(`/auction/${ful.data.url}`);
-      },
-      (_rej) => {
-        setError("Coś poszło nie tak, spróbuj ponownie");
-      }
-    );
+    function add() {
+      const imgs = imagesUri.filter((i) => i !== "");
+      axios({
+        url: "/api/addAuction",
+        method: "post",
+        data: { ...values, markdown: md, image: imgs },
+      }).then(
+        (ful) => {
+          router.push(`/auction/${ful.data.url}`);
+        },
+        (_rej) => {
+          setError("Coś poszło nie tak, spróbuj ponownie");
+        }
+      );
+    }
+    function modify() {
+      axios({
+        url: "/api/modifyAuction",
+        method: "post",
+        data: { ...values, markdown: md, id: props.modify?.id },
+      }).then(
+        (ful) => {
+          router.push(`/auction/${ful.data.url}`);
+        },
+        (_rej) => {
+          setError("Coś poszło nie tak, spróbuj ponownie");
+        }
+      );
+    }
+    function admin() {
+      axios({
+        url: "/api/admin/modifyAuction",
+        method: "post",
+        data: { ...values, markdown: md, id: props.modify?.id },
+      }).then(
+        (ful) => {
+          router.push(`/auction/${ful.data.url}`);
+        },
+        (_rej) => {
+          setError("Coś poszło nie tak, spróbuj ponownie");
+        }
+      );
+    }
+    props.modify ? (props.admin ? admin() : modify()) : add();
   }
 
   return (
-    <Formik initialValues={initialValues} onSubmit={handleOnSubmit}>
+    <Formik
+      initialValues={props.modify ? modifyValues : initialValues}
+      onSubmit={handleOnSubmit}
+    >
       <Flex margin="5" justifyContent={"center"} alignItems="center">
         <Stack minW={{ base: "full", md: "50vw" }}>
           <Form>
@@ -126,15 +192,17 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
               label={"Cena"}
               isNumeric
             />
-            <FormImages
-              name="images"
-              label="Zdjęcia"
-              setImagesUri={setImagesUri}
-              imagesUri={imagesUri}
-              maxImages={maxImages}
-              setSending={setSending}
-              sending={sending}
-            />
+            {props.modify ? null : (
+              <FormImages
+                name="images"
+                label="Zdjęcia"
+                setImagesUri={setImagesUri}
+                imagesUri={imagesUri}
+                maxImages={maxImages}
+                setSending={setSending}
+                sending={sending}
+              />
+            )}
             {/* <Box>Kategoria!!!</Box> */}
             <FormSelect
               name="categoryId"
@@ -176,7 +244,7 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
                 ),
               }}
             >
-              Dodaj aukcję
+              {props.modify ? "Edytuj aukcję" : "Dodaj aukcję"}
             </Button>
           </Form>
         </Stack>

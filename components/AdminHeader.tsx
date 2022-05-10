@@ -40,6 +40,7 @@ export default function AdminHeader(props: AdminHeaderProps): JSX.Element {
                 ? "100%"
                 : "calc(100vw - calc(var(--chakra-sizes-5) * 2))"
             }
+            // gridTemplateColumns="auto auto auto"
             gridTemplateColumns={"repeat(auto-fit,minmax(240px,1fr))"}
           >
             <NextButton href="/admin">Strona główna panelu</NextButton>
@@ -48,7 +49,7 @@ export default function AdminHeader(props: AdminHeaderProps): JSX.Element {
             <NextButton href="/admin/removeAdmin">
               Usuń administratora
             </NextButton>
-
+            <NextButton href="/admin/items">Przeglądaj przedmioty</NextButton>
             <NextButton href="/api/admin/logout">Wyloguj</NextButton>
             <ColorModeSwitcher
               variant="solid"

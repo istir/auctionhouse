@@ -1,7 +1,7 @@
 import { Auction } from "@prisma/client";
 import prisma from "../prisma/prisma";
 
-export default async function getRandomAuctions(limit: number, count: number) {
+export default async function getRandomAuctions(take: number, skip: number) {
   const results: Omit<
     Auction,
     "categoryId" | "sellerId" | "markdown" | "buyerId"
@@ -25,7 +25,8 @@ export default async function getRandomAuctions(limit: number, count: number) {
       usersBought: true,
       bidding: true,
     },
-    take: limit,
+    take: take,
+    skip: skip,
   });
   // const itemsCount = await prisma.auction.count();
   // const skip = Math.floor(Math.random() * itemsCount);

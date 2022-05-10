@@ -19,17 +19,31 @@ interface HomePageProps {
   })[];
   user?: User;
   auctions: (Auction & { bids: Bid[] })[];
+  page: number;
+  allPages: number;
 }
 
 export const getServerSideProps: GetServerSideProps = withSession(
-  async function ({ req }: { req: NextApiRequest & { session: Session } }) {
+  async function ({
+    req,
+    query,
+  }: {
+    req: NextApiRequest & { session: Session };
+    query: { p: string };
+  }) {
+    const page = parseInt(query.p) || 1;
+
     const parentCategories = await prisma.categoryParent.findMany({
       include: {
         categories: { include: { auctions: { select: { _count: true } } } },
       },
     });
+    const pages =
+      (await prisma.auction.count({
+        where: { dateEnd: { gt: Date.now().toString() }, buyerId: null },
+      })) / 100;
 
-    const auctions = (await getRandomAuctions(100, 100)) || [];
+    const auctions = (await getRandomAuctions(100, (page - 1) * 100)) || [];
     const token = await checkIfTokenValidAndRefresh(req.session);
     if (token) {
       const user = await prisma.user.findUnique({
@@ -48,6 +62,8 @@ export const getServerSideProps: GetServerSideProps = withSession(
             user: user,
             auctions: auctions ? auctions : [],
             parentCategories: parentCategories || [],
+            page: page,
+            allPages: pages,
           },
         };
       }
@@ -56,6 +72,8 @@ export const getServerSideProps: GetServerSideProps = withSession(
           parentCategories: parentCategories || [],
           user: token.user,
           auctions: auctions ? auctions : [],
+          page: page,
+          allPages: pages,
         },
       };
     } else {
@@ -63,6 +81,8 @@ export const getServerSideProps: GetServerSideProps = withSession(
         props: {
           auctions: auctions ? auctions : [],
           parentCategories: parentCategories || [],
+          page: page,
+          allPages: pages,
         },
       };
     }
@@ -89,7 +109,11 @@ export default function Home(props: HomePageProps) {
         collapsable
       />
 
-      <AuctionsGrid auctions={props.auctions} />
+      <AuctionsGrid
+        auctions={props.auctions}
+        page={props.page}
+        allPages={props.allPages}
+      />
     </Box>
   );
 }

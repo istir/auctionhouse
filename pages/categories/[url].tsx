@@ -16,6 +16,8 @@ interface CategoriesByNameProps {
   user?: User;
   auctions: (Auction & { bids: Bid[] })[];
   categoryName: string;
+  page: number;
+  allPages: number;
 }
 export const getServerSideProps: GetServerSideProps = withSession(
   async function ({
@@ -25,13 +27,23 @@ export const getServerSideProps: GetServerSideProps = withSession(
   }: {
     req: NextApiRequest & { session: Session };
     params: { url: string };
-    query: { q: string };
+    query: { q: string; p: string };
   }) {
+    const page = parseInt(query.p) || 1;
+
     printDevStackTrace(`Query: ${query.q}`);
     const removedSpaces = query.q && query.q.replace(/ /g, "");
-
+    let pages = 0;
     let auctions: Auction[] = [];
     if (!query.q || removedSpaces.length < 3 || query.q.length > 50) {
+      pages =
+        (await prisma.auction.count({
+          where: {
+            category: { url: params.url },
+            buyerId: null,
+            dateEnd: { gt: Date.now().toString() },
+          },
+        })) / 100;
       auctions = await prisma.auction.findMany({
         where: {
           category: { url: params.url },
@@ -39,8 +51,25 @@ export const getServerSideProps: GetServerSideProps = withSession(
           dateEnd: { gt: Date.now().toString() },
         },
         include: { bids: true },
+        take: 100,
+        skip: (page - 1) * 100,
       });
     } else {
+      pages =
+        (await prisma.auction.count({
+          where: {
+            AND: [
+              {
+                category: {
+                  url: params.url,
+                },
+              },
+              { buyerId: null },
+              { name: { search: query.q.split(" ").join(" & ") } },
+              { dateEnd: { gt: Date.now().toString() } },
+            ],
+          },
+        })) / 100;
       auctions = await prisma.auction.findMany({
         where: {
           AND: [
@@ -54,6 +83,8 @@ export const getServerSideProps: GetServerSideProps = withSession(
             { dateEnd: { gt: Date.now().toString() } },
           ],
         },
+        take: 100,
+        skip: (page - 1) * 100,
         include: { bids: true },
       });
     }
@@ -81,6 +112,8 @@ export const getServerSideProps: GetServerSideProps = withSession(
             user: user,
             auctions: auctions ? auctions : [],
             categoryName: category ? category.name : "",
+            page,
+            allPages: pages,
           },
         };
       }
@@ -89,6 +122,8 @@ export const getServerSideProps: GetServerSideProps = withSession(
           user: token.user,
           auctions: auctions ? auctions : [],
           categoryName: category ? category.name : "",
+          page,
+          allPages: pages,
         },
       };
     } else {
@@ -96,6 +131,8 @@ export const getServerSideProps: GetServerSideProps = withSession(
         props: {
           auctions: auctions ? auctions : [],
           categoryName: category ? category.name : "",
+          page,
+          allPages: pages,
         },
       };
     }
@@ -113,7 +150,11 @@ export default function CategoriesByName(
     <Box>
       <Header user={props.user} refresh={refreshData} />
       <TitleHolder title={props.categoryName} router={router}>
-        <AuctionsGrid auctions={props.auctions} />
+        <AuctionsGrid
+          auctions={props.auctions}
+          allPages={props.allPages}
+          page={props.page}
+        />
       </TitleHolder>
       {props.auctions.length === 0 && (
         <Box mx="2" fontSize={"lg"}>

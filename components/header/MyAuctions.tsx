@@ -14,6 +14,7 @@ import { Auction, Bid, User } from "@prisma/client";
 import { useRouter } from "next/router";
 import React from "react";
 import AuctionTimer from "../auction/AuctionTimer";
+import NextButton from "../NextButton";
 import TitleHolder from "../TitleHolder";
 import Header from "./header";
 
@@ -117,7 +118,7 @@ export default function MyAuctions(props: MyAuctionsProps): JSX.Element {
                     )}
                   </Td>
 
-                  <Td>{auction.originalPrice} zł</Td>
+                  <Td>{auction.price} zł</Td>
                   <Td>
                     {auction.buyerId === props.user?.id ? (
                       <Checkbox defaultChecked isDisabled />
@@ -141,6 +142,7 @@ export default function MyAuctions(props: MyAuctionsProps): JSX.Element {
                 <Th>Oferta</Th>
                 <Th>Zakończona</Th>
                 <Th>Kupiona</Th>
+                <Th>Edytuj</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -163,7 +165,7 @@ export default function MyAuctions(props: MyAuctionsProps): JSX.Element {
                     )}
                   </Td>
 
-                  <Td>{auction.originalPrice} zł</Td>
+                  <Td>{auction.price} zł</Td>
                   <Td>
                     {auction.buyerId !== null ||
                     parseInt(auction.dateEnd) < Date.now() ? (
@@ -178,6 +180,24 @@ export default function MyAuctions(props: MyAuctionsProps): JSX.Element {
                     ) : (
                       <Checkbox isDisabled />
                     )}
+                  </Td>
+                  <Td
+                    cursor={"default"}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <NextButton
+                      href={`/auction/modify/${auction.url}`}
+                      disabled={auction.buyerId !== null}
+                    >
+                      Edytuj
+                    </NextButton>
+                    {/* {auction.buyerId !== null ? (
+                      <Checkbox defaultChecked isDisabled />
+                    ) : (
+                      <Checkbox isDisabled />
+                    )} */}
                   </Td>
                 </Tr>
               ))}

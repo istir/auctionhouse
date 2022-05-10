@@ -14,6 +14,8 @@ import prisma from "../prisma/prisma";
 interface SearchProps {
   user?: User;
   auctions: (Auction & { bids: Bid[] })[];
+  page: number;
+  allPages: number;
 }
 export const getServerSideProps: GetServerSideProps = withSession(
   async function ({
@@ -22,9 +24,12 @@ export const getServerSideProps: GetServerSideProps = withSession(
   }: {
     req: NextApiRequest & { session: Session };
 
-    query: { q: string };
+    query: { q: string; p: string };
   }) {
     printDevStackTrace(`Query: ${query.q}`);
+    const page = parseInt(query.p) || 1;
+    let pages: number = 0;
+
     const removedSpaces = query.q && query.q.replace(/ /g, "");
 
     let auctions: Auction[] = [];
@@ -35,7 +40,15 @@ export const getServerSideProps: GetServerSideProps = withSession(
         where: {
           name: { search: query.q.split(" ").join(" & ") },
         },
+        take: 100,
+        skip: (page - 1) * 100,
       });
+      pages =
+        (await prisma.auction.count({
+          where: {
+            name: { search: query.q.split(" ").join(" & ") },
+          },
+        })) / 100;
     }
 
     // printDevStackTrace(`Auctions: ${JSON.stringify(auctions)}`);
@@ -57,6 +70,8 @@ export const getServerSideProps: GetServerSideProps = withSession(
           props: {
             user: user,
             auctions: auctions ? auctions : [],
+            page,
+            allPages: pages,
           },
         };
       }
@@ -64,10 +79,14 @@ export const getServerSideProps: GetServerSideProps = withSession(
         props: {
           user: token.user,
           auctions: auctions ? auctions : [],
+          page,
+          allPages: pages,
         },
       };
     } else {
-      return { props: { auctions: auctions ? auctions : [] } };
+      return {
+        props: { auctions: auctions ? auctions : [], page, allPages: pages },
+      };
     }
   }
 );
@@ -81,8 +100,15 @@ export default function Search(props: SearchProps): JSX.Element {
   return (
     <Box>
       <Header user={props.user} refresh={refreshData} />
-      {props.auctions.length === 0 && <Box>Nie znaleziono aukcji.</Box>}
-      <AuctionsGrid auctions={props.auctions} />
+      {props.auctions.length === 0 ? (
+        <Box>Nie znaleziono aukcji.</Box>
+      ) : (
+        <AuctionsGrid
+          auctions={props.auctions}
+          allPages={props.allPages}
+          page={props.page}
+        />
+      )}
     </Box>
   );
 }
