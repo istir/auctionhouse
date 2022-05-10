@@ -103,6 +103,7 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
                   ))
                 : null}
             </Box>
+
             <Flex justifyContent="center" my="4">
               {props.auction.bidding ||
                 (props.user ? (

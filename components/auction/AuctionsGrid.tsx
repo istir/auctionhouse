@@ -5,6 +5,7 @@ import AuctionThumbnail from "./AuctionThumbnail";
 
 interface AuctionsGridProps {
   auctions: (Auction & { bids: Bid[] })[];
+  hideEnded?: boolean;
 }
 
 export default function AuctionsGrid(props: AuctionsGridProps): JSX.Element {
@@ -14,9 +15,12 @@ export default function AuctionsGrid(props: AuctionsGridProps): JSX.Element {
       margin={{ md: "4" }}
       // alignItems="center"
     >
-      {props.auctions.map((auction) => (
-        <AuctionThumbnail auction={auction} key={auction.id} />
-      ))}
+      {props.auctions.map(
+        (auction) =>
+          props.hideEnded || (
+            <AuctionThumbnail auction={auction} key={auction.id} />
+          )
+      )}
     </Grid>
   );
 }

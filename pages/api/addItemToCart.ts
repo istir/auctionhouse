@@ -4,6 +4,7 @@ import prisma from "../../prisma/prisma";
 import { Session } from "next-iron-session";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
 import withSession from "../../libs/ironSession";
+import { printDevErrorStackTrace } from "../../libs/stackTrace";
 // export default withSession(
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
@@ -33,6 +34,10 @@ export default withSession(
     const auction = await prisma.auction.findUnique({
       where: { id: auctionId },
     });
+    if (auction?.buyerId) {
+      printDevErrorStackTrace("auction already bought");
+      return res.status(400).end("Auction already bought");
+    }
     console.log("auction:", auction);
     const user = await prisma.user.findUnique({
       where: { email: isValidToken.user.email },

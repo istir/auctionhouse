@@ -4,6 +4,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import React from "react";
 import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
+import FormMessage from "../form/FormMessage";
 
 interface CartComponentProps {
   cartItems?: Auction[];
@@ -14,7 +15,9 @@ export default function CartComponent(props: CartComponentProps): JSX.Element {
   const isLightMode = useLightModeCheck();
   const router = useRouter();
   const [itemsInCart, setItemsInCart] = React.useState<Auction[]>([]);
-
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [success, setSuccess] = React.useState<string>("");
+  const [error, setError] = React.useState<string>("");
   function getPrice(original: boolean, items?: Auction[]) {
     let price = 0;
     const i = items ? items : itemsInCart;
@@ -177,6 +180,25 @@ export default function CartComponent(props: CartComponentProps): JSX.Element {
             margin="3"
             shadow={"lg"}
             borderRadius="full"
+            isLoading={isLoading}
+            onClick={async () => {
+              setIsLoading(true);
+              axios({
+                url: "/api/buyItems",
+                method: "POST",
+                data: { itemIds: itemsInCart.map((i) => i.id) },
+              }).then(
+                (res) => {
+                  setSuccess("Kupiono przedmioty.");
+                  setIsLoading(false);
+                  setItemsInCart([]);
+                },
+                (rej) => {
+                  setError("Coś poszło nie tak");
+                  setIsLoading(false);
+                }
+              );
+            }}
           >
             <Flex alignItems={"center"}>
               <Text>Zamów i zapłać | </Text>
@@ -185,6 +207,7 @@ export default function CartComponent(props: CartComponentProps): JSX.Element {
             </Flex>
           </Button>
         ) : null}
+        <FormMessage error={error} success={success} />
       </Box>
     </>
   );

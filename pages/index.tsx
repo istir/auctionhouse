@@ -38,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
           avatar: true,
           firstName: true,
           lastName: true,
-          cart: { include: { items: true } },
+          cart: { include: { items: { where: { buyerId: null } } } },
           id: true,
         },
       });

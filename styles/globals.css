@@ -27,9 +27,9 @@ a {
 
 .w-md-editor-content {
   display: grid;
-  height: calc(-webkit-fill-available - 39.1px) !important;
-  height: calc(-moz-fill-available - 39.1px) !important;
-  height: calc(fill-available - 39.1px) !important;
+  height: calc(stretch - 39.1px) !important;
+  /* height: calc(stretch - 39.1px) !important;
+  height: calc(stretch - 39.1px) !important; */
   grid-template-columns: auto auto;
 }
 .wmde-markdown.w-md-editor-preview {
@@ -43,7 +43,10 @@ a {
   .wmde-markdown-var.w-md-editor.w-md-editor-show-live {
     /* height: 300px !important; */
   }
-
+  .wmde-markdown.wmde-markdown-color.w-md-editor-preview {
+    border-left: 0 !important;
+    border-top-width: 1px !important;
+  }
   .w-md-editor-content {
     grid-template-columns: auto !important;
     grid-template-rows: auto auto !important;

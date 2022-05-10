@@ -17,6 +17,7 @@ interface MyAuctionsPageProps {
   //     auction: Auction;
   //   };
   bidding: (Auction & { bids: Bid[] })[];
+  selling: (Auction & { bids: Bid[] })[];
 }
 
 export const getServerSideProps: GetServerSideProps = withSession(
@@ -43,7 +44,12 @@ export const getServerSideProps: GetServerSideProps = withSession(
             include: { bids: { select: { offer: true } } },
           })
         : [];
-
+      const sellingAuctions = user
+        ? await prisma.auction.findMany({
+            where: { sellerId: user.id },
+            include: { bids: { select: { offer: true } } },
+          })
+        : [];
       //   const auctions = []
       //   user?.bids.forEach(bid => {
       //       const a = bid.auction
@@ -56,6 +62,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
           bought: user?.auctionsAsBuyer || [],
           //   bids: user?.bids || [],
           bidding: auctions,
+          selling: sellingAuctions,
         },
       };
     } else {
@@ -75,6 +82,7 @@ export default function MyAuctionsPage(
       user={props.user}
       //   bids={props.bids}
       auctionsBid={props.bidding}
+      sellingAuctions={props.selling}
       refresh={() => {
         router.push(router.asPath);
       }}

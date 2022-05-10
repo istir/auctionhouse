@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Flex,
   Stack,
@@ -143,21 +144,21 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
             <Text fontWeight={"semibold"} py="2">
               Opis
             </Text>
-
-            <div
-              data-color-mode={useColorMode().colorMode}
-              style={{ overflow: "hidden" }}
-            >
-              <div className="wmde-markdown-var"> </div>
-              <MDEditor
-                height={400}
-                value={md}
-                onChange={(value = "") => {
-                  setMd(value);
-                }}
-              />
-            </div>
-
+            <Box borderRadius={"md"} overflow="hidden" shadow={"md"}>
+              <div
+                data-color-mode={useColorMode().colorMode}
+                style={{ overflow: "hidden" }}
+              >
+                <div className="wmde-markdown-var"> </div>
+                <MDEditor
+                  height={400}
+                  value={md}
+                  onChange={(value = "") => {
+                    setMd(value);
+                  }}
+                />
+              </div>
+            </Box>
             <FormDate name="dateEnd" label="Koniec aukcji" dateTime minToday />
             <FormMessage error={error} />
             <Button

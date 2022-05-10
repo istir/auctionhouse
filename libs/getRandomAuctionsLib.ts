@@ -11,7 +11,7 @@ export default async function getRandomAuctions(limit: number, count: number) {
 
   const result = await prisma.auction.findMany({
     orderBy: { id: "desc" },
-    where: { dateEnd: { gt: Date.now().toString() } },
+    where: { dateEnd: { gt: Date.now().toString() }, buyerId: null },
     select: {
       id: true,
       bids: true,

@@ -43,7 +43,7 @@ export default function AuctionThumbnail(
             shadow="md"
             margin="auto"
             mt="2"
-            height={"full"}
+            height={"80"}
             color={"gray.500"}
             justifyContent="center"
             alignItems={"center"}
@@ -156,7 +156,10 @@ export default function AuctionThumbnail(
         </Box>
         {renderPrice(props.auction.originalPrice, props.auction.price)}
 
-        <AuctionTimer dateToEnd={props.auction.dateEnd} />
+        <AuctionTimer
+          dateToEnd={props.auction.dateEnd}
+          bought={props.auction.buyerId}
+        />
       </Grid>
     </Grid>
   );

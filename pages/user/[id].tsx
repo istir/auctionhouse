@@ -1,14 +1,16 @@
 import { Auction, Bid, Cart, Category, Token, User } from ".prisma/client";
-import { Box } from "@chakra-ui/react";
+import { Box, Checkbox, Flex, Text } from "@chakra-ui/react";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
 import { useRouter } from "next/router";
 import React from "react";
-import AuctionCom from "../../components/auction/AuctionPage/AuctionCom";
+import AuctionsGrid from "../../components/auction/AuctionsGrid";
+import Header from "../../components/header/header";
+import TitleHolder from "../../components/TitleHolder";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
 import withSession from "../../libs/ironSession";
 import prisma from "../../prisma/prisma";
-interface AuctionPageProps {
+interface UserAuctionPageProps {
   token?: Token & {
     user: User & {
       cart: Cart & {
@@ -22,12 +24,12 @@ interface AuctionPageProps {
     };
   };
 
-  auction?: Auction & {
+  auctions?: (Auction & {
     category: Category;
     seller: User;
     buyer: User | null;
     bids: Bid[];
-  };
+  })[];
 }
 // test
 // export async function getStaticPaths() {
@@ -46,7 +48,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
     params,
   }: {
     req: NextApiRequest & { session: Session };
-    params: { url: string };
+    params: { id: string };
   }) {
     // let auction = await prisma.auction.findUnique({
     //   where: { url: params.url },
@@ -56,20 +58,18 @@ export const getServerSideProps: GetServerSideProps = withSession(
     //     buyer: { select: { firstName: true, lastName: true, avatar: true } },
     //   },
     // });
+    const id = parseInt(params.id);
     const token = await checkIfTokenValidAndRefresh(req.session);
-    const auction = await prisma.auction.findUnique({
-      where: { url: params.url },
-      include: {
-        category: true,
-        seller: { select: { firstName: true, lastName: true, avatar: true } },
-        buyer: { select: { firstName: true, lastName: true, avatar: true } },
-        bids: { select: { userId: true, offer: true } },
-      },
-    });
-    // console.log(auction);
-
+    console.log("token", token);
+    let user: {
+      firstName: string;
+      lastName: string;
+      avatar: string | null;
+      id: number;
+      cart: (Cart & { items: Auction[] }) | null;
+    } | null = null;
     if (token) {
-      const user = await prisma.user.findUnique({
+      user = await prisma.user.findUnique({
         where: { id: token.user.id },
         select: {
           avatar: true,
@@ -79,9 +79,21 @@ export const getServerSideProps: GetServerSideProps = withSession(
           id: true,
         },
       });
-      return { props: { auction, user } };
     }
-    return { props: { auction, token } };
+    if (!id) return { props: { auctions: [], user } };
+
+    const auctions = await prisma.auction.findMany({
+      where: { sellerId: id },
+      include: {
+        category: true,
+        seller: { select: { firstName: true, lastName: true, avatar: true } },
+        buyer: { select: { firstName: true, lastName: true, avatar: true } },
+        bids: { select: { userId: true, offer: true } },
+      },
+    });
+    // console.log(auction);
+    return { props: { auctions, user } };
+    // return { props: { auctions, token } };
   }
 );
 
@@ -100,18 +112,37 @@ export const getServerSideProps: GetServerSideProps = withSession(
 //   return { props: { auction } };
 // }
 
-export default function AuctionPage(props: AuctionPageProps): JSX.Element {
+export default function UserAuctionPage(
+  props: UserAuctionPageProps
+): JSX.Element {
   const router = useRouter();
-  console.log(props.token?.user);
-
-  if (!props.auction) return <Box>404</Box>;
+  console.log(props.token?.user, props.user);
+  const [hideEnded, setHideEnded] = React.useState<boolean>(false);
+  if (!props.auctions || props.auctions.length === 0)
+    return (
+      <Box>
+        <Header refresh={router.reload} user={props.user} />
+        <Text fontSize={"2xl"}>Nie znaleziono aukcji</Text>
+      </Box>
+    );
   return (
-    <AuctionCom
-      auction={props.auction}
-      user={props.token?.user || props.user}
-      refresh={() => {
-        router.push(router.asPath);
-      }}
-    />
+    <Box>
+      <Header refresh={router.reload} user={props.user} />
+      <TitleHolder
+        title={`Aukcje użytkownika ${props.auctions[0].seller.firstName} ${props.auctions[0].seller.lastName}`}
+      >
+        <Flex gap="1">
+          <Checkbox
+            //   value={hideEnded}
+            checked={hideEnded}
+            onChange={() => {
+              setHideEnded(!hideEnded);
+            }}
+          />
+          <Text>Ukryj zakończone</Text>
+        </Flex>
+        <AuctionsGrid auctions={props.auctions} hideEnded={hideEnded} />
+      </TitleHolder>
+    </Box>
   );
 }

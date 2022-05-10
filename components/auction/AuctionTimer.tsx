@@ -5,6 +5,7 @@ import { convertMillisecondsToTime, formatTime } from "../../libs/time";
 interface AuctionTimerProps {
   dateToEnd: string;
   onEnd?: () => void;
+  bought?: number | null;
 }
 
 export default function AuctionTimer(props: AuctionTimerProps): JSX.Element {
@@ -13,11 +14,17 @@ export default function AuctionTimer(props: AuctionTimerProps): JSX.Element {
   );
 
   React.useEffect(() => {
-    const timer = renderRemainingTime(props.dateToEnd);
-    return () => {
-      //cleanup - ComponentWillUnmount
-      timer && clearInterval(timer);
-    };
+    if (props.bought) {
+      renderRemainingTime("0");
+      return () => {};
+    } else {
+      const timer = renderRemainingTime(props.dateToEnd);
+
+      return () => {
+        //cleanup - ComponentWillUnmount
+        timer && clearInterval(timer);
+      };
+    }
   }, []);
 
   function calculateRemainingTime(dateEnd: string) {
@@ -46,6 +53,7 @@ export default function AuctionTimer(props: AuctionTimerProps): JSX.Element {
   }
 
   function timeColor(dateToEnd: string) {
+    if (timeToEnd === "Aukcja zakończona") return "gray.400";
     const deadline = parseInt(dateToEnd);
     if (!deadline) return;
     if (deadline - Date.now() < 3600000) return "red.400";

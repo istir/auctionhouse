@@ -84,7 +84,7 @@ export default function Header(props: HeaderProps): JSX.Element {
           direction={"row"}
           spacing={6}
         >
-          <Flex>
+          <Flex justifyContent={"center"} alignItems="center">
             <SearchComponent paddingX="2" />
             <Flex paddingRight={"2"} display={{ base: "none", md: "flex" }}>
               <HamburgerOptions
