@@ -94,12 +94,18 @@ a {
   }
   .wmde-markdown.wmde-markdown-color.w-md-editor-preview {
     border-left: 0 !important;
-    border-top-width: 1px !important;
+    border-top: 1px solid !important;
+    border-color: var(--color-border-default) !important;
   }
   .w-md-editor-content {
     grid-template-columns: auto !important;
     grid-template-rows: auto auto !important;
   }
+}
+.wmde-markdown.wmde-markdown-color.w-md-editor-preview {
+  box-shadow: none !important;
+  border-left: 1px solid;
+  border-color: var(--color-border-default);
 }
 
 .w-md-editor-toolbar {
