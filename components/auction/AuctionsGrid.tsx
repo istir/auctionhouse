@@ -26,7 +26,7 @@ export default function AuctionsGrid(props: AuctionsGridProps): JSX.Element {
             )
         )}
       </Grid>
-      {props.page && props.allPages && (
+      {props.page && props.allPages ? (
         <Pagination
           allPages={props.allPages}
           page={props.page}
@@ -35,7 +35,7 @@ export default function AuctionsGrid(props: AuctionsGridProps): JSX.Element {
             return `/?p=${page}`;
           }}
         />
-      )}
+      ) : null}
     </Box>
   );
 }

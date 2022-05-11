@@ -105,6 +105,7 @@ export default function AuctionPage(props: AuctionPageProps): JSX.Element {
   console.log(props.token?.user);
 
   if (!props.auction) return <Box>404</Box>;
+  console.log(props.auction.markdown);
   return (
     <AuctionCom
       auction={props.auction}

@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {
   Box,
   Button,
   Flex,
+  Spinner,
   Stack,
   Text,
   useColorModeValue,
@@ -23,6 +25,7 @@ import FormImages from "../form/FormImages";
 import { useRouter } from "next/router";
 import FormMessage from "../form/FormMessage";
 import FormSelect from "../form/FormSelect";
+import NextButton from "../NextButton";
 const MDEditor = dynamic<MDEditorProps>(() => import("@uiw/react-md-editor"), {
   ssr: false,
 });
@@ -37,7 +40,7 @@ interface AddAuctionProps {
 export default function AddAuction(props: AddAuctionProps): JSX.Element {
   const maxImages = 10;
   const router = useRouter();
-
+  const [loading, setLoading] = React.useState<boolean>(false);
   const [categories, setCategories] = React.useState<
     {
       id: number;
@@ -49,6 +52,10 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
     }[]
   >([]);
   const [error, setError] = React.useState<string>("");
+  const [ending, setEnding] = React.useState<boolean>(false);
+  const [endingSuccess, setEndingSuccess] = React.useState<string>("");
+  const [endingError, setEndingError] = React.useState<string>("");
+
   const [sending, setSending] = React.useState<boolean[]>(
     new Array(maxImages).fill(false)
   );
@@ -126,6 +133,7 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
 
   function handleOnSubmit(values: FormikValues) {
     function add() {
+      setLoading(true);
       const imgs = imagesUri.filter((i) => i !== "");
       axios({
         url: "/api/addAuction",
@@ -134,13 +142,16 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
       }).then(
         (ful) => {
           router.push(`/auction/${ful.data.url}`);
+          setLoading(false);
         },
         (_rej) => {
           setError("Coś poszło nie tak, spróbuj ponownie");
+          setLoading(false);
         }
       );
     }
     function modify() {
+      setLoading(true);
       axios({
         url: "/api/modifyAuction",
         method: "post",
@@ -148,13 +159,16 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
       }).then(
         (ful) => {
           router.push(`/auction/${ful.data.url}`);
+          setLoading(false);
         },
         (_rej) => {
           setError("Coś poszło nie tak, spróbuj ponownie");
+          setLoading(false);
         }
       );
     }
     function admin() {
+      setLoading(true);
       axios({
         url: "/api/admin/modifyAuction",
         method: "post",
@@ -162,9 +176,11 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
       }).then(
         (ful) => {
           router.push(`/auction/${ful.data.url}`);
+          setLoading(false);
         },
         (_rej) => {
           setError("Coś poszło nie tak, spróbuj ponownie");
+          setLoading(false);
         }
       );
     }
@@ -178,74 +194,122 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
     >
       <Flex margin="5" justifyContent={"center"} alignItems="center">
         <Stack minW={{ base: "full", md: "50vw" }}>
-          <Form>
-            <FormInput
-              validator={validateName}
-              name={"name"}
-              label={"Nazwa aukcji"}
-            />
-            <FormCheckbox label="Licytacja" name="bidding" />
-            <FormInput
-              validator={validatePrice}
-              name={"price"}
-              label={"Cena"}
-              isNumeric
-            />
-            {props.modify ? null : (
-              <FormImages
-                name="images"
-                label="Zdjęcia"
-                setImagesUri={setImagesUri}
-                imagesUri={imagesUri}
-                maxImages={maxImages}
-                setSending={setSending}
-                sending={sending}
-              />
-            )}
-            {/* <Box>Kategoria!!!</Box> */}
-            <FormSelect
-              name="categoryId"
-              label="Kategoria"
-              categories={categories}
-            />
-            <Text fontWeight={"semibold"} py="2">
-              Opis
-            </Text>
-            <Box borderRadius={"md"} overflow="hidden" shadow={"md"}>
-              <div
-                data-color-mode={useColorModeValue("light", "dark")}
-                style={{ overflow: "hidden" }}
+          {props.modify && parseInt(props.modify.dateEnd) > Date.now() ? (
+            endingSuccess ? (
+              <NextButton href="/">Wróć do strony głównej</NextButton>
+            ) : (
+              <Button
+                isLoading={loading}
+                onClick={() => {
+                  setLoading(true);
+                  setEnding(true);
+                  axios({
+                    url: "/api/endAuction",
+                    method: "post",
+                    data: { id: props.modify?.id },
+                  }).then(
+                    (res) => {
+                      if (res.status === 200) {
+                        setEndingSuccess("Aukcja została zakończona");
+                      } else {
+                        setEndingError("Coś poszło nie tak, spróbuj ponownie");
+                      }
+                    },
+                    (rej) => {
+                      setEndingError("Coś poszło nie tak, spróbuj ponownie");
+                    }
+                  );
+
+                  setLoading(false);
+                }}
               >
-                <div className="wmde-markdown-var"> </div>
-                <MDEditor
-                  height={400}
-                  value={md}
-                  onChange={(value = "") => {
-                    setMd(value);
-                  }}
+                Zakończ aukcję
+              </Button>
+            )
+          ) : null}
+          {ending ? (
+            endingSuccess || endingError ? (
+              <FormMessage success={endingSuccess} error={endingError} />
+            ) : (
+              <Flex justifyContent={"center"} alignItems="center">
+                <Spinner />
+              </Flex>
+            )
+          ) : (
+            <Form>
+              <FormInput
+                validator={validateName}
+                name={"name"}
+                label={"Nazwa aukcji"}
+              />
+              <FormCheckbox label="Licytacja" name="bidding" />
+              <FormInput
+                validator={validatePrice}
+                name={"price"}
+                label={"Cena"}
+                isNumeric
+              />
+              {props.modify ? null : (
+                <FormImages
+                  name="images"
+                  label="Zdjęcia"
+                  setImagesUri={setImagesUri}
+                  imagesUri={imagesUri}
+                  maxImages={maxImages}
+                  setSending={setSending}
+                  sending={sending}
                 />
-              </div>
-            </Box>
-            <FormDate name="dateEnd" label="Koniec aukcji" dateTime minToday />
-            <FormMessage error={error} />
-            <Button
-              type="submit"
-              mt="2"
-              isLoading={sending.some((s) => s)}
-              bg={useColorModeValue(
-                "light.primaryContainer",
-                "dark.primaryContainer"
               )}
-              _hover={{
-                backgroundColor: useColorModeValue(
-                  "light.tertiaryContainer",
-                  "dark.tertiaryContainer"
-                ),
-              }}
-            >
-              {props.modify ? "Edytuj aukcję" : "Dodaj aukcję"}
-            </Button>
-          </Form>
+              {/* <Box>Kategoria!!!</Box> */}
+              <FormSelect
+                name="categoryId"
+                label="Kategoria"
+                categories={categories}
+              />
+              <Text fontWeight={"semibold"} py="2">
+                Opis
+              </Text>
+              <Box borderRadius={"md"} overflow="hidden" shadow={"md"}>
+                <div
+                  data-color-mode={useColorModeValue("light", "dark")}
+                  style={{ overflow: "hidden" }}
+                >
+                  <div className="wmde-markdown-var"> </div>
+                  <MDEditor
+                    height={400}
+                    value={md}
+                    onChange={(value = "") => {
+                      setMd(value);
+                    }}
+                  />
+                </div>
+              </Box>
+              <FormDate
+                name="dateEnd"
+                label="Koniec aukcji"
+                dateTime
+                minToday
+              />
+              <FormMessage error={error} />
+              <Button
+                type="submit"
+                mt="2"
+                isLoading={loading || sending.some((s) => s)}
+                bg={useColorModeValue(
+                  "light.primaryContainer",
+                  "dark.primaryContainer"
+                )}
+                _hover={{
+                  backgroundColor: useColorModeValue(
+                    "light.tertiaryContainer",
+                    "dark.tertiaryContainer"
+                  ),
+                }}
+              >
+                {props.modify ? "Edytuj aukcję" : "Dodaj aukcję"}
+              </Button>
+            </Form>
+          )}
         </Stack>
       </Flex>
     </Formik>

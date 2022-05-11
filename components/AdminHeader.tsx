@@ -50,6 +50,9 @@ export default function AdminHeader(props: AdminHeaderProps): JSX.Element {
               Usuń administratora
             </NextButton>
             <NextButton href="/admin/items">Przeglądaj przedmioty</NextButton>
+            <NextButton href="/admin/exampleAuctions">
+              Dodaj przykładowe aukcje
+            </NextButton>
             <NextButton href="/api/admin/logout">Wyloguj</NextButton>
             <ColorModeSwitcher
               variant="solid"

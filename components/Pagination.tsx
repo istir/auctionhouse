@@ -54,6 +54,7 @@ export default function Pagination(props: PaginationProps): JSX.Element {
         renderPageButton(page + props.page)
     );
   }
+
   if (props.hideIfZero && difference === 0) return <Box></Box>;
   if (props.page >= props.allPages)
     return (

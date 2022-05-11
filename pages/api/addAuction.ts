@@ -1,14 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "../../prisma/prisma";
 
 import { Session } from "next-iron-session";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
 import withSession from "../../libs/ironSession";
-import generateUrl from "../../libs/generateUrl";
-import {
-  printDevErrorStackTrace,
-  printDevStackTrace,
-} from "../../libs/stackTrace";
+
+import addAuction from "../../libs/addAuction";
 // export default withSession(
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
@@ -59,47 +55,58 @@ export default withSession(
       ).getTime()
     )
       return res.status(400).end("Wrong time");
-    let generatedUrl = generateUrl(name);
-    let goAgane = true;
-    while (goAgane === true) {
-      goAgane = false;
-      return await prisma.auction
-        .create({
-          data: {
-            name,
-            price,
-            bidding,
-            markdown,
-            image,
-            dateEnd: new Date(dateEnd).getTime().toString(),
-            timesBought: 0,
-            usersBought: 0,
-            categoryId: parseInt(categoryId),
-            sellerId: isValidToken.user.id,
-            url: generatedUrl,
-          },
-        })
-        .catch((err) => {
-          printDevStackTrace(`Catch: ${err}`);
-          if (err.code === "P2002") {
-            printDevErrorStackTrace("P2002");
-            goAgane = true;
-            generatedUrl = generateUrl(name);
-          }
-        })
-        .finally(() => {
-          printDevStackTrace(`finally, generatedUrl: ${generatedUrl}`);
-          return res
-            .status(200)
-            .end(JSON.stringify({ status: "OK", url: generatedUrl }));
-        });
-    }
+    const added = await addAuction({
+      name,
+      price,
+      bidding,
+      markdown,
+      image,
+      dateEnd: new Date(dateEnd).getTime().toString(),
+      categoryId: parseInt(categoryId),
+      sellerId: isValidToken.user.id,
+    });
+    if (added) return res.status(200).end(JSON.stringify(added));
+    return res.status(200).end("Error");
+    // let generatedUrl = generateUrl(name);
+    // let goAgane = true;
+    // while (goAgane === true) {
+    //   goAgane = false;
+    //   return await prisma.auction
+    //     .create({
+    //       data: {
+    //         name,
+    //         price,
+    //         bidding,
+    //         markdown,
+    //         image,
+    //         dateEnd: new Date(dateEnd).getTime().toString(),
+    //         timesBought: 0,
+    //         usersBought: 0,
+    //         categoryId: parseInt(categoryId),
+    //         sellerId: isValidToken.user.id,
+    //         url: generatedUrl,
+    //       },
+    //     })
+    //     .catch((err) => {
+    //       printDevStackTrace(`Catch: ${err}`);
+    //       if (err.code === "P2002") {
+    //         printDevErrorStackTrace("P2002");
+    //         goAgane = true;
+    //         generatedUrl = generateUrl(name);
+    //       }
+    //     })
+    //     .finally(() => {
+    //       printDevStackTrace(`finally, generatedUrl: ${generatedUrl}`);
+    //       return res
+    //         .status(200)
+    //         .end(JSON.stringify({ status: "OK", url: generatedUrl }));
+    //     });
+    // }
 
     // return res
     //   .status(200)
     //   .end(JSON.stringify({ status: "OK", url: generatedUrl }));
     // console.log(generateUrl(name));
-    // return res.status(200).end("Error");
   }
 );
 // );
