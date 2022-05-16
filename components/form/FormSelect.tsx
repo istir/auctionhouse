@@ -3,6 +3,7 @@ import {
   FormErrorMessage,
   FormLabel,
   Select,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useField } from "formik";
 import React from "react";
@@ -27,10 +28,19 @@ interface FormSelectProps {
 }
 
 export default function FormSelect(props: FormSelectProps): JSX.Element {
+  const optionBGColor = useColorModeValue(
+    "var(--chakra-colors-light-primary1)",
+    "var(--chakra-colors-dark-primary1)"
+  );
+  const optgroupBGColor = useColorModeValue(
+    "var(--chakra-colors-light-primary4)",
+    "var(--chakra-colors-dark-primary4)"
+  );
   const [field, meta] = useField({
     name: props.name,
     validate: props.validator,
   });
+
   return (
     <FormControl isInvalid={meta.error && meta.touched ? true : false}>
       <FormLabel htmlFor={props.name}>{props.label}</FormLabel>
@@ -40,9 +50,17 @@ export default function FormSelect(props: FormSelectProps): JSX.Element {
           ? props.options?.map(
               (option, index) =>
                 option.groupItems.length > 0 && (
-                  <optgroup key={index} label={option.groupLabel}>
+                  <optgroup
+                    key={index}
+                    label={option.groupLabel}
+                    style={{ backgroundColor: optgroupBGColor }}
+                  >
                     {option.groupItems.map((item, index) => (
-                      <option key={index} value={item.value}>
+                      <option
+                        key={index}
+                        value={item.value}
+                        style={{ backgroundColor: optionBGColor }}
+                      >
                         {item.label}
                       </option>
                     ))}
@@ -52,9 +70,17 @@ export default function FormSelect(props: FormSelectProps): JSX.Element {
           : props.categories?.map(
               (option, index) =>
                 option.categories.length > 0 && (
-                  <optgroup key={index} label={option.name}>
+                  <optgroup
+                    key={index}
+                    label={option.name}
+                    style={{ backgroundColor: optgroupBGColor }}
+                  >
                     {option.categories.map((item, index) => (
-                      <option key={index} value={item.id}>
+                      <option
+                        key={index}
+                        value={item.id}
+                        style={{ backgroundColor: optionBGColor }}
+                      >
                         {item.name}
                       </option>
                     ))}

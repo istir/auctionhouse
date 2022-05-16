@@ -13,7 +13,11 @@ import { MDEditorProps } from "@uiw/react-md-editor";
 import { Form, Formik } from "formik";
 import dynamic from "next/dynamic";
 import React from "react";
-import { validateName, validatePrice } from "../../libs/validator";
+import {
+  validateName,
+  validatePrice,
+  validateSelect,
+} from "../../libs/validator";
 import FormCheckbox from "../form/FormCheckbox";
 import FormInput from "../form/FormInput";
 import "@uiw/react-md-editor/markdown-editor.css";
@@ -265,6 +269,7 @@ export default function AddAuction(props: AddAuctionProps): JSX.Element {
                 name="categoryId"
                 label="Kategoria"
                 categories={categories}
+                validator={validateSelect}
               />
               <Text fontWeight={"semibold"} py="2">
                 Opis

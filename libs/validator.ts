@@ -118,6 +118,11 @@ export function validateZipCode(value: string): string | void {
   }
 }
 
+export function validateSelect(value: string): string | void {
+  // if (process.env.NODE_ENV === "development") return;
+  if (!value) return "Pole nie może być puste";
+}
+
 /**
  * This function checks if entered value is that of "City 11", "City 11/1", "City 11a/1", "City 11 m. 1". Supports polish characters
  * @param value - entered address
