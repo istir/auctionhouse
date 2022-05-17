@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { Box, Button, Stack, Text, useColorModeValue } from "@chakra-ui/react";
 import { Admin } from "@prisma/client";
 import axios from "axios";
@@ -15,7 +16,7 @@ import FormMessage from "../../components/form/FormMessage";
 
 interface AdminAddAdminPageProps {
   token: string;
-  admin: Admin;
+  admin?: Admin;
 }
 
 export const getServerSideProps: GetServerSideProps = withAdminSession(
@@ -45,6 +46,15 @@ export default function AdminAddAdminPage(
   const initialValues = { password: "", email: "" };
   const [loading, setLoading] = React.useState<boolean>(false);
   const router = useRouter();
+
+  React.useEffect(() => {
+    if (!props.admin) {
+      router.push("/admin");
+    }
+    return () => {
+      //cleanup - ComponentWillUnmount
+    };
+  });
   function onSubmit(values: { password: string; email: string }) {
     try {
       setError("");
@@ -76,7 +86,9 @@ export default function AdminAddAdminPage(
       console.error(err);
     }
   }
-  if (!props.admin) router.push("/admin");
+  if (!props.admin) {
+    return <Box></Box>;
+  }
   return (
     <Box>
       <AdminHeader admin={props.admin} />

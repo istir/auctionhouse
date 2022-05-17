@@ -34,8 +34,19 @@ export default function RemoveAdminPage(
   props: RemoveAdminPageProps
 ): JSX.Element {
   const router = useRouter();
-  if (!props.admin) router.push("/admin");
 
+  React.useEffect(() => {
+    if (!props.admin) {
+      router.push("/admin");
+    }
+    return () => {
+      //cleanup - ComponentWillUnmount
+    };
+  });
+
+  if (!props.admin) {
+    return <Box></Box>;
+  }
   return (
     <Box>
       <AdminHeader admin={props.admin} />

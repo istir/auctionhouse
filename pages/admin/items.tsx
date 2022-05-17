@@ -12,6 +12,7 @@ import {
 import { Admin, Auction, Bid, User } from "@prisma/client";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
+import { useRouter } from "next/router";
 import React from "react";
 import AdminHeader from "../../components/AdminHeader";
 import NextButton from "../../components/NextButton";
@@ -60,6 +61,18 @@ export const getServerSideProps: GetServerSideProps = withAdminSession(
 export default function AdminItemsPage(
   props: AdminItemsPageProps
 ): JSX.Element {
+  const router = useRouter();
+  React.useEffect(() => {
+    if (!props.admin) {
+      router.push("/admin");
+    }
+    return () => {
+      //cleanup - ComponentWillUnmount
+    };
+  });
+  if (!props.admin) {
+    return <Box></Box>;
+  }
   return (
     <Box>
       <AdminHeader admin={props.admin} />

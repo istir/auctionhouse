@@ -63,7 +63,14 @@ export default function AdminAddAdminPage(
   const initialValues = { password: "", email: "" };
   const [loading, setLoading] = React.useState<boolean>(false);
   const router = useRouter();
-
+  React.useEffect(() => {
+    if (!props.admin) {
+      router.push("/admin");
+    }
+    return () => {
+      //cleanup - ComponentWillUnmount
+    };
+  });
   function onSubmit() {
     try {
       setError("");
@@ -136,7 +143,9 @@ export default function AdminAddAdminPage(
     }
   }
 
-  if (!props.admin) router.push("/admin");
+  if (!props.admin) {
+    return <Box></Box>;
+  }
   return (
     <Box>
       <AdminHeader admin={props.admin} />
