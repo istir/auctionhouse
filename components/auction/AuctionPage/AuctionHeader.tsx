@@ -3,6 +3,7 @@ import { Box, Flex, Text } from "@chakra-ui/layout";
 import { useBreakpoint } from "@chakra-ui/react";
 import React from "react";
 import PopupLogin from "../../login/PopupLogin";
+import AuctionTimer from "../AuctionTimer";
 import AuctionAddToCart from "./AuctionAddToCart";
 import AuctionBid from "./AuctionBid";
 import AuctionSeller from "./AuctionSeller";
@@ -45,22 +46,31 @@ export default function AuctionHeader({
           flexDirection={{ base: "column", md: "row" }}
         >
           <AuctionSeller auction={auction} />
-          {auction.bidding ? (
-            <AuctionBid auction={auction} user={props.user} />
-          ) : props.user ? (
-            <AuctionAddToCart
-              full={breakpoint === "base" || false}
-              auction={auction}
-              setInCart={props.setInCart}
-              inCart={props.inCart}
-              // user={props.user}
-            />
-          ) : (
-            <PopupLogin
-              refresh={props.refresh}
-              text="Zaloguj się i dodaj do koszyka!"
-            />
-          )}
+          <Flex flexDir="column" justifyContent={"center"} alignItems="center">
+            {!auction.buyerId && (
+              <AuctionTimer
+                dateToEnd={auction.dateEnd}
+                bought={auction.buyerId}
+              />
+            )}
+
+            {auction.bidding ? (
+              <AuctionBid auction={auction} user={props.user} />
+            ) : props.user ? (
+              <AuctionAddToCart
+                full={breakpoint === "base" || false}
+                auction={auction}
+                setInCart={props.setInCart}
+                inCart={props.inCart}
+                // user={props.user}
+              />
+            ) : (
+              <PopupLogin
+                refresh={props.refresh}
+                text="Zaloguj się i dodaj do koszyka!"
+              />
+            )}
+          </Flex>
         </Flex>
       </Box>
     </Box>
