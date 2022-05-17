@@ -3,16 +3,18 @@ import { User } from "@prisma/client";
 // import { trace } from "console";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
+import { useRouter } from "next/router";
 import React from "react";
 import AddAuction from "../components/auction/AddAuction";
 import Header from "../components/header/header";
+import PopupLogin from "../components/login/PopupLogin";
 import checkIfTokenValidAndRefresh from "../libs/checkIfTokenValidAndRefresh";
 // import getItemsInCart from "../libs/getItemsInCart";
 // import { get } from "stack-trace";
 import withSession from "../libs/ironSession";
 import prisma from "../prisma/prisma";
 interface AddAuctionPageProps {
-  user: User;
+  user?: User;
 }
 
 export const getServerSideProps: GetServerSideProps = withSession(
@@ -36,6 +38,12 @@ export const getServerSideProps: GetServerSideProps = withSession(
           user: user,
         },
       };
+    } else {
+      return {
+        props: {
+          user: null,
+        },
+      };
     }
   }
 );
@@ -44,7 +52,19 @@ export default function AddAuctionPage(
   props: AddAuctionPageProps
 ): JSX.Element {
   // const [user, setUser] = useState<User | undefined>(props.user);
-
+  const router = useRouter();
+  if (!props.user) {
+    return (
+      <Box>
+        <Header user={props.user} />
+        <PopupLogin
+          refresh={router.reload}
+          text="Zaloguj się by dodać aukcję"
+          dontRenderIcon
+        />
+      </Box>
+    );
+  }
   return (
     <Box>
       <Header user={props.user} />
