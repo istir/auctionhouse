@@ -7,6 +7,7 @@ import React from "react";
 import useLightModeCheck from "../../../libs/hooks/useLightModeCheck";
 import NextButton from "../../NextButton";
 import AuctionBuyModal from "../AuctionBuyWindow.tsx/AuctionBuyModal";
+import AuctionTimer from "../AuctionTimer";
 
 interface AuctionAddToCartProps {
   auction: Auction;
@@ -78,32 +79,35 @@ export default function AuctionAddToCart({
       </Flex>
     );
   return (
-    <AuctionBuyModal
-      seller={props.seller}
-      auction={auction}
-      inCart={props.inCart}
-      user={props.user}
-      onPress={sendAjaxRequest}
-    >
-      <Button
-        variant="pill"
-        // @ts-ignore
-        promo={
-          auction.originalPrice &&
-          (auction.originalPrice > auction.price).toString()
-        }
-        size={props.size}
-        width={props.full ? "full" : "fit-content"}
-        overflow="hidden"
+    <Flex flexDir={"column"} alignItems="center">
+      <AuctionTimer dateToEnd={auction.dateEnd} />
+      <AuctionBuyModal
+        seller={props.seller}
+        auction={auction}
+        inCart={props.inCart}
+        user={props.user}
+        onPress={sendAjaxRequest}
       >
-        {props.inCart ? (
-          <Flex alignItems="center">W koszyku</Flex>
-        ) : (
-          <Flex alignItems="center">
-            <Text>Dodaj do koszyka |</Text> {renderPrice()}
-          </Flex>
-        )}
-      </Button>
-    </AuctionBuyModal>
+        <Button
+          variant="pill"
+          // @ts-ignore
+          promo={
+            auction.originalPrice &&
+            (auction.originalPrice > auction.price).toString()
+          }
+          size={props.size}
+          width={props.full ? "full" : "fit-content"}
+          overflow="hidden"
+        >
+          {props.inCart ? (
+            <Flex alignItems="center">W koszyku</Flex>
+          ) : (
+            <Flex alignItems="center">
+              <Text>Dodaj do koszyka |</Text> {renderPrice()}
+            </Flex>
+          )}
+        </Button>
+      </AuctionBuyModal>
+    </Flex>
   );
 }
