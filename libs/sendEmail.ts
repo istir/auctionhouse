@@ -7,9 +7,17 @@ export default async function sendEmail(
   message: string
 ) {
   if (!email) return;
+  const port = process.env.EMAIL_PORT;
+  const host = process.env.EMAIL_SMTP_HOST;
+  const user = process.env.EMAIL_USER;
+  const pass = process.env.EMAIL_PASSWORD;
+  if (!port || !host || !user || !pass) return;
   const transporter = createTransport({
-    service: process.env.EMAIL_PROVIDER,
-    auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASSWORD },
+    port: parseInt(port),
+    secure: false,
+    tls: { ciphers: "SSLv3" },
+    host: host,
+    auth: { user, pass },
   });
   await new Promise((resolve, reject) => {
     // verify connection configuration
@@ -25,7 +33,10 @@ export default async function sendEmail(
   });
 
   const mailData = {
-    from: "Auctionhouse",
+    from: {
+      name: "Auctionhouse",
+      address: user,
+    },
 
     to: `${email}`,
     subject: title || "Auctionhouse",
