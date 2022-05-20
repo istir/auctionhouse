@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FaChevronDown } from "react-icons/fa";
-import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
+import useLightModeCheck from "../../libs/useLightModeCheck";
 import PopupLogin from "../login/PopupLogin";
 import HamburgerOptions from "./HamburgerOptions";
 import SearchComponent from "./SearchComponent";

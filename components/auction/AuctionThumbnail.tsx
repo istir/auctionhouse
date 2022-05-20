@@ -4,7 +4,7 @@ import { Image, useColorModeValue } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
 import React from "react";
-import useLightModeCheck from "../../libs/hooks/useLightModeCheck";
+import useLightModeCheck from "../../libs/useLightModeCheck";
 import AuctionTimer from "./AuctionTimer";
 
 interface AuctionThumbnailProps {

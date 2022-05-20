@@ -3,7 +3,7 @@ import React from "react";
 import { Image } from "@chakra-ui/image";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Button } from "@chakra-ui/button";
-import useLightModeCheck from "../libs/hooks/useLightModeCheck";
+import useLightModeCheck from "../libs/useLightModeCheck";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 
