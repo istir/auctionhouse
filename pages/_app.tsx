@@ -6,25 +6,15 @@ import NextNProgress from "nextjs-progressbar";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div
-      id="everything-container"
-      // style={{
-      //   transform: "translateX(0)",
-      //   position: "absolute",
-      //   transition: "0.3s",
-      //   overflowX: "hidden",
-      //   overflowY: "visible",
-      // }}
-    >
-      <div
-        id="everything-container-black-out"
-        style={{ overflowX: "hidden", overflowY: "visible" }}
-      >
-        <ChakraProvider theme={theme}>
-          <NextNProgress />
-          <Component {...pageProps} />
-        </ChakraProvider>
-      </div>
+    <div>
+      <head>
+        <title>Auctionhouse</title>
+      </head>
+
+      <ChakraProvider theme={theme}>
+        <NextNProgress />
+        <Component {...pageProps} />
+      </ChakraProvider>
     </div>
   );
 }
