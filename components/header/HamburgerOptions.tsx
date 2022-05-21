@@ -66,7 +66,7 @@ export default function HamburgerOptions(
       <HStack>
         {items.map((item) =>
           item.href ? (
-            <Flex key={item.name}>
+            <Flex key={item.name} zIndex={"modal"}>
               <Popover trigger="hover">
                 <PopoverTrigger>
                   <Box>
@@ -99,7 +99,7 @@ export default function HamburgerOptions(
               </Popover>
             </Flex>
           ) : (
-            <Flex key={item.name}>
+            <Flex key={item.name} zIndex={"modal"}>
               <Popover trigger="hover">
                 <PopoverTrigger>
                   <IconButton
