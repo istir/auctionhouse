@@ -3,13 +3,14 @@ import type { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../theme";
 import NextNProgress from "nextjs-progressbar";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <div>
-      <head>
+      <Head>
         <title>Auctionhouse</title>
-      </head>
+      </Head>
 
       <ChakraProvider theme={theme}>
         <NextNProgress />

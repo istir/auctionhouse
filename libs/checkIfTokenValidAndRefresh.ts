@@ -16,7 +16,6 @@ export default async function checkIfTokenValidAndRefresh(
   token?: string
 ): Promise<
   | false
-  | undefined
   | {
       token: string;
       user: {
@@ -28,9 +27,6 @@ export default async function checkIfTokenValidAndRefresh(
       };
     }
 > {
-  // const trace = get();
-
-  // console.log(trace[0].getFunctionName());
   printStackTrace("Checking if token is valid...");
 
   checkForEndingAuctions();
@@ -54,7 +50,7 @@ export default async function checkIfTokenValidAndRefresh(
 
     return false;
   }
-  // const sessionToken = token ? token : session.get("user").token;
+
   if (sessionToken) {
     const foundToken = await prisma.token.findUnique({
       where: { token: sessionToken },
@@ -65,16 +61,6 @@ export default async function checkIfTokenValidAndRefresh(
         Date.now()
       ) {
         //* token too old
-        // printStackTrace(
-        //   `Token generated time: ${foundToken.timeGenerated.valueOf()}`
-        // );
-        // printStackTrace(`Token valid time: ${foundToken.validTime}`);
-        // printStackTrace(
-        //   `TokenTime: ${
-        //     foundToken.timeGenerated.valueOf() + foundToken.validTime
-        //   }`
-        // );
-        // printStackTrace(`CurrentTime: ${Date.now()}`);
         printStackTrace("Token too old");
         await prisma.token
           .delete({ where: { id: foundToken.id } })
@@ -86,7 +72,6 @@ export default async function checkIfTokenValidAndRefresh(
         return false;
       } else {
         //* token refresh
-
         await prisma.token.update({
           include: { user: true },
           where: { id: foundToken.id },

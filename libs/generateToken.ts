@@ -6,9 +6,9 @@ export default async function generateToken(
   shouldRemember?: boolean
 ) {
   let generatedToken = randomSalt(24);
-  let goAgane = true;
-  while (goAgane === true) {
-    goAgane = false;
+  let tryAgain = true;
+  while (tryAgain === true) {
+    tryAgain = false;
     const create = await prisma.token
       .create({
         data: {
@@ -19,18 +19,11 @@ export default async function generateToken(
         },
       })
       .catch((err) => {
-        // goAgane = false;
-        // console.log(err);
         if (err.code === "P2002") {
-          goAgane = true;
+          tryAgain = true;
           generatedToken = randomSalt(24);
         }
       });
-    // console.log(create);
-    // const userToken = create;
   }
-  // req.session.set("user", userToken);
   return generatedToken;
-  // await req.session.save();
-  // console.log(getUser);
 }

@@ -12,6 +12,8 @@ import getRandomAuctions from "../libs/getRandomAuctionsLib";
 import { useState } from "react";
 import AuctionsGrid from "../components/auction/AuctionsGrid";
 import Categories from "../components/mainPage/Categories";
+import getCategories from "../libs/getCategories";
+import { getAllPages } from "../libs/pagination";
 
 interface HomePageProps {
   parentCategories: (CategoryParent & {
@@ -33,15 +35,8 @@ export const getServerSideProps: GetServerSideProps = withSession(
   }) {
     const page = parseInt(query.p) || 1;
 
-    const parentCategories = await prisma.categoryParent.findMany({
-      include: {
-        categories: { include: { auctions: { select: { _count: true } } } },
-      },
-    });
-    const pages =
-      (await prisma.auction.count({
-        where: { dateEnd: { gt: Date.now().toString() }, buyerId: null },
-      })) / 100;
+    const parentCategories = await getCategories();
+    const pages = await getAllPages();
 
     const auctions = (await getRandomAuctions(100, (page - 1) * 100)) || [];
     const token = await checkIfTokenValidAndRefresh(req.session);

@@ -7,6 +7,7 @@ import React from "react";
 import Header from "../../components/header/header";
 import Categories from "../../components/mainPage/Categories";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
+import getCategories from "../../libs/getCategories";
 import withSession from "../../libs/ironSession";
 import prisma from "../../prisma/prisma";
 
@@ -19,16 +20,7 @@ interface CategoriesPageProps {
 
 export const getServerSideProps: GetServerSideProps = withSession(
   async function ({ req }: { req: NextApiRequest & { session: Session } }) {
-    // return await getUserFromSession(req);
-
-    //   const auctions = await prisma.auction.findMany();
-    const parentCategories = await prisma.categoryParent.findMany({
-      include: {
-        categories: { include: { auctions: { select: { _count: true } } } },
-      },
-    });
-    // const categories = await prisma.category.findMany();
-    // console.log(auctions);
+    const parentCategories = await getCategories();
     const token = await checkIfTokenValidAndRefresh(req.session);
     if (token) {
       const user = await prisma.user.findUnique({

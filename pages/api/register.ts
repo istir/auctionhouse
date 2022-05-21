@@ -2,15 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import argon2 from "argon2-browser";
 import randomSalt from "../../libs/randomSalt";
 import prisma from "../../prisma/prisma";
-import {
-  validateAddress,
-  validateDate,
-  validateEmail,
-  validateName,
-  validatePassword,
-  validatePhoneNumber,
-  validateZipCode,
-} from "../../libs/validator";
+import { validateRegisterData } from "../../libs/validator";
 import withSession from "../../libs/ironSession";
 import { Session } from "next-iron-session";
 import sendVerificationEmail from "../../libs/sendVerificationEmail";
@@ -19,6 +11,7 @@ import {
   printErrorStackTrace,
 } from "../../libs/stackTrace";
 import insertVerificationTokenIntoUser from "../../libs/insertVerificationTokenIntoUser";
+import unifyRegisterData from "../../libs/unifyRegisterData";
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
     // > ------------------------- how it should work --------------------------- //
@@ -50,45 +43,30 @@ export default withSession(
 
     //? 1.5. validate the data
     if (
-      validateEmail(email) ||
-      validateName(firstName) ||
-      validateName(lastName) ||
-      validatePassword(password) ||
-      validateAddress(street) ||
-      validateName(city) ||
-      validateZipCode(zipCode) ||
-      validatePhoneNumber(phoneNumber) ||
-      validateDate(birthDate)
+      !validateRegisterData({
+        email,
+        firstName,
+        lastName,
+        password,
+        phoneNumber,
+        street,
+        zipCode,
+        city,
+        birthDate,
+      })
     ) {
       console.error("wrong data");
       res.status(200).end("Wrong data");
       return;
     }
     // street = street.replace(" m. ", "/");
-    street = street
-      .replace(/^((ul|ulica)\.? ?)?\b/i, "")
-      .replace(/ ?m.? ?/, "/")
-      .replace(/\w\S*/g, (w: string) =>
-        w.replace(/^\w/, (c) => c.toUpperCase())
-      ); //* replace ul|ulica case insensitive with nothing, then m. to / and then capitalize first letter of word
-    phoneNumber = phoneNumber.replace(/ /g, ""); //* replace spaces with nothing
-    phoneNumber = phoneNumber.replace(/-/g, ""); //* replace - with nothing
-    zipCode = parseInt(zipCode.toString().replace("-", "")); //* replace - with nothing
 
-    if (process.env.NODE_ENV === "development") {
-      zipCode = 12345;
-    }
-
-    let birthDateAsDateObject = birthDate !== "" ? new Date(birthDate) : "";
-    if (
-      process.env.NODE_ENV === "development" &&
-      birthDateAsDateObject === ""
-    ) {
-      birthDateAsDateObject = new Date();
-    }
-    if (process.env.NODE_ENV === "development" && password === "") {
-      password = "123";
-    }
+    const unifiedData = unifyRegisterData({
+      street,
+      phoneNumber,
+      zipCode,
+      birthDate,
+    });
     //? 2 encode the password
     const hash = await argon2.hash({
       pass: password,
@@ -99,12 +77,12 @@ export default withSession(
     try {
       const created = await prisma.user.create({
         data: {
-          birthDate: birthDateAsDateObject,
+          birthDate: unifiedData.birthDate,
           email,
           password: hash.encoded,
           firstName,
           lastName,
-          phoneNumber,
+          phoneNumber: unifiedData.phoneNumber,
           // verificationToken: randomSalt(32, true),
         },
       });
@@ -135,8 +113,8 @@ export default withSession(
           const address = await prisma.address.create({
             data: {
               city,
-              street,
-              zipCode,
+              street: unifiedData.street,
+              zipCode: unifiedData.zipCode,
               userId: created.id,
             },
           });

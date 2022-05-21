@@ -234,3 +234,40 @@ export function validateDate(value: string): string | void {
     console.error(err);
   }
 }
+
+export function validateRegisterData({
+  email,
+  firstName,
+  lastName,
+  password,
+  phoneNumber,
+  street,
+  zipCode,
+  city,
+  birthDate,
+}: {
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  phoneNumber: string;
+  street: string;
+  zipCode: string;
+  city: string;
+  birthDate: string;
+}): boolean {
+  if (
+    validateEmail(email) ||
+    validateName(firstName) ||
+    validateName(lastName) ||
+    validatePassword(password) ||
+    validateAddress(street) ||
+    validateName(city) ||
+    validateZipCode(zipCode) ||
+    validatePhoneNumber(phoneNumber) ||
+    validateDate(birthDate)
+  ) {
+    return false;
+  }
+  return true;
+}

@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Checkbox,
   Table,
   TableContainer,
@@ -10,6 +11,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { Admin, Auction, Bid, User } from "@prisma/client";
+import axios from "axios";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
 import { useRouter } from "next/router";
@@ -61,6 +63,10 @@ export const getServerSideProps: GetServerSideProps = withAdminSession(
 export default function AdminItemsPage(
   props: AdminItemsPageProps
 ): JSX.Element {
+  const [ended, setEnded] = React.useState<boolean[]>(
+    new Array(props.auctions.length).fill(false)
+  );
+
   const router = useRouter();
   React.useEffect(() => {
     if (!props.admin) {
@@ -86,16 +92,20 @@ export default function AdminItemsPage(
                 <Th>Licytacja</Th>
                 <Th>Kup teraz</Th>
                 <Th>Zakończona</Th>
+                <Th>Zakończ</Th>
               </Tr>
             </Thead>
             <Tbody>
-              {props.auctions.map((auction) => (
+              {props.auctions.map((auction, index) => (
                 <Tr key={auction.id}>
-                  <Td maxW={"40"} overflowX="auto" p="1">
+                  <Td overflowX={"auto"} p="1">
                     <NextButton
                       href={`/auction/${auction.url}`}
                       variant="ghost"
                       m="0"
+                      w={"48"}
+                      overflowX="auto"
+                      justifyContent="start"
                     >
                       {auction.name}
                     </NextButton>
@@ -120,6 +130,33 @@ export default function AdminItemsPage(
                     ) : (
                       <Checkbox isDisabled />
                     )}
+                  </Td>
+                  <Td>
+                    <Button
+                      isDisabled={
+                        auction.buyerId !== null ||
+                        parseInt(auction.dateEnd) < Date.now() ||
+                        ended[index]
+                      }
+                      onClick={() => {
+                        axios({
+                          method: "POST",
+                          url: "/api/admin/endAuction",
+                          data: { id: auction.id },
+                        }).then(
+                          (res) => {
+                            if (res.status === 200) {
+                              const newEnded = [...ended];
+                              newEnded[index] = true;
+                              setEnded(newEnded);
+                            }
+                          },
+                          (rej) => {}
+                        );
+                      }}
+                    >
+                      Zakończ
+                    </Button>
                   </Td>
                 </Tr>
               ))}
