@@ -1,8 +1,9 @@
 import { Auction, Bid, Category, User } from ".prisma/client";
 import { Box, Flex, Text } from "@chakra-ui/layout";
-import { useBreakpoint } from "@chakra-ui/react";
+import { useBreakpoint, useColorModeValue } from "@chakra-ui/react";
 import React from "react";
 import PopupLogin from "../../login/PopupLogin";
+import NextButton from "../../NextButton";
 import AuctionAddToCart from "./AuctionAddToCart";
 import AuctionBid from "./AuctionBid";
 import AuctionSeller from "./AuctionSeller";
@@ -31,7 +32,16 @@ export default function AuctionHeader({
   return (
     <Box>
       <Box pos="relative">
-        <Text>{auction.category.name}</Text>
+        <NextButton
+          href={`/categories/${auction.category.url}`}
+          borderRadius="full"
+          variant="pill"
+          backgroundColor={useColorModeValue("gray.100", "gray.800")}
+          // colorScheme={"gray"}
+        >
+          <Text>{auction.category.name}</Text>
+        </NextButton>
+
         <Text
           mt={`${imageRef.current?.height}px`}
           fontWeight="bold"

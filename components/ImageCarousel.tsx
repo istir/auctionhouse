@@ -18,6 +18,7 @@ export default function ImageCarousel(props: ImageCarouselProps): JSX.Element {
   function renderImages() {
     return props.images.map((image) => (
       <Image
+        userSelect={"none"}
         key={image}
         src={image}
         alt="Image"
@@ -128,6 +129,7 @@ export default function ImageCarousel(props: ImageCarouselProps): JSX.Element {
           renderArrowNext={renderRightArrow}
           renderIndicator={renderSizeBar}
           axis="horizontal"
+          infiniteLoop={false}
         >
           {renderImages()}
         </Carousel>
