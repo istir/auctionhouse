@@ -39,6 +39,8 @@ export const getServerSideProps: GetServerSideProps = withSession(
       auctions = await prisma.auction.findMany({
         where: {
           name: { search: query.q.split(" ").join(" & ") },
+          dateEnd: { gt: Date.now().toString() },
+          buyerId: null,
         },
         take: 100,
         skip: (page - 1) * 100,
@@ -47,6 +49,8 @@ export const getServerSideProps: GetServerSideProps = withSession(
         (await prisma.auction.count({
           where: {
             name: { search: query.q.split(" ").join(" & ") },
+            dateEnd: { gt: Date.now().toString() },
+            buyerId: null,
           },
         })) / 100;
     }
