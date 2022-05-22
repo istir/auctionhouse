@@ -38,6 +38,9 @@ export default function AuctionBid(props: AuctionBidProps): JSX.Element {
   const [currentPrice, setCurrentPrice] = React.useState<number>(
     getCurrentPrice()
   );
+  const [currentBidLength, setCurrentBidLength] = React.useState<number>(
+    props.auction.bids.length
+  );
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [sending, setSending] = React.useState<boolean>(false);
   const [auctionended, setAuctionended] = React.useState<boolean>(
@@ -77,6 +80,7 @@ export default function AuctionBid(props: AuctionBidProps): JSX.Element {
         setSending(false);
         onClose();
         setCurrentPrice(price);
+        setCurrentBidLength(currentBidLength + 1);
       },
       (_rej) => {
         setSending(false);
@@ -132,7 +136,7 @@ export default function AuctionBid(props: AuctionBidProps): JSX.Element {
           <Box>
             <Flex gap="1">
               <Text>Aktualna liczba ofert: </Text>
-              <Text fontWeight={"semibold"}>{props.auction.bids.length}</Text>
+              <Text fontWeight={"semibold"}>{currentBidLength}</Text>
             </Flex>
             <Text>Twoja oferta:</Text>
             <InputGroup>
