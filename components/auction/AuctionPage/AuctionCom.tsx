@@ -36,12 +36,14 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
     <Box>
       <Header user={props.user} refresh={props.refresh} />
 
-      <Box
+      <Flex
         bg={isLightMode ? "light.primary1" : "dark.primary1"}
-        m={["0", "5", "10"]}
+        // m={["0", "5", "10"]}
+        m={{ base: 0, md: 5, lg: 10 }}
         shadow={["none", "md"]}
         borderRadius="2xl"
         overflow="hidden"
+        justifyContent={"center"}
       >
         <AuctionImages name={props.auction.name} images={props.auction.image} />
         <Box zIndex="2" pos="relative" mt={["70vh", "70vh", "55vh"]}>
@@ -125,7 +127,7 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
             </Flex>
           </Box>
         </Box>
-      </Box>
+      </Flex>
     </Box>
   );
 }
