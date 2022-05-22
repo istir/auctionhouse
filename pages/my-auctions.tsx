@@ -1,4 +1,4 @@
-import { Auction, Bid, User } from "@prisma/client";
+import { Address, Auction, Bid, User } from "@prisma/client";
 // import { trace } from "console";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { Session } from "next-iron-session";
@@ -17,7 +17,10 @@ interface MyAuctionsPageProps {
   //     auction: Auction;
   //   };
   bidding: (Auction & { bids: Bid[] })[];
-  selling: (Auction & { bids: Bid[] })[];
+  selling: (Auction & {
+    bids: Bid[];
+    buyer: (User & { address: Address }) | null;
+  })[];
 }
 
 export const getServerSideProps: GetServerSideProps = withSession(
@@ -47,7 +50,18 @@ export const getServerSideProps: GetServerSideProps = withSession(
       const sellingAuctions = user
         ? await prisma.auction.findMany({
             where: { sellerId: user.id },
-            include: { bids: { select: { offer: true } } },
+            include: {
+              bids: { select: { offer: true } },
+              buyer: {
+                select: {
+                  firstName: true,
+                  lastName: true,
+                  address: true,
+                  email: true,
+                  phoneNumber: true,
+                },
+              },
+            },
           })
         : [];
       //   const auctions = []

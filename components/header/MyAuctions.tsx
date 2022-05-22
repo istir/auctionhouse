@@ -1,16 +1,28 @@
 import {
   Box,
+  Button,
   Checkbox,
+  Flex,
   Image,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Table,
   TableContainer,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
+  useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { Auction, Bid, User } from "@prisma/client";
+import { Address, Auction, Bid, User } from "@prisma/client";
 import { useRouter } from "next/router";
 import React from "react";
 import AuctionTimer from "../auction/AuctionTimer";
@@ -23,15 +35,20 @@ interface MyAuctionsProps {
   auctionsBid?: (Auction & { bids: Bid[] })[];
   token?: string;
   user?: User;
-  sellingAuctions?: (Auction & { bids: Bid[] })[];
+  sellingAuctions?: (Auction & {
+    bids: Bid[];
+    buyer: (User & { address: Address }) | null;
+  })[];
   //   bids?: Bid[] & { auction: Auction };
   refresh: () => void;
 }
 
 export default function MyAuctions(props: MyAuctionsProps): JSX.Element {
-  console.log(props.auctionsWon);
-  console.log(props.auctionsBid);
   const router = useRouter();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [buyerData, setBuyerData] = React.useState<
+    (User & { address: Address }) | null | undefined
+  >(null);
   return (
     <Box>
       <Header user={props.user} />
@@ -143,6 +160,7 @@ export default function MyAuctions(props: MyAuctionsProps): JSX.Element {
                 <Th>Zakończona</Th>
                 <Th>Kupiona</Th>
                 <Th>Edytuj</Th>
+                <Th>Dane o kupującym</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -199,12 +217,73 @@ export default function MyAuctions(props: MyAuctionsProps): JSX.Element {
                       <Checkbox isDisabled />
                     )} */}
                   </Td>
+                  <Td
+                    cursor={"default"}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <Button
+                      disabled={auction.buyerId === null}
+                      onClick={() => {
+                        setBuyerData(auction.buyer);
+                        onOpen();
+                      }}
+                    >
+                      Wyświetl
+                    </Button>
+                  </Td>
                 </Tr>
               ))}
             </Tbody>
           </Table>
         </TableContainer>
       </TitleHolder>
+      <Modal isOpen={isOpen} onClose={onClose} size="2xl">
+        <ModalOverlay />
+        <ModalContent
+          backgroundColor={useColorModeValue("light.primary1", "dark.primary1")}
+        >
+          <ModalHeader>Dane użytkownika</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {buyerData ? (
+              <Flex flexDir="column">
+                <Flex flexDir={"column"}>
+                  <Text>Dane kupującego: </Text>
+                  <Text>
+                    {buyerData.firstName} {buyerData.lastName}
+                  </Text>
+                  <Text>
+                    {buyerData.address.street}, {buyerData.address.zipCode}{" "}
+                    {buyerData.address.city}
+                  </Text>
+                  <Text>{buyerData.phoneNumber}</Text>
+                  <Text
+                    as={"a"}
+                    href={`mailto:${buyerData.email}`}
+                    decoration="underline"
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    color={useColorModeValue(
+                      "light.onPrimaryContainer",
+                      "dark.onPrimaryContainer"
+                    )}
+                  >
+                    {buyerData.email}
+                  </Text>
+                </Flex>
+              </Flex>
+            ) : (
+              "Coś poszło nie tak"
+            )}
+          </ModalBody>
+          <ModalFooter display={"flex"} justifyContent="space-between">
+            <Button colorScheme={"blue"} onClick={onClose}>
+              Zamknij
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }
