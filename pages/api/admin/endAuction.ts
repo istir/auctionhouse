@@ -26,9 +26,9 @@ export default withAdminSession(
       });
 
       if (auction) {
-        const a = await prisma.auction.update({
+        const a = await prisma.auction.delete({
           where: { id: auction.id },
-          data: { dateEnd: new Date().getTime().toString() },
+          // data: { dateEnd: new Date().getTime().toString() },
         });
         if (a) return res.status(200).end("OK");
         return res.status(400).end("Couldn't end auction");

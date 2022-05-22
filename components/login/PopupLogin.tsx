@@ -1,4 +1,4 @@
-import { Button } from "@chakra-ui/button";
+import { Button, ButtonProps } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import {
   Modal,
@@ -27,7 +27,6 @@ interface PopupLoginProps {
   dontRenderIcon?: boolean;
   text?: string;
   buttonSize?: "sm" | "lg" | "md" | "xs";
-
   buttonColorScheme?:
     | "teal"
     | "whiteAlpha"
@@ -49,7 +48,9 @@ interface PopupLoginProps {
     | "telegram";
 }
 
-export default function PopupLogin(props: PopupLoginProps): JSX.Element {
+export default function PopupLogin(
+  props: PopupLoginProps & ButtonProps
+): JSX.Element {
   const [type, setType] = React.useState<"login" | "register" | "forgor">(
     "login"
   );
@@ -70,6 +71,7 @@ export default function PopupLogin(props: PopupLoginProps): JSX.Element {
   return (
     <>
       <Button
+        borderRadius={"full"}
         onClick={onOpen}
         size={props.buttonSize || "md"}
         bg={useColorModeValue(

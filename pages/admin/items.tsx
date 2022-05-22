@@ -155,7 +155,7 @@ export default function AdminItemsPage(
                         );
                       }}
                     >
-                      Zakończ
+                      Usuń
                     </Button>
                   </Td>
                 </Tr>
