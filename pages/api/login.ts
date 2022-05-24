@@ -43,7 +43,12 @@ export default withSession(
       return;
     }
     //? 1 get JSON data from request
-    let { email, password, rememberMe } = req.body;
+    let { password, rememberMe } = req.body;
+    let email = req.body.email as string;
+    email = email.toLowerCase().trim();
+
+    // email:string = email.toString()
+
     // console.log("res", res);
     // return;
     //? 1.5. validate the data

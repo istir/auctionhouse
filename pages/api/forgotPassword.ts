@@ -16,7 +16,8 @@ export default async function search(
   if (req.method === "GET") {
     return res.status(400).send("Bad Request");
   }
-  const email = req.body.email as string;
+  let email = req.body.email as string;
+  email = email.toLowerCase().trim();
 
   if (!email) {
     printErrorStackTrace(`Wrong email: ${email}`);

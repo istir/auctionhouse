@@ -5,10 +5,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const email = Array.isArray(req.query.email)
+  let email = Array.isArray(req.query.email)
     ? req.query.email[0]
     : req.query.email;
-  console.log(email);
+
+  email = email.toLowerCase().trim();
 
   if (!email) return res.status(400).end();
   const _m = await sendVerificationEmail(email);

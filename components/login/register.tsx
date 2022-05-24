@@ -28,7 +28,7 @@ interface RegisterProps {
 export const Register: React.FC<RegisterProps> = (props) => {
   const [success, setSuccess] = React.useState<string>("");
   const [error, setError] = React.useState<string>("");
-
+  const [loading, setLoading] = React.useState<boolean>(false);
   type FormikValues = {
     firstName: string;
     lastName: string;
@@ -58,6 +58,7 @@ export const Register: React.FC<RegisterProps> = (props) => {
   function HandleOnSubmit(values: FormikValues) {
     setError("");
     props.setLoading?.(true);
+    setLoading(true);
     axios({ url: "/api/register", method: "post", data: values }).then(
       (ful) => {
         console.log(ful.data);
@@ -67,16 +68,20 @@ export const Register: React.FC<RegisterProps> = (props) => {
             setSuccess(
               "Wysłano maila weryfikującego. Sprawdź swoją skrzynkę pocztową"
             );
+            setLoading(false);
             return props.setLoading?.(false);
           }
           if (ful.data === "email already exists") {
+            setLoading(false);
             return setError("Email już istnieje");
           }
         } else {
+          setLoading(false);
           setError(ful.data);
         }
       },
       (rej) => {
+        setLoading(false);
         props.setLoading?.(false);
         setError(rej);
       }
@@ -131,6 +136,7 @@ export const Register: React.FC<RegisterProps> = (props) => {
             <FormInput name="city" label="Miasto*" validator={validateName} />
           </Grid>
           <Button
+            isLoading={loading}
             type="submit"
             mt="2"
             bg={useColorModeValue(

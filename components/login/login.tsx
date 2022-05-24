@@ -19,6 +19,7 @@ interface LoginProps {
 
 export default function Login(props: LoginProps): JSX.Element {
   const [error, setError] = React.useState<string>("");
+  const [loading, setLoading] = React.useState<boolean>(false);
   const [success, setSuccess] = React.useState<string>("");
   const [erroredEmail, setErroredEmail] = React.useState<string>("");
   type FormikValues = {
@@ -36,6 +37,7 @@ export default function Login(props: LoginProps): JSX.Element {
     try {
       setError("");
       props.setLoading?.(true);
+      setLoading(true);
       axios.post("/api/login", values).then(
         (ful) => {
           console.log(ful);
@@ -46,14 +48,17 @@ export default function Login(props: LoginProps): JSX.Element {
           ) {
             props?.setUser?.(ful.data.user as User);
             props?.closePopup?.();
+            setLoading(false);
           } else if (
             (ful.status == 200 && ful.data.status === "refresh") ||
             (ful.data.status === "OK" && props?.setUser === undefined)
           ) {
             props?.refresh?.();
             props?.closePopup?.();
+            setLoading(false);
           } else {
             props.setLoading?.(false);
+            setLoading(false);
             ful.data?.status ? setError(ful.data.status) : setError(ful.data);
             setErroredEmail(values.email);
           }
@@ -94,6 +99,7 @@ export default function Login(props: LoginProps): JSX.Element {
           <Button
             type="submit"
             mt="2"
+            isLoading={loading}
             bg={useColorModeValue(
               "light.primaryContainer",
               "dark.primaryContainer"

@@ -24,7 +24,10 @@ export default withAdminSession(
       return;
     }
     //? 1 get JSON data from request
-    let { email, password } = req.body;
+    let { password } = req.body;
+    let email = req.body.email as string;
+    email = email.toLowerCase().trim();
+
     // console.log("res", res);
     // return;
     //? 1.5. validate the data

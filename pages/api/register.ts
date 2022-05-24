@@ -30,7 +30,6 @@ export default withSession(
     }
     //? 1 get JSON data from request
     let {
-      email,
       firstName,
       lastName,
       password,
@@ -40,7 +39,10 @@ export default withSession(
       city,
       birthDate,
     } = req.body;
-
+    let email = req.body.email as string;
+    email = email.toLowerCase().trim();
+    firstName = firstName.trim();
+    lastName = lastName.trim();
     //? 1.5. validate the data
     if (
       !validateRegisterData({
