@@ -25,7 +25,7 @@ export default async function handleAdminSessionToken(
       } else session.set("usr", { token });
 
       await session.save();
-      console.log("await save");
+      // console.log("await save");
       //   await prisma.token.create({
       //     data: {
       //       token: token.token,

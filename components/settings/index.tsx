@@ -32,6 +32,7 @@ interface SettingsProps {
   onOpen: () => void;
   onClose: () => void;
   user: User;
+  setUser?: (user: User) => void;
 }
 
 export default function Settings(props: SettingsProps): JSX.Element {
@@ -85,7 +86,9 @@ export default function Settings(props: SettingsProps): JSX.Element {
     }).then(
       (ful) => {
         setLoading(false);
-        router.reload();
+        props?.setUser?.({ ...props.user, ...values, avatar: imgs[0] });
+        props?.onClose?.();
+        // router.reload();
       },
       () => {
         setChangeInfoError("Coś poszło nie tak, spróbuj ponownie");
@@ -107,7 +110,7 @@ export default function Settings(props: SettingsProps): JSX.Element {
     }).then(
       (ful) => {
         setLoading(false);
-        console.log(ful.data);
+        // console.log(ful.data);
         router.reload();
       },
       () => {
@@ -126,7 +129,7 @@ export default function Settings(props: SettingsProps): JSX.Element {
     }).then(
       (ful) => {
         setLoading(false);
-        console.log(ful.data);
+        // console.log(ful.data);
         router.reload();
       },
       () => {
@@ -165,7 +168,7 @@ export default function Settings(props: SettingsProps): JSX.Element {
                   onSubmit={submitChangePassword}
                 >
                   <Form>
-                    <Flex flexDir={"column"} gap="2">
+                    <Flex flexDir={"column"} gap="2" w="64">
                       <FormInput
                         name="previousPassword"
                         label="Podaj obecne hasło"
@@ -178,6 +181,10 @@ export default function Settings(props: SettingsProps): JSX.Element {
                         isPassword
                       />
                       <FormMessage error={changePasswordError} />
+                      <Text textAlign={"center"}>
+                        Po zmianie hasła zostaniesz wylogowany ze wszytkich
+                        urządzeń
+                      </Text>
                       <Button
                         colorScheme={"red"}
                         type="submit"
@@ -208,7 +215,7 @@ export default function Settings(props: SettingsProps): JSX.Element {
                   onSubmit={submitChangeInfo}
                 >
                   <Form>
-                    <Flex flexDir={"column"} gap="2">
+                    <Flex flexDir={"column"} gap="2" w="64">
                       <FormInput
                         name="firstName"
                         label="Imię"
@@ -265,7 +272,7 @@ export default function Settings(props: SettingsProps): JSX.Element {
                   onSubmit={submitDeleteAccount}
                 >
                   <Form>
-                    <Flex flexDir={"column"} gap="2">
+                    <Flex flexDir={"column"} gap="2" w="64">
                       <FormInput
                         name="password"
                         label="Podaj obecne hasło"

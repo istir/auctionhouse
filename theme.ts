@@ -1,4 +1,9 @@
-import { Colors, ThemeConfig, extendTheme } from "@chakra-ui/react";
+import {
+  ButtonProps,
+  Colors,
+  ThemeConfig,
+  extendTheme,
+} from "@chakra-ui/react";
 import { Styles, mode } from "@chakra-ui/theme-tools";
 // import isLight from "./libs/isLightMode";
 // const customTheme:Theme {
@@ -169,11 +174,24 @@ const config: ThemeConfig = {
   initialColorMode: "system",
   useSystemColorMode: false,
 };
+
+//var(--chakra-colors-dark-primary3)
 const components = {
   Button: {
-    baseStyle: ({ colorScheme }: { colorScheme: string }) => ({
+    baseStyle: (props: { colorScheme: string } & ButtonProps) => ({
       _focus: {
-        boxShadow: `0 0 0 0px var(--chakra-colors-${colorScheme}-200)`,
+        boxShadow:
+          props.colorScheme === "dark" ||
+          props.colorScheme === "light" ||
+          props.colorScheme === "material"
+            ? mode(
+                `0 0 0 2px var(--chakra-colors-light-onPrimaryContainer)`,
+                `0 0 0 2px var(--chakra-colors-dark-onPrimaryContainer)`
+              )(props)
+            : mode(
+                `0 0 0 2px var(--chakra-colors-${props.colorScheme}-200)`,
+                `0 0 0 2px var(--chakra-colors-${props.colorScheme}-500)`
+              )(props),
       },
     }),
     variants: {

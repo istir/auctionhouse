@@ -60,7 +60,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
     // });
     const id = parseInt(params.id);
     const token = await checkIfTokenValidAndRefresh(req.session);
-    console.log("token", token);
+    // console.log("token", token);
     let user: {
       firstName: string;
       lastName: string;
@@ -116,7 +116,7 @@ export default function UserAuctionPage(
   props: UserAuctionPageProps
 ): JSX.Element {
   const router = useRouter();
-  console.log(props.token?.user, props.user);
+  // console.log(props.token?.user, props.user);
   const [hideEnded, setHideEnded] = React.useState<boolean>(false);
   if (!props.auctions || props.auctions.length === 0)
     return (

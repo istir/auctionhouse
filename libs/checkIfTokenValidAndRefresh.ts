@@ -1,7 +1,6 @@
 import { Session } from "next-iron-session";
 import prisma from "../prisma/prisma";
 import checkForEndingAuctions from "./checkForEndingAuctions";
-import { ifDev } from "./ifDev";
 import { printErrorStackTrace, printStackTrace } from "./stackTrace";
 /**
  * function checks if token is valid
@@ -79,7 +78,7 @@ export default async function checkIfTokenValidAndRefresh(
         });
         printStackTrace("Token refreshed");
         const user = session.get("user");
-        ifDev && console.log("User found:", user);
+        printStackTrace(`User found: ${user}`);
         return user;
       }
     }

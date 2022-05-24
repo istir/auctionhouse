@@ -5,7 +5,7 @@ import prisma from "../../prisma/prisma";
 import withSession from "../../libs/ironSession";
 import { Session } from "next-iron-session";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
-import { printErrorStackTrace } from "../../libs/stackTrace";
+import { printErrorStackTrace, printStackTrace } from "../../libs/stackTrace";
 import randomSalt from "../../libs/randomSalt";
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
@@ -22,7 +22,8 @@ export default withSession(
     const user = await prisma.user.findUnique({
       where: { id },
     });
-    console.log("user", user);
+
+    // console.log("user", user);
     // ? 2.5. if user doesn't exist throw a generic error
     if (!user) {
       return res.status(200).end("Data doesn't exist");
@@ -42,7 +43,14 @@ export default withSession(
           data: { password: hash.encoded },
         });
         if (changed) {
-          printErrorStackTrace(`Changed password for user: ${user.email}`);
+          const removeTokens = await prisma.token.deleteMany({
+            where: { userId: changed.id },
+          });
+          printStackTrace(`Changed password for user: ${user.email}`);
+          if (removeTokens) {
+            printStackTrace(`Removed tokens for user: ${user.email}`);
+          }
+          return res.status(200).end("OK");
         }
         printErrorStackTrace(
           `Failed to change password for user: ${user.email}`

@@ -53,13 +53,18 @@ export default withSession(
           include: { tokens: true },
         });
         if (changed) {
-          await handleSessionToken(req.session, "", {
-            firstName: changed.firstName,
-            lastName: changed.lastName,
-            id: changed.id,
-            email: changed.email,
-            phoneNumber: changed.phoneNumber,
-          });
+          await handleSessionToken(
+            req.session,
+            "",
+            {
+              firstName: changed.firstName,
+              lastName: changed.lastName,
+              id: changed.id,
+              email: changed.email,
+              phoneNumber: changed.phoneNumber,
+            },
+            "save"
+          );
           printErrorStackTrace(`Changed information for user: ${user.email}`);
           return res.status(200).end("OK");
         }

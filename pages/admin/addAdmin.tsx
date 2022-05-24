@@ -62,14 +62,14 @@ export default function AdminAddAdminPage(
       // props.setLoading?.(true);
       axios.post("/api/admin/addAdmin", values).then(
         (ful) => {
-          console.log(ful);
+          // console.log(ful);
           if (ful.status == 200 && ful.data.status === "OK") {
             router.push("/admin");
           } else {
             // TODO: show error
             setLoading(false);
             setSuccess(`Dodano nowego administratora: ${ful.data}`);
-            console.log(ful.data);
+            // console.log(ful.data);
             // ful.data?.status ? setError(ful.data.status) : setError(ful.data);
           }
           // ful.status=200&&ful.statusText='OK'&&props?.refresh()&&props?.closePopup();

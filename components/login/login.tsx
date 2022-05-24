@@ -40,7 +40,6 @@ export default function Login(props: LoginProps): JSX.Element {
       setLoading(true);
       axios.post("/api/login", values).then(
         (ful) => {
-          console.log(ful);
           if (
             ful.status == 200 &&
             ful.data.status === "OK" &&

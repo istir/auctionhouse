@@ -61,7 +61,6 @@ export const Register: React.FC<RegisterProps> = (props) => {
     setLoading(true);
     axios({ url: "/api/register", method: "post", data: values }).then(
       (ful) => {
-        console.log(ful.data);
         if (ful.status === 200) {
           if (ful.data === "OK" || ful.data === "OK + Address") {
             props?.setUser?.(ful.data as User);

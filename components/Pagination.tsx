@@ -12,7 +12,6 @@ interface PaginationProps {
 }
 
 export default function Pagination(props: PaginationProps): JSX.Element {
-  console.log(props.allPages, props.page);
   const difference = Math.ceil(props.allPages) - Math.ceil(props.page);
   const pages = [...Array(difference + 1).keys()].slice(1);
   const max = props.maxPages || 5;

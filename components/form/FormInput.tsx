@@ -15,6 +15,7 @@ interface FormFieldProps {
   label: string;
   isPassword?: boolean;
   isNumeric?: boolean;
+  tabindex?: number;
 }
 
 export default function FormInput(props: FormFieldProps): JSX.Element {
@@ -31,6 +32,7 @@ export default function FormInput(props: FormFieldProps): JSX.Element {
           {...field}
           id={props.name}
           placeholder={props.label}
+          tabIndex={props.tabindex}
           type={
             props.isPassword
               ? showPassword
@@ -49,6 +51,7 @@ export default function FormInput(props: FormFieldProps): JSX.Element {
               variant={"ghost"}
               m="0"
               borderLeftRadius={"0"}
+              tabIndex={-1}
               onClick={() => {
                 setShowPassword((prev) => !prev);
               }}

@@ -44,7 +44,7 @@ export default function FormImages(props: FormImagesProps): JSX.Element {
           value: ImageListType,
           addUpdatedIndex?: number[] | undefined
         ) => {
-          console.log(value, addUpdatedIndex);
+          // console.log(value, addUpdatedIndex);
           setImages(value);
           if (!addUpdatedIndex) return;
           const dataUri = value[addUpdatedIndex?.[0]].dataURL;
@@ -78,7 +78,7 @@ export default function FormImages(props: FormImagesProps): JSX.Element {
               }
             },
             (rej) => {
-              console.log(rej, rej.data);
+              // console.log(rej, rej.data);
             }
           );
         }}
@@ -93,6 +93,7 @@ export default function FormImages(props: FormImagesProps): JSX.Element {
         }) => (
           <Box>
             <Button
+              mb="2"
               colorScheme={isDragging ? "red" : "blue"}
               onClick={onImageUpload}
               {...dragProps}

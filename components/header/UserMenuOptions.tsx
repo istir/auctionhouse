@@ -3,7 +3,9 @@ import {
   Button,
   MenuItem,
   MenuList,
+  Portal,
   useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { User } from "@prisma/client";
 import axios from "axios";
@@ -17,7 +19,7 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 import NextButton from "../NextButton";
-import OpenSettingsButton from "../settings/OpenSettingsButton";
+import Settings from "../settings";
 
 interface UserMenuOptionsProps {
   refresh?: () => void;
@@ -29,6 +31,7 @@ interface UserMenuOptionsProps {
 export default function UserMenuOptions(
   props: UserMenuOptionsProps
 ): JSX.Element {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const items = [
     {
@@ -57,28 +60,28 @@ export default function UserMenuOptions(
     },
     {
       name: "Ustawienia",
-      onClick: () => {
-        // router.push("/my-auctions");
-      },
+      onClick: onOpen,
       // href: "/my-auctions",
       href: "#",
-      component: (
-        <OpenSettingsButton
-          key={"Ustawienia"}
-          w="full"
-          m="0"
-          p="0"
-          paddingInlineEnd={"0"}
-          paddingInlineStart="0"
-          variant={"ghost"}
-          user={props.user}
-        >
-          <Box mr="2">
-            <FaCog />
-          </Box>
-          Ustawienia
-        </OpenSettingsButton>
-      ),
+
+      // component: (
+      //   <OpenSettingsButton
+      //     key={"Ustawienia"}
+      //     w="full"
+      //     m="0"
+      //     p="0"
+      //     paddingInlineEnd={"0"}
+      //     paddingInlineStart="0"
+      //     variant={"ghost"}
+      //     user={props.user}
+      //     setUser={props.setUser}
+      //   >
+      //     <Box mr="2">
+      //       <FaCog />
+      //     </Box>
+      //     Ustawienia
+      //   </OpenSettingsButton>
+      // ),
       icon: <FaCog />,
     },
     {
@@ -100,35 +103,36 @@ export default function UserMenuOptions(
   ];
 
   return (
-    <MenuList
-      zIndex={"modal"}
-      bg={useColorModeValue("light.primary4", "dark.primary4")}
-    >
-      {items.map((item) =>
-        item.href && item.href !== "#" ? (
-          <MenuItem
-            // cursor={"pointer"}
-            key={item.name}
-            margin={"0"}
-            padding="0"
-            // onClick={item.onClick}
-            //   as={item.href ? "a" : "button"}
+    <>
+      <MenuList
+        zIndex={"modal"}
+        bg={useColorModeValue("light.primary4", "dark.primary4")}
+      >
+        {items.map((item) =>
+          item.href && item.href !== "#" ? (
+            <MenuItem
+              // cursor={"pointer"}
+              key={item.name}
+              margin={"0"}
+              padding="0"
+              // onClick={item.onClick}
+              //   as={item.href ? "a" : "button"}
 
-            //   href={item.href}
-          >
-            <NextButton
-              href={item.href}
-              w="full"
-              m="0"
-              p="0"
-              paddingInlineEnd={"0"}
-              paddingInlineStart="0"
-              variant={"ghost"}
+              //   href={item.href}
             >
-              <Box mr="2">{item.icon}</Box>
-              {item.name}
-            </NextButton>
-            {/* <NextLink href={item.href} passHref>
+              <NextButton
+                href={item.href}
+                w="full"
+                m="0"
+                p="0"
+                paddingInlineEnd={"0"}
+                paddingInlineStart="0"
+                variant={"ghost"}
+              >
+                <Box mr="2">{item.icon}</Box>
+                {item.name}
+              </NextButton>
+              {/* <NextLink href={item.href} passHref>
               <Button
                 w="full"
                 m="0"
@@ -141,34 +145,44 @@ export default function UserMenuOptions(
                 {item.name}
               </Button>
             </NextLink> */}
-          </MenuItem>
-        ) : item.component ? (
-          item.component
-        ) : (
-          <MenuItem
-            // cursor={"pointer"}
-            key={item.name}
-            margin={"0"}
-            padding="0"
-            //   as={item.href ? "a" : "button"}
-            //   as={"a"}
-            //   href={item.href}
-          >
-            <Button
-              w="full"
-              m="0"
-              p="0"
-              paddingInlineEnd={"0"}
-              paddingInlineStart="0"
-              variant={"ghost"}
-              onClick={item.onClick}
+            </MenuItem>
+          ) : (
+            <MenuItem
+              // cursor={"pointer"}
+              key={item.name}
+              margin={"0"}
+              padding="0"
+              //   as={item.href ? "a" : "button"}
+              //   as={"a"}
+              //   href={item.href}
             >
-              <Box mr="2">{item.icon}</Box>
-              {item.name}
-            </Button>
-          </MenuItem>
-        )
-      )}
-    </MenuList>
+              <Button
+                w="full"
+                m="0"
+                p="0"
+                paddingInlineEnd={"0"}
+                paddingInlineStart="0"
+                variant={"ghost"}
+                onClick={item.onClick}
+              >
+                <Box mr="2">{item.icon}</Box>
+                {item.name}
+              </Button>
+            </MenuItem>
+          )
+        )}
+      </MenuList>
+      <Portal>
+        {props.user ? (
+          <Settings
+            isOpen={isOpen}
+            onOpen={onOpen}
+            onClose={onClose}
+            user={props.user}
+            setUser={props.setUser}
+          />
+        ) : null}
+      </Portal>
+    </>
   );
 }

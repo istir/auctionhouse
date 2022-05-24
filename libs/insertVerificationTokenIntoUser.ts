@@ -1,6 +1,7 @@
 // import { User } from "@prisma/client";
 import prisma from "../prisma/prisma";
 import randomSalt from "./randomSalt";
+import { printErrorStackTrace } from "./stackTrace";
 
 export default async function insertVerificationTokenIntoUser(
   userId: number,
@@ -13,7 +14,7 @@ export default async function insertVerificationTokenIntoUser(
   let goAgane = true;
   while (goAgane === true) {
     goAgane = false;
-    console.log("agane");
+    printErrorStackTrace(`Token ${token} already exists, trying again...`);
     return await prisma.user
       .update({
         where: { id: userId },

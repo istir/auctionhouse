@@ -138,7 +138,7 @@ export default function CartComponent(props: CartComponentProps): JSX.Element {
                         data: { auctionId: item.id },
                       })
                         .then((res) => {
-                          console.log(res);
+                          // console.log(res);
                           if (res.status === 200) {
                             setItemsInCart((prevItems) => {
                               return prevItems.filter((i) => i.id !== item.id);
@@ -146,7 +146,7 @@ export default function CartComponent(props: CartComponentProps): JSX.Element {
                           }
                         })
                         .catch((err) => {
-                          console.log(err);
+                          // console.log(err);
                         });
                     }}
                   >

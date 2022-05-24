@@ -41,19 +41,19 @@ export default function AdminLoginPage(
       // props.setLoading?.(true);
       axios.post("/api/admin/login", values).then(
         (ful) => {
-          console.log(ful);
+          // console.log(ful);
           if (ful.status == 200 && ful.data.status === "OK") {
             router.push("/admin");
           } else {
             // TODO: show error
             setLoading(false);
-            console.log(ful.data);
+            // console.log(ful.data);
             // ful.data?.status ? setError(ful.data.status) : setError(ful.data);
           }
           // ful.status=200&&ful.statusText='OK'&&props?.refresh()&&props?.closePopup();
         },
         (rej) => {
-          console.error(rej);
+          // console.error(rej);
           setError(
             "Ups, coś poszło nie tak! Sprawdź dane logowania i spróbuj ponownie."
           ); //! ?

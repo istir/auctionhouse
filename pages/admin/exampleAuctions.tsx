@@ -79,7 +79,7 @@ export default function AdminAddAdminPage(
       // props.setLoading?.(true);
       axios.post("/api/admin/addExampleAuctions").then(
         (ful) => {
-          console.log(ful.data);
+          // console.log(ful.data);
 
           if (ful.status == 200) {
             if (ful.data === "Success") {
@@ -120,7 +120,7 @@ export default function AdminAddAdminPage(
       // props.setLoading?.(true);
       axios.post("/api/admin/endExampleAuctions").then(
         (ful) => {
-          console.log(ful.data);
+          // console.log(ful.data);
 
           if (ful.status == 200) {
             setSuccess("Usunięto aukcje");

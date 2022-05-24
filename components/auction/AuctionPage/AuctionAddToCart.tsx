@@ -32,7 +32,6 @@ export default function AuctionAddToCart({
   const router = useRouter();
   function sendAjaxRequest() {
     // if (!props.user) return;
-    console.log("props.user");
     props.setInCart(true);
     if (props.inCart) {
       router.push("/cart");

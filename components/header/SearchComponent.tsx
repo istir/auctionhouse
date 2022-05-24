@@ -31,7 +31,7 @@ export default function SearchComponent(
 
   function sendSearch() {
     router.push("/search?q=" + search);
-    console.log(search);
+    // console.log(search);
   }
 
   return (

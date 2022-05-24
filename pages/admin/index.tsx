@@ -16,7 +16,7 @@ interface AdminIndexPageProps {
 export const getServerSideProps: GetServerSideProps = withAdminSession(
   async function ({ req }: { req: NextApiRequest & { session: Session } }) {
     const token = await checkIfAdminTokenValidAndRefresh(req.session);
-    console.log(token);
+    // console.log(token);
     if (token) {
       return { props: { token: token.token, admin: token.user } };
     } else {
