@@ -46,7 +46,12 @@ export default function AuctionCom(props: AuctionProps): JSX.Element {
         justifyContent={"center"}
       >
         <AuctionImages name={props.auction.name} images={props.auction.image} />
-        <Box zIndex="2" pos="relative" mt={["70vh", "70vh", "55vh"]}>
+        <Box
+          zIndex="2"
+          pos="relative"
+          mt={["70vh", "70vh", "55vh"]}
+          minW="70vw"
+        >
           <Box
             bg={isLightMode ? "light.primary1" : "dark.primary1"}
             px={["3", "10"]}

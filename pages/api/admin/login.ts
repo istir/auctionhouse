@@ -60,13 +60,13 @@ export default withAdminSession(
         encoded: user.password,
       })
       .then(async () => {
-        console.log("v");
+        // console.log("v");
         const token = await generateAdminToken(user.id);
         await handleAdminSessionToken(req.session, token, {
           id: user.id,
           email: user.email,
         });
-        console.log("h");
+        // console.log("h");
         // avatar: true,
         // firstName: true,
         // lastName: true,
