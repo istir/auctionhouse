@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { printStackTrace } from "../../libs/stackTrace";
 import prisma from "../../prisma/prisma";
 
 export default async function handler(
@@ -14,6 +15,7 @@ export default async function handler(
       data: { verified: true },
     });
     if (userToVerify) {
+      printStackTrace(`Verified user: ${userToVerify.email}`);
       return res
         .status(200)
         .end(

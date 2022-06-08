@@ -9,6 +9,7 @@ import sendVerificationEmail from "../../libs/sendVerificationEmail";
 import {
   printDevStackTrace,
   printErrorStackTrace,
+  printStackTrace,
 } from "../../libs/stackTrace";
 import insertVerificationTokenIntoUser from "../../libs/insertVerificationTokenIntoUser";
 import unifyRegisterData from "../../libs/unifyRegisterData";
@@ -102,6 +103,7 @@ export default withSession(
       //   phoneNumber: created.phoneNumber,
       // });
       if (created) {
+        printStackTrace(`User created: ${created.email}`);
         const u = await insertVerificationTokenIntoUser(created.id);
       }
       try {

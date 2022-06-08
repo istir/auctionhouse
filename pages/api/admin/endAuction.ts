@@ -4,6 +4,7 @@ import { Session } from "next-iron-session";
 import checkIfAdminTokenValidAndRefresh from "../../../libs/admin/checkIfAdminTokenValidAndRefresh";
 import withAdminSession from "../../../libs/admin/adminIronSession";
 import prisma from "../../../prisma/prisma";
+import { printStackTrace } from "../../../libs/stackTrace";
 
 export default withAdminSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
@@ -30,7 +31,12 @@ export default withAdminSession(
           where: { id: auction.id },
           // data: { dateEnd: new Date().getTime().toString() },
         });
-        if (a) return res.status(200).end("OK");
+        if (a) {
+          printStackTrace(
+            `Deleted auction: ${auction.id} by admin ${isValidToken.user.email}`
+          );
+          return res.status(200).end("OK");
+        }
         return res.status(400).end("Couldn't end auction");
       }
       return res.status(400).end("Auction doesn't exist");
