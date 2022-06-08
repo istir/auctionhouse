@@ -7,7 +7,7 @@ import { Session } from "next-iron-session";
 import handleSessionToken from "../../libs/handleSessionToken";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
 import generateToken from "../../libs/generateToken";
-import { printDevStackTrace } from "../../libs/stackTrace";
+import { printDevStackTrace, printStackTrace } from "../../libs/stackTrace";
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
     // > ------------------------- how it should work --------------------------- //
@@ -95,6 +95,7 @@ export default withSession(
         // lastName: true,
         // cart: { include: { items: true } },
         // id: true,
+        printStackTrace(`User logged in: ${user.email}`);
         res.status(200).end(
           JSON.stringify({
             status: "OK",

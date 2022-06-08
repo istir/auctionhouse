@@ -5,6 +5,7 @@ import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh"
 import withSession from "../../libs/ironSession";
 
 import addAuction from "../../libs/addAuction";
+import { printStackTrace } from "../../libs/stackTrace";
 // export default withSession(
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
@@ -22,7 +23,7 @@ export default withSession(
     const price = req.body.price as number;
     const categoryId = req.body.categoryId as string;
 
-    console.log(bidding, markdown, name, dateEnd, image, price, categoryId);
+    // console.log(bidding, markdown, name, dateEnd, image, price, categoryId);
     // const auctionId = parseInt(req.body.auctionId as string) || 0;
     const isValidToken = await checkIfTokenValidAndRefresh(req.session);
 
@@ -65,7 +66,12 @@ export default withSession(
       categoryId: parseInt(categoryId),
       sellerId: isValidToken.user.id,
     });
-    if (added) return res.status(200).end(JSON.stringify(added));
+    if (added) {
+      printStackTrace(
+        `Added auction: ${added.name} by user ${isValidToken.user.email}`
+      );
+      return res.status(200).end(JSON.stringify(added));
+    }
     return res.status(200).end("Error");
     // let generatedUrl = generateUrl(name);
     // let goAgane = true;

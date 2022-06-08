@@ -17,7 +17,7 @@ export default async function handler(
       return res
         .status(200)
         .end(
-          `<h1>Konto ${userToVerify.email} zweryfikowane.</h1> <a href="/">Powrót do strony głównej</a>`
+          `<h1>Konto ${userToVerify.email} zweryfikowane.</h1> <a href="/">Auctionhouse</a>`
         );
     }
   } catch {

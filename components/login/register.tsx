@@ -124,7 +124,7 @@ export const Register: React.FC<RegisterProps> = (props) => {
             />
             <FormInput
               name="street"
-              label="Ulica*"
+              label="Ulica i numer domu*"
               validator={validateAddress}
             />
             <FormInput
