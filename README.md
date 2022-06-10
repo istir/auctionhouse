@@ -1,3 +1,9 @@
+**This online auction marketplace is not complete: you can't actually buy stuff - there is no payment option.**
+
+It was created as a part of my graduation thesis, using mainly Next.js, React.js, Chakra-UI, Prisma and Nodemailer.
+
+---
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
