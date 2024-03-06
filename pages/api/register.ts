@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import randomSalt from "../../libs/randomSalt";
 import prisma from "../../prisma/prisma";
 import argon2 from "argon2";
 import { validateRegisterData } from "../../libs/validator";

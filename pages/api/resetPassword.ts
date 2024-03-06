@@ -6,7 +6,6 @@ import {
 } from "../../libs/stackTrace";
 import { Session } from "next-iron-session";
 import argon2 from "argon2";
-import randomSalt from "../../libs/randomSalt";
 
 // export default withSession(
 export default async function search(

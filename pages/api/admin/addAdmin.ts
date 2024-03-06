@@ -4,7 +4,6 @@ import { Session } from "next-iron-session";
 import checkIfAdminTokenValidAndRefresh from "../../../libs/admin/checkIfAdminTokenValidAndRefresh";
 import prisma from "../../../prisma/prisma";
 import { printErrorStackTrace } from "../../../libs/stackTrace";
-import randomSalt from "../../../libs/randomSalt";
 import withAdminSession from "../../../libs/admin/adminIronSession";
 // import generateAdminToken from "../../../libs/admin/generateAdminToken";
 // import handleAdminSessionToken from "../../../libs/admin/handleAdminSessionToken";

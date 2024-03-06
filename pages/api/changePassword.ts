@@ -6,7 +6,6 @@ import withSession from "../../libs/ironSession";
 import { Session } from "next-iron-session";
 import checkIfTokenValidAndRefresh from "../../libs/checkIfTokenValidAndRefresh";
 import { printErrorStackTrace, printStackTrace } from "../../libs/stackTrace";
-import randomSalt from "../../libs/randomSalt";
 export default withSession(
 	async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
 		const isValidToken = await checkIfTokenValidAndRefresh(req.session);
